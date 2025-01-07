@@ -29,5 +29,6 @@ Technologies currently being discussed on being used include:
 ## ERD
 Our entity relationship database currently looks like the diagram below. 
 * Entities may be altered depending on application requirements.
+* Hello
 
 ![ERDS](https://imgur.com/WMfClll.png)
