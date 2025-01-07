@@ -1,6 +1,6 @@
 # Movie Dating Information 
 
-Our team is developing a fullstack dating application where users can match with other user's based off their movie pefrences.
+Our team is developing a fullstack dating application where users can match with and chat with other user's based off their movie pefrences.
 
 # Features
 Features we want to include in our application is included but not limited to:
@@ -29,6 +29,5 @@ Technologies currently being discussed on being used include:
 ## ERD
 Our entity relationship database currently looks like the diagram below. 
 * Entities may be altered depending on application requirements.
-* Hello
 
 ![ERDS](https://imgur.com/WMfClll.png)
