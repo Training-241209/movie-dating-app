@@ -1,5 +1,7 @@
 package com.moviedating.backend.Entity;
 
+import com.moviedating.backend.Entity.Movie;
+
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -21,9 +23,18 @@ public class Account {
     private String username;
 
     @Column(nullable = false)
+    private String password;
+
+    @OneToOne
+    @JoinColumn(name = "movieId", nullable = false)
     private Movie favoriteMovie;
 
     @Column(nullable = false)
-    private Genre favoriteGenre;
+    private String favoriteGenre;
+
+
+    private String getUsername(String username) {
+        return username;
+    }
 
 }

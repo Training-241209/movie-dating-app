@@ -7,5 +7,9 @@ import lombok.Data;
 @Data
 @Table(name = "gender")
 public class Gender {
-    
+
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer genderId;
+
+
 }

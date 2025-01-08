@@ -19,6 +19,7 @@ import { Route as ChatImport } from './routes/_chat'
 
 const AboutLazyImport = createFileRoute('/about')()
 const IndexLazyImport = createFileRoute('/')()
+const ProtectedDashboardLazyImport = createFileRoute('/_protected/dashboard')()
 const ChatChatLazyImport = createFileRoute('/_chat/chat')()
 const ProtectedTsxDashboardLazyImport = createFileRoute(
   '/_protected/tsx/dashboard',
@@ -44,6 +45,14 @@ const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+
+const ProtectedDashboardLazyRoute = ProtectedDashboardLazyImport.update({
+  id: '/_protected/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/_protected/dashboard.lazy').then((d) => d.Route),
+)
 
 const ChatChatLazyRoute = ChatChatLazyImport.update({
   id: '/chat',
@@ -107,6 +116,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ChatChatLazyImport
       parentRoute: typeof ChatImport
     }
+    '/_protected/dashboard': {
+      id: '/_protected/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof ProtectedDashboardLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/_auth/auth/login': {
       id: '/_auth/auth/login'
       path: '/auth/login'
@@ -148,6 +164,7 @@ export interface FileRoutesByFullPath {
   '': typeof ChatRouteWithChildren
   '/about': typeof AboutLazyRoute
   '/chat': typeof ChatChatLazyRoute
+  '/dashboard': typeof ProtectedDashboardLazyRoute
   '/auth/login': typeof AuthAuthLoginLazyRoute
   '/auth/register': typeof AuthAuthRegisterLazyRoute
   '/tsx/dashboard': typeof ProtectedTsxDashboardLazyRoute
@@ -158,6 +175,7 @@ export interface FileRoutesByTo {
   '': typeof ChatRouteWithChildren
   '/about': typeof AboutLazyRoute
   '/chat': typeof ChatChatLazyRoute
+  '/dashboard': typeof ProtectedDashboardLazyRoute
   '/auth/login': typeof AuthAuthLoginLazyRoute
   '/auth/register': typeof AuthAuthRegisterLazyRoute
   '/tsx/dashboard': typeof ProtectedTsxDashboardLazyRoute
@@ -169,6 +187,7 @@ export interface FileRoutesById {
   '/_chat': typeof ChatRouteWithChildren
   '/about': typeof AboutLazyRoute
   '/_chat/chat': typeof ChatChatLazyRoute
+  '/_protected/dashboard': typeof ProtectedDashboardLazyRoute
   '/_auth/auth/login': typeof AuthAuthLoginLazyRoute
   '/_auth/auth/register': typeof AuthAuthRegisterLazyRoute
   '/_protected/tsx/dashboard': typeof ProtectedTsxDashboardLazyRoute
@@ -181,6 +200,7 @@ export interface FileRouteTypes {
     | ''
     | '/about'
     | '/chat'
+    | '/dashboard'
     | '/auth/login'
     | '/auth/register'
     | '/tsx/dashboard'
@@ -190,6 +210,7 @@ export interface FileRouteTypes {
     | ''
     | '/about'
     | '/chat'
+    | '/dashboard'
     | '/auth/login'
     | '/auth/register'
     | '/tsx/dashboard'
@@ -199,6 +220,7 @@ export interface FileRouteTypes {
     | '/_chat'
     | '/about'
     | '/_chat/chat'
+    | '/_protected/dashboard'
     | '/_auth/auth/login'
     | '/_auth/auth/register'
     | '/_protected/tsx/dashboard'
@@ -209,6 +231,7 @@ export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   ChatRoute: typeof ChatRouteWithChildren
   AboutLazyRoute: typeof AboutLazyRoute
+  ProtectedDashboardLazyRoute: typeof ProtectedDashboardLazyRoute
   AuthAuthLoginLazyRoute: typeof AuthAuthLoginLazyRoute
   AuthAuthRegisterLazyRoute: typeof AuthAuthRegisterLazyRoute
   ProtectedTsxDashboardLazyRoute: typeof ProtectedTsxDashboardLazyRoute
@@ -218,6 +241,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   ChatRoute: ChatRouteWithChildren,
   AboutLazyRoute: AboutLazyRoute,
+  ProtectedDashboardLazyRoute: ProtectedDashboardLazyRoute,
   AuthAuthLoginLazyRoute: AuthAuthLoginLazyRoute,
   AuthAuthRegisterLazyRoute: AuthAuthRegisterLazyRoute,
   ProtectedTsxDashboardLazyRoute: ProtectedTsxDashboardLazyRoute,
@@ -236,6 +260,7 @@ export const routeTree = rootRoute
         "/",
         "/_chat",
         "/about",
+        "/_protected/dashboard",
         "/_auth/auth/login",
         "/_auth/auth/register",
         "/_protected/tsx/dashboard"
@@ -256,6 +281,9 @@ export const routeTree = rootRoute
     "/_chat/chat": {
       "filePath": "_chat/chat.lazy.tsx",
       "parent": "/_chat"
+    },
+    "/_protected/dashboard": {
+      "filePath": "_protected/dashboard.lazy.tsx"
     },
     "/_auth/auth/login": {
       "filePath": "_auth/auth/login.lazy.tsx"
