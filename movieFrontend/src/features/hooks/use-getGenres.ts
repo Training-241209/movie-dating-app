@@ -1,11 +1,11 @@
 import { useQuery, } from "@tanstack/react-query";
 import { axiosInstanceExternal } from "@/lib/axios-Externalconfig";
-export function useGetMovies(){
+export function useGetGenres(){
     return (
         useQuery({
-            queryKey: ['movie'],
+            queryKey: ['genre'],
             queryFn: async () => {
-                const response = await axiosInstanceExternal.get(`/3/discover/movie?include_adult=false&include_video=true&language=en-US&page=1&sort_by=popularity.desc&with_genres=28&with_original_language=en`);
+                const response = await axiosInstanceExternal.get("/3/genre/movie/list");
                 console.log("RESPONSE", response.data)
                 return response.data;
             }
