@@ -1,13 +1,23 @@
-import { createLazyFileRoute } from '@tanstack/react-router'
+import { useAuth } from '@/features/hooks/use-Auth';
+import { createLazyFileRoute, useRouter } from '@tanstack/react-router'
+import { useEffect } from 'react';
 
 export const Route = createLazyFileRoute('/')({
   component: Index,
 })
 
 function Index() {
-  return (
-    <div className="p-2">
-      <h3>Welcome Home!</h3>
-    </div>
-  )
+
+  const {data: auth} = useAuth();
+  const router = useRouter();
+
+
+  useEffect(() => {
+    console.log(auth);
+    if (auth) {
+      router.navigate({ to: "/"});
+    }
+
+  }, [auth]);
+
 }
