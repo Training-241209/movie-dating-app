@@ -11,12 +11,8 @@ import com.moviedating.backend.Repository.AccountRepository;
 
 @Service
 public class AccountService {
-    private AccountRepository accountRepository;
-
     @Autowired
-    public AccountService(AccountRepository accountRepository) {
-        this.accountRepository = accountRepository;
-    }
+    private AccountRepository accountRepository;
 
     public Account registerAccount(Account account) {
         Optional<Account> existingAccount = accountRepository.findByUsername(account.getUsername());

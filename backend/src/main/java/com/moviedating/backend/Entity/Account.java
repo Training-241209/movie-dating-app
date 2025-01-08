@@ -3,10 +3,15 @@ package com.moviedating.backend.Entity;
 import com.moviedating.backend.Entity.Movie;
 
 import jakarta.persistence.*;
-import lombok.Data;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 @Table(name = "account")
 public class Account {
     @Id
@@ -32,9 +37,7 @@ public class Account {
     @Column(nullable = false)
     private String favoriteGenre;
 
-
-    private String getUsername(String username) {
-        return username;
-    }
+    @Column(nullable = false)
+    private String Gender;
 
 }
