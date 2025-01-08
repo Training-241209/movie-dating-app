@@ -2,6 +2,7 @@ package com.moviedating.backend.Service;
 
 import com.moviedating.backend.Entity.Account;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,6 @@ import javax.crypto.SecretKey;
 
 @Service
 public class JwtService {
-
     @Value("${jwt.secret}")
     private String secretKey;
 
