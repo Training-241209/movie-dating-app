@@ -17,7 +17,9 @@ function Index() {
     if (auth) {
       router.navigate({ to: "/"});
     }
-
+    else{
+      router.navigate({ to: "/auth/login"});
+    }
   }, [auth]);
 
 }
