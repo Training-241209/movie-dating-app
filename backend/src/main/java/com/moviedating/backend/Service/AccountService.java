@@ -37,4 +37,14 @@ public class AccountService {
         } else
             return null;
     }
+
+    public void saveLikes(String username, Integer genreId, Integer movieId){
+        Account account = accountRepository.findByUsername(username)
+            .orElseThrow(() -> new IllegalArgumentException("Account cannot be found"));
+        
+        account.setFavoriteGenre(genreId);
+        account.setFavoriteMovie(movieId);
+
+        accountRepository.save(account);
+    }
 }

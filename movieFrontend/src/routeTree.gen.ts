@@ -14,7 +14,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as ChatImport } from './routes/_chat'
-import { Route as ProtectedMovieGenreIdRouteImport } from './routes/_protected/movie.$genreId.route'
+import { Route as ProtectedMovieGenreIdGenreNameRouteImport } from './routes/_protected/movie.$genreId.$genreName.route'
 
 // Create Virtual Routes
 
@@ -74,13 +74,12 @@ const AuthAuthLoginLazyRoute = AuthAuthLoginLazyImport.update({
   import('./routes/_auth/auth/login.lazy').then((d) => d.Route),
 )
 
-const ProtectedMovieGenreIdRouteRoute = ProtectedMovieGenreIdRouteImport.update(
-  {
-    id: '/_protected/movie/$genreId',
-    path: '/movie/$genreId',
+const ProtectedMovieGenreIdGenreNameRouteRoute =
+  ProtectedMovieGenreIdGenreNameRouteImport.update({
+    id: '/_protected/movie/$genreId/$genreName',
+    path: '/movie/$genreId/$genreName',
     getParentRoute: () => rootRoute,
-  } as any,
-)
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -121,13 +120,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedDashboardLazyImport
       parentRoute: typeof rootRoute
     }
-    '/_protected/movie/$genreId': {
-      id: '/_protected/movie/$genreId'
-      path: '/movie/$genreId'
-      fullPath: '/movie/$genreId'
-      preLoaderRoute: typeof ProtectedMovieGenreIdRouteImport
-      parentRoute: typeof rootRoute
-    }
     '/_auth/auth/login': {
       id: '/_auth/auth/login'
       path: '/auth/login'
@@ -140,6 +132,13 @@ declare module '@tanstack/react-router' {
       path: '/auth/register'
       fullPath: '/auth/register'
       preLoaderRoute: typeof AuthAuthRegisterLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/_protected/movie/$genreId/$genreName': {
+      id: '/_protected/movie/$genreId/$genreName'
+      path: '/movie/$genreId/$genreName'
+      fullPath: '/movie/$genreId/$genreName'
+      preLoaderRoute: typeof ProtectedMovieGenreIdGenreNameRouteImport
       parentRoute: typeof rootRoute
     }
   }
@@ -163,9 +162,9 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutLazyRoute
   '/chat': typeof ChatChatLazyRoute
   '/dashboard': typeof ProtectedDashboardLazyRoute
-  '/movie/$genreId': typeof ProtectedMovieGenreIdRouteRoute
   '/auth/login': typeof AuthAuthLoginLazyRoute
   '/auth/register': typeof AuthAuthRegisterLazyRoute
+  '/movie/$genreId/$genreName': typeof ProtectedMovieGenreIdGenreNameRouteRoute
 }
 
 export interface FileRoutesByTo {
@@ -174,9 +173,9 @@ export interface FileRoutesByTo {
   '/about': typeof AboutLazyRoute
   '/chat': typeof ChatChatLazyRoute
   '/dashboard': typeof ProtectedDashboardLazyRoute
-  '/movie/$genreId': typeof ProtectedMovieGenreIdRouteRoute
   '/auth/login': typeof AuthAuthLoginLazyRoute
   '/auth/register': typeof AuthAuthRegisterLazyRoute
+  '/movie/$genreId/$genreName': typeof ProtectedMovieGenreIdGenreNameRouteRoute
 }
 
 export interface FileRoutesById {
@@ -186,9 +185,9 @@ export interface FileRoutesById {
   '/about': typeof AboutLazyRoute
   '/_chat/chat': typeof ChatChatLazyRoute
   '/_protected/dashboard': typeof ProtectedDashboardLazyRoute
-  '/_protected/movie/$genreId': typeof ProtectedMovieGenreIdRouteRoute
   '/_auth/auth/login': typeof AuthAuthLoginLazyRoute
   '/_auth/auth/register': typeof AuthAuthRegisterLazyRoute
+  '/_protected/movie/$genreId/$genreName': typeof ProtectedMovieGenreIdGenreNameRouteRoute
 }
 
 export interface FileRouteTypes {
@@ -199,9 +198,9 @@ export interface FileRouteTypes {
     | '/about'
     | '/chat'
     | '/dashboard'
-    | '/movie/$genreId'
     | '/auth/login'
     | '/auth/register'
+    | '/movie/$genreId/$genreName'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -209,9 +208,9 @@ export interface FileRouteTypes {
     | '/about'
     | '/chat'
     | '/dashboard'
-    | '/movie/$genreId'
     | '/auth/login'
     | '/auth/register'
+    | '/movie/$genreId/$genreName'
   id:
     | '__root__'
     | '/'
@@ -219,9 +218,9 @@ export interface FileRouteTypes {
     | '/about'
     | '/_chat/chat'
     | '/_protected/dashboard'
-    | '/_protected/movie/$genreId'
     | '/_auth/auth/login'
     | '/_auth/auth/register'
+    | '/_protected/movie/$genreId/$genreName'
   fileRoutesById: FileRoutesById
 }
 
@@ -230,9 +229,9 @@ export interface RootRouteChildren {
   ChatRoute: typeof ChatRouteWithChildren
   AboutLazyRoute: typeof AboutLazyRoute
   ProtectedDashboardLazyRoute: typeof ProtectedDashboardLazyRoute
-  ProtectedMovieGenreIdRouteRoute: typeof ProtectedMovieGenreIdRouteRoute
   AuthAuthLoginLazyRoute: typeof AuthAuthLoginLazyRoute
   AuthAuthRegisterLazyRoute: typeof AuthAuthRegisterLazyRoute
+  ProtectedMovieGenreIdGenreNameRouteRoute: typeof ProtectedMovieGenreIdGenreNameRouteRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -240,9 +239,10 @@ const rootRouteChildren: RootRouteChildren = {
   ChatRoute: ChatRouteWithChildren,
   AboutLazyRoute: AboutLazyRoute,
   ProtectedDashboardLazyRoute: ProtectedDashboardLazyRoute,
-  ProtectedMovieGenreIdRouteRoute: ProtectedMovieGenreIdRouteRoute,
   AuthAuthLoginLazyRoute: AuthAuthLoginLazyRoute,
   AuthAuthRegisterLazyRoute: AuthAuthRegisterLazyRoute,
+  ProtectedMovieGenreIdGenreNameRouteRoute:
+    ProtectedMovieGenreIdGenreNameRouteRoute,
 }
 
 export const routeTree = rootRoute
@@ -259,9 +259,9 @@ export const routeTree = rootRoute
         "/_chat",
         "/about",
         "/_protected/dashboard",
-        "/_protected/movie/$genreId",
         "/_auth/auth/login",
-        "/_auth/auth/register"
+        "/_auth/auth/register",
+        "/_protected/movie/$genreId/$genreName"
       ]
     },
     "/": {
@@ -283,14 +283,14 @@ export const routeTree = rootRoute
     "/_protected/dashboard": {
       "filePath": "_protected/dashboard.lazy.tsx"
     },
-    "/_protected/movie/$genreId": {
-      "filePath": "_protected/movie.$genreId.route.tsx"
-    },
     "/_auth/auth/login": {
       "filePath": "_auth/auth/login.lazy.tsx"
     },
     "/_auth/auth/register": {
       "filePath": "_auth/auth/register.lazy.tsx"
+    },
+    "/_protected/movie/$genreId/$genreName": {
+      "filePath": "_protected/movie.$genreId.$genreName.route.tsx"
     }
   }
 }

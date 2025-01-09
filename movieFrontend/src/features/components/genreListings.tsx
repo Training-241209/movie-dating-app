@@ -1,31 +1,30 @@
-import { Button } from "@/components/ui/button"
 import { useGetGenres } from "../hooks/use-getGenres";
-import { useState,useEffect } from "react";
-import { Link, useRouter } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { useGetMovies } from "../hooks/use-getMovies";
 
 export function GenreListings(){
-
     const {data = []} = useGetGenres();
-    const router = useRouter();
-
-    function handleGenreClick(genreId: number){
-        router.navigate({ to: `/movie/${genreId}` });
-        useGetMovies(genreId.toString());
+    function onClick(genreId: string,genreName: string){
+        console.log(genreId)
+        useGetMovies(genreId);
+        <Link to = {`/movie/$genreId/$genreName`} params={{ genreId:genreId,genreName:genreName }} key = {genreId}></Link>
     }
-
     return (
         <div>
             <div className = "text-4xl flex justify-center mb-10">
                 Please Select A Genre  
             </div>
-            <div className="columns-2 justify-items-center">
-                {data.map((item) => (
-                    <div key = {item.id} >
-                        <Button onClick={() => handleGenreClick(item.id)}>
-                        {item.name}
-                        </Button> 
+            <div className="columns-3  mb-5">
+                {data.map((item) => (  
+                    <div key = {item.id} className="text-center ml-5 mr-5 overflow-hidden" >
+                        <a href= {`/movie/${item.id}/${item.name}`}>
+                        <img className = "w-full h-[350px] object-center rounded-lg duration-300 hover:opacity-20 aspect-auto"
+                        src = {`src/assets/GenrePictures/${item.name}.jpg`} onClick={()=> onClick(item.id,item.name)}>
+                        </img>
+                        <p>{item.name}</p>
+                        </a>
                     </div>
+                    
                 ))}
             </div>
         </div>

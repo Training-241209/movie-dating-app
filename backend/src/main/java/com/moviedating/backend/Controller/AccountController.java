@@ -5,12 +5,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.moviedating.backend.Entity.Account;
 import com.moviedating.backend.Service.AccountService;
-import com.moviedating.backend.Service.JwtService;
+import com.moviedating.backend.Service.jwtService;
+import com.moviedating.backend.dtos.FavoritesDTO;
 
 @RestController
 @RequestMapping("/account")
@@ -19,7 +21,7 @@ public class AccountController {
     @Autowired
     AccountService accountService;
     @Autowired
-    JwtService jwtService;
+    jwtService jwtService;
 
     @PostMapping("/register")
     public ResponseEntity<Account> registerAccount(@RequestBody Account account) {
@@ -41,5 +43,20 @@ public class AccountController {
         } else
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
+
+    @PostMapping("/choose-favorites")
+    public ResponseEntity<String>  chooseFavorites(
+        @RequestBody FavoritesDTO favorites,
+        @RequestHeader(name ="Authorization") String authHeader) {
+
+            String token = authHeader.replace("Bearer ", "");
+
+            Account extractedAccount = jwtService.decodeToken(token);
+            String username = extractedAccount.getUsername();
+
+            accountService.saveLikes(username, favorites.getGenreId(), favorites.getMovieId());
+
+            return ResponseEntity.ok("User's liked genre and movie updated successfully!");
+        }
 
 }
