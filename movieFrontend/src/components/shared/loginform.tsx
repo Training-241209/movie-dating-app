@@ -43,7 +43,7 @@ export function LoginForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Username</FormLabel>
-              <FormControl>
+              <FormControl >
                 <Input type="username" placeholder="Username" {...field} />
               </FormControl>
               <FormMessage />
@@ -65,7 +65,7 @@ export function LoginForm() {
                   )}
                 />
 
-                  <Button type="submit" className="w-full" disabled={isPending}>Submit</Button>
+                  <Button type="submit" className="w-full" disabled={isPending}>Login</Button>
 
       </form>
     </Form>

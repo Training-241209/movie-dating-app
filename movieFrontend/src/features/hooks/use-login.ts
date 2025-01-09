@@ -21,7 +21,7 @@ export function useLogin() {
             });
             queryClient.setQueryData(["auth"], data);
             toast.success("Logged in successfuly.");
-            //router.navigate({ to: "/dashboard"});
+            router.navigate({ to: "/dashboard"});
         },
         onError: () => {
             toast.error("Failed to login.");

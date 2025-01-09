@@ -1,5 +1,3 @@
-"use client";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
@@ -28,6 +26,7 @@ export function RegisterForm() {
     defaultValues: {
       username: "",
       password: "",
+      confirmPassword: "",
       firstName: "",
       lastName: "",
     },
@@ -47,7 +46,7 @@ export function RegisterForm() {
             <FormItem>
               <FormLabel>First Name</FormLabel>
               <FormControl>
-                <Input type="firstName" placeholder="First Name" {...field} />
+                <Input type="text" placeholder="First Name" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -61,7 +60,7 @@ export function RegisterForm() {
             <FormItem>
               <FormLabel>Last Name</FormLabel>
               <FormControl>
-                <Input type="lastName" placeholder="Last Name" {...field} />
+                <Input type="text" placeholder="Last Name" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -75,7 +74,7 @@ export function RegisterForm() {
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input type="username" placeholder="Username" {...field} />
+                <Input type="text" placeholder="Username" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -96,9 +95,22 @@ export function RegisterForm() {
           )}
         />
 
+        <FormField
+          control={form.control}
+          name="confirmPassword"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Confirm Password</FormLabel>
+              <FormControl>
+                <Input type="password" placeholder="Confirm Password" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <Button type="submit" className="w-full" disabled={isPending}>
-          {" "}
-          Submit{" "}
+          Register
         </Button>
       </form>
     </Form>
