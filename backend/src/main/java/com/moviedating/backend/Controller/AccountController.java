@@ -17,6 +17,7 @@ import com.moviedating.backend.dtos.FavoritesDTO;
 @RestController
 @RequestMapping("/account")
 public class AccountController {
+    
     @Autowired
     AccountService accountService;
     @Autowired
