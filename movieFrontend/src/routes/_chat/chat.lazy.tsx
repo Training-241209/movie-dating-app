@@ -1,4 +1,4 @@
-import { ChatBoxCard, ChatBoxCentering, ChatBoxContents, ChatBoxInnerContainer } from '@/components/shared/chat'
+import { ChatBoxCard, ChatBoxCentering, ChatBoxContents, ChatBoxInnerContainer, Message } from '@/components/shared/chat'
 import { createLazyFileRoute } from '@tanstack/react-router'
 
 export const Route = createLazyFileRoute('/_chat/chat')({
@@ -11,8 +11,8 @@ function RouteComponent() {
       <ChatBoxCard>
         <ChatBoxContents>
           <ChatBoxInnerContainer>
-            <div>Hello</div>
-            <div>Hello2</div>
+            <Message user="me" message="hello world"/>
+            <Message user="you" message="hello world"/>
           </ChatBoxInnerContainer>
         </ChatBoxContents>
       </ChatBoxCard>

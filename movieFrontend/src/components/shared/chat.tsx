@@ -1,40 +1,114 @@
 import React from "react";
 
-import { Card } from "@/components/ui/card"
-  
+import { Card } from "@/components/ui/card";
+import { useForm } from "react-hook-form";
+import { messageSchema, MessageSchema } from "@/features/schemas/messageSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SendHorizontal } from "lucide-react";
 
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Button } from "../ui/button";
 
-
-export function ChatBoxCentering({children}: {children: React.ReactNode}) {
-    return(
-        <div className="min-h-screen flex justify-center items-center">
-            {children}
-        </div>
-    )
+export function ChatBoxCentering({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="min-h-screen flex justify-center items-center">
+      {children}
+    </div>
+  );
 }
 
-export function ChatBoxCard({children}: {children: React.ReactNode}) {
-    return(
-        <Card className="w-[1200px] h-[650px]">
-           {children}
-        </Card>
-    )
+export function ChatBoxCard({ children }: { children: React.ReactNode }) {
+  return <Card className="w-[1200px] h-[650px]">{children}</Card>;
 }
 
-export function ChatBoxContents({children}: {children: React.ReactNode}) {
-    return(
-        <div className="bg-gray-200 h-[610px] w-[1150px] mx-auto mt-4 border border-black rounded-md">
-            {children}
-        </div>
-    )
+export function ChatBoxContents({ children }: { children: React.ReactNode }) {
+
+  const form = useForm<MessageSchema>({
+    resolver: zodResolver(messageSchema),
+    defaultValues: {
+      message: "",
+    },
+  });
+
+  function onSubmit(values: MessageSchema) {
+    console.log(values);
+    form.reset();
+  }
+
+  const isMessageEmpty = !form.watch("message")?.trim();
+
+
+  return (
+    <>
+      <div className="bg-gray-200 h-[550px] w-[1150px] mx-auto mt-4 border border-black rounded-md flex flex-col-reverse overflow-y-auto">
+        <ChatBoxInnerContainer>{children}</ChatBoxInnerContainer>
+      </div>
+
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="flex justify-between items-center w-[1150px] mx-auto mt-4">
+        <FormField
+          control={form.control}
+          name="message"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Input className="w-[1050px] border border-black"
+                 type="message" placeholder="Message" autoComplete="off"{...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <Button type="submit" className="w-[90px]" disabled={isMessageEmpty}>
+          <SendHorizontal />
+        </Button>
+
+        </form>
+      </Form>
+    </>
+  );
 }
 
-export function ChatBoxInnerContainer({children}: {children: React.ReactNode}) {
+export function ChatBoxInnerContainer({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex flex-col">
+      {children}
+    </div>
+  );
+}
+
+export function Message({
+  message,
+  user,
+}: {
+  message: string;
+  user: string;
+}) {
+
+  if(user == "me"){
     return(
-        <div className="w-full display: flex flex-col text-black">
-            <div className="py-2 border border-black bg-blue-400">
-                {children}
-            </div>
-        </div>
+      <div className="self-end mr-5 pb-2">
+        {message} from {user}
+      </div>
     )
+  }else{
+    return(
+      <div className="self-start ml-5 pb-2">
+        {message} from {user}
+      </div>
+    )
+  }
 }
