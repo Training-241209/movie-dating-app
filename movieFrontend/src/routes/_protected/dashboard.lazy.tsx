@@ -1,5 +1,6 @@
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { MovieListings } from '@/features/components/movieListings'
+import { GenreListings } from '@/features/components/genreListings'
 export const Route = createLazyFileRoute('/_protected/dashboard')({
   component: RouteComponent,
 })
@@ -7,7 +8,7 @@ export const Route = createLazyFileRoute('/_protected/dashboard')({
 function RouteComponent() {
   return (
       <div>
-        {<MovieListings/>}
+        {<GenreListings/>}
         </div>
     )
 }

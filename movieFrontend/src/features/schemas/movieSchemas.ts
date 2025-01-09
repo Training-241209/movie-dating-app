@@ -4,4 +4,4 @@ const movieSchema = z.object({
     genre: z.string(),
     imageURL: z.string(),
 })
-export type Movie = z.infer<typeof movieSchema>
+export type MovieSchema = z.infer<typeof movieSchema>
