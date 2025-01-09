@@ -6,7 +6,7 @@ export function GenreListings(){
     const {data = []} = useGetGenres();
     function onClick(genreId: string,genreName: string){
         console.log(genreId)
-        useGetMovies(genreId);
+        useGetMovies({genreId});
         <Link to = {`/movie/$genreId/$genreName`} params={{ genreId:genreId,genreName:genreName }} key = {genreId}></Link>
     }
     return (

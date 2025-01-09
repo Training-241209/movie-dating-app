@@ -1,10 +1,9 @@
 import { Button } from "@/components/ui/button"
 import { useGetMovies } from "../hooks/use-getMovies";
-import { useParams} from "@tanstack/react-router";
 
-export function MovieListings({genreId,genreName}){
+export function MovieListings({genreId,genreName}:{genreId: string,genreName:string}){
     
-    const {data = []} = useGetMovies(genreId);
+    const {data = []} = useGetMovies({genreId});
 
     function onClick(movieName: string){
         console.log("CLICKED",movieName)
