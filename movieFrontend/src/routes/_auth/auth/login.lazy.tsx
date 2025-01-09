@@ -18,11 +18,11 @@ export const Route = createLazyFileRoute('/_auth/auth/login')({
 
 function RouteComponent() {
   return(
-    <div className='min-h-screen flex justify-center items-center bg-pink-200'>
+    <div className=''>
 
-      <img src={logo} className='w-[200px]' alt='logo' />
+      <img src={logo} className='w-[150px]' alt='logo' />
 
-      <div className=''>
+      <div className='flex justify-center items-center mt-[130px] ml-[700px]'>
         <Card className="w-[500px]">
             <CardHeader>
               <CardTitle className="text-3xl font-bold">Welcome Back!</CardTitle>

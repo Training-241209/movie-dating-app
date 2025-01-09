@@ -19,7 +19,7 @@ function RouteComponent() {
     <div className='min-h-screen flex justify-center items-center bg-slate-800'>
       <Card className="w-[500px] ">
         <CardHeader>
-          <CardTitle className="text-3xl font-bold">Register</CardTitle>
+          <CardTitle className="text-3xl font-bold">Welcome!</CardTitle>
           <CardDescription>Please enter your credentials</CardDescription>
         </CardHeader>
         <CardContent>

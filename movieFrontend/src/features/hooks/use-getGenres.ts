@@ -10,7 +10,7 @@ export function useGetGenres(){
                 const response = await axiosInstanceExternal.get("/3/genre/movie/list");
                 const {genres, bloat} = response.data
                 queryClient.invalidateQueries({
-                    queryKey: ["genre"],
+                    queryKey: ['genre'],
                 });
                 return genres;
             }
