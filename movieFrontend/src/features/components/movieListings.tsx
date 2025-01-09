@@ -1,7 +1,8 @@
 import { useGetMovies } from "../hooks/use-getMovies";
 
-export function MovieListings({ genreId, genreName }) {
-  const { data = [], isLoading } = useGetMovies(genreId);
+export function MovieListings({genreId,genreName}:{genreId: string,genreName:string}){
+    
+    const {data = []} = useGetMovies({genreId});
 
   function onClick(movieName: string) {
     console.log("CLICKED", movieName);
