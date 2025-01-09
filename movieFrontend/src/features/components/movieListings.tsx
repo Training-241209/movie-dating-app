@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button"
 import { useGetMovies } from "../hooks/use-getMovies";
 
 export function MovieListings({genreId,genreName}:{genreId: string,genreName:string}){
