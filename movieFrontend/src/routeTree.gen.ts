@@ -22,9 +22,6 @@ const IndexLazyImport = createFileRoute('/')()
 const ProtectedMovieLazyImport = createFileRoute('/_protected/movie')()
 const ProtectedDashboardLazyImport = createFileRoute('/_protected/dashboard')()
 const ChatChatLazyImport = createFileRoute('/_chat/chat')()
-const ProtectedTsxDashboardLazyImport = createFileRoute(
-  '/_protected/tsx/dashboard',
-)()
 const AuthAuthRegisterLazyImport = createFileRoute('/_auth/auth/register')()
 const AuthAuthLoginLazyImport = createFileRoute('/_auth/auth/login')()
 
@@ -68,14 +65,6 @@ const ChatChatLazyRoute = ChatChatLazyImport.update({
   path: '/chat',
   getParentRoute: () => ChatRoute,
 } as any).lazy(() => import('./routes/_chat/chat.lazy').then((d) => d.Route))
-
-const ProtectedTsxDashboardLazyRoute = ProtectedTsxDashboardLazyImport.update({
-  id: '/_protected/tsx/dashboard',
-  path: '/tsx/dashboard',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/_protected.tsx/dashboard.lazy').then((d) => d.Route),
-)
 
 const AuthAuthRegisterLazyRoute = AuthAuthRegisterLazyImport.update({
   id: '/_auth/auth/register',
