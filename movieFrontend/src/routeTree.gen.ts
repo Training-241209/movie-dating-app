@@ -14,17 +14,14 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as ChatImport } from './routes/_chat'
+import { Route as ProtectedMovieGenreIdRouteImport } from './routes/_protected/movie.$genreId.route'
 
 // Create Virtual Routes
 
 const AboutLazyImport = createFileRoute('/about')()
 const IndexLazyImport = createFileRoute('/')()
-const ProtectedMovieLazyImport = createFileRoute('/_protected/movie')()
 const ProtectedDashboardLazyImport = createFileRoute('/_protected/dashboard')()
 const ChatChatLazyImport = createFileRoute('/_chat/chat')()
-const ProtectedTsxDashboardLazyImport = createFileRoute(
-  '/_protected/tsx/dashboard',
-)()
 const AuthAuthRegisterLazyImport = createFileRoute('/_auth/auth/register')()
 const AuthAuthLoginLazyImport = createFileRoute('/_auth/auth/login')()
 
@@ -47,14 +44,6 @@ const IndexLazyRoute = IndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
-const ProtectedMovieLazyRoute = ProtectedMovieLazyImport.update({
-  id: '/_protected/movie',
-  path: '/movie',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/_protected/movie.lazy').then((d) => d.Route),
-)
-
 const ProtectedDashboardLazyRoute = ProtectedDashboardLazyImport.update({
   id: '/_protected/dashboard',
   path: '/dashboard',
@@ -68,14 +57,6 @@ const ChatChatLazyRoute = ChatChatLazyImport.update({
   path: '/chat',
   getParentRoute: () => ChatRoute,
 } as any).lazy(() => import('./routes/_chat/chat.lazy').then((d) => d.Route))
-
-const ProtectedTsxDashboardLazyRoute = ProtectedTsxDashboardLazyImport.update({
-  id: '/_protected/tsx/dashboard',
-  path: '/tsx/dashboard',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/_protected.tsx/dashboard.lazy').then((d) => d.Route),
-)
 
 const AuthAuthRegisterLazyRoute = AuthAuthRegisterLazyImport.update({
   id: '/_auth/auth/register',
@@ -91,6 +72,14 @@ const AuthAuthLoginLazyRoute = AuthAuthLoginLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() =>
   import('./routes/_auth/auth/login.lazy').then((d) => d.Route),
+)
+
+const ProtectedMovieGenreIdRouteRoute = ProtectedMovieGenreIdRouteImport.update(
+  {
+    id: '/_protected/movie/$genreId',
+    path: '/movie/$genreId',
+    getParentRoute: () => rootRoute,
+  } as any,
 )
 
 // Populate the FileRoutesByPath interface
@@ -132,11 +121,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedDashboardLazyImport
       parentRoute: typeof rootRoute
     }
-    '/_protected/movie': {
-      id: '/_protected/movie'
-      path: '/movie'
-      fullPath: '/movie'
-      preLoaderRoute: typeof ProtectedMovieLazyImport
+    '/_protected/movie/$genreId': {
+      id: '/_protected/movie/$genreId'
+      path: '/movie/$genreId'
+      fullPath: '/movie/$genreId'
+      preLoaderRoute: typeof ProtectedMovieGenreIdRouteImport
       parentRoute: typeof rootRoute
     }
     '/_auth/auth/login': {
@@ -174,7 +163,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutLazyRoute
   '/chat': typeof ChatChatLazyRoute
   '/dashboard': typeof ProtectedDashboardLazyRoute
-  '/movie': typeof ProtectedMovieLazyRoute
+  '/movie/$genreId': typeof ProtectedMovieGenreIdRouteRoute
   '/auth/login': typeof AuthAuthLoginLazyRoute
   '/auth/register': typeof AuthAuthRegisterLazyRoute
 }
@@ -185,7 +174,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutLazyRoute
   '/chat': typeof ChatChatLazyRoute
   '/dashboard': typeof ProtectedDashboardLazyRoute
-  '/movie': typeof ProtectedMovieLazyRoute
+  '/movie/$genreId': typeof ProtectedMovieGenreIdRouteRoute
   '/auth/login': typeof AuthAuthLoginLazyRoute
   '/auth/register': typeof AuthAuthRegisterLazyRoute
 }
@@ -197,7 +186,7 @@ export interface FileRoutesById {
   '/about': typeof AboutLazyRoute
   '/_chat/chat': typeof ChatChatLazyRoute
   '/_protected/dashboard': typeof ProtectedDashboardLazyRoute
-  '/_protected/movie': typeof ProtectedMovieLazyRoute
+  '/_protected/movie/$genreId': typeof ProtectedMovieGenreIdRouteRoute
   '/_auth/auth/login': typeof AuthAuthLoginLazyRoute
   '/_auth/auth/register': typeof AuthAuthRegisterLazyRoute
 }
@@ -210,7 +199,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/chat'
     | '/dashboard'
-    | '/movie'
+    | '/movie/$genreId'
     | '/auth/login'
     | '/auth/register'
   fileRoutesByTo: FileRoutesByTo
@@ -220,7 +209,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/chat'
     | '/dashboard'
-    | '/movie'
+    | '/movie/$genreId'
     | '/auth/login'
     | '/auth/register'
   id:
@@ -230,7 +219,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/_chat/chat'
     | '/_protected/dashboard'
-    | '/_protected/movie'
+    | '/_protected/movie/$genreId'
     | '/_auth/auth/login'
     | '/_auth/auth/register'
   fileRoutesById: FileRoutesById
@@ -241,7 +230,7 @@ export interface RootRouteChildren {
   ChatRoute: typeof ChatRouteWithChildren
   AboutLazyRoute: typeof AboutLazyRoute
   ProtectedDashboardLazyRoute: typeof ProtectedDashboardLazyRoute
-  ProtectedMovieLazyRoute: typeof ProtectedMovieLazyRoute
+  ProtectedMovieGenreIdRouteRoute: typeof ProtectedMovieGenreIdRouteRoute
   AuthAuthLoginLazyRoute: typeof AuthAuthLoginLazyRoute
   AuthAuthRegisterLazyRoute: typeof AuthAuthRegisterLazyRoute
 }
@@ -251,7 +240,7 @@ const rootRouteChildren: RootRouteChildren = {
   ChatRoute: ChatRouteWithChildren,
   AboutLazyRoute: AboutLazyRoute,
   ProtectedDashboardLazyRoute: ProtectedDashboardLazyRoute,
-  ProtectedMovieLazyRoute: ProtectedMovieLazyRoute,
+  ProtectedMovieGenreIdRouteRoute: ProtectedMovieGenreIdRouteRoute,
   AuthAuthLoginLazyRoute: AuthAuthLoginLazyRoute,
   AuthAuthRegisterLazyRoute: AuthAuthRegisterLazyRoute,
 }
@@ -270,7 +259,7 @@ export const routeTree = rootRoute
         "/_chat",
         "/about",
         "/_protected/dashboard",
-        "/_protected/movie",
+        "/_protected/movie/$genreId",
         "/_auth/auth/login",
         "/_auth/auth/register"
       ]
@@ -294,8 +283,8 @@ export const routeTree = rootRoute
     "/_protected/dashboard": {
       "filePath": "_protected/dashboard.lazy.tsx"
     },
-    "/_protected/movie": {
-      "filePath": "_protected/movie.lazy.tsx"
+    "/_protected/movie/$genreId": {
+      "filePath": "_protected/movie.$genreId.route.tsx"
     },
     "/_auth/auth/login": {
       "filePath": "_auth/auth/login.lazy.tsx"
