@@ -30,12 +30,13 @@ public class Account {
     @Column(nullable = false)
     private String password;
 
-    @OneToOne
-    @JoinColumn(name = "movieId", nullable = false)
-    private Movie favoriteMovie;
+//    @OneToOne
+//    @JoinColumn(name = "movieId", nullable = false)
+    @Column(nullable = true)
+    private Integer favoriteMovie;
 
-    @Column(nullable = false)
-    private String favoriteGenre;
+    @Column(nullable = true)
+    private Integer favoriteGenre;
 
     @Column(nullable = false)
     private String Gender;
