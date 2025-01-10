@@ -3,6 +3,7 @@ package com.moviedating.backend.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -58,5 +59,12 @@ public class AccountController {
 
             return ResponseEntity.ok("User's liked genre and movie updated successfully!");
         }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteAccount(@RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.replace("Bearer ", "");
+        accountService.deleteAccount(token);
+        return ResponseEntity.ok("Account has been deleted");
+    }
 
 }

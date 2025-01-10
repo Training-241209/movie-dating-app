@@ -13,12 +13,12 @@ import lombok.Setter;
 @Table(name = "movie")
 public class Movie {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    //@GeneratedValue(strategy = GenerationType.AUTO)
     private Integer movieId;
 
     @Column(nullable = false)
     private String movieName;
 
-    @Column(nullable = false)
-    private String movieGenre;
+    @Enumerated(EnumType.STRING)
+    private Genre movieGenre;
 }
