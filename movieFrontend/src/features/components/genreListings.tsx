@@ -9,13 +9,14 @@ export function GenreListings(){
         useGetMovies({genreId});
         <Link to = {`/movie/$genreId/$genreName`} params={{ genreId:genreId,genreName:genreName }} key = {genreId}></Link>
     }
+    
     return (
         <div>
             <div className = "text-4xl flex justify-center mb-10">
                 Please Select A Genre  
             </div>
             <div className="flex flex-wrap justify-center  gap-5 mb-5 mx-5">
-                {data.map((item) => (  
+                {data.map((item:any) => (  
                     <div key = {item.id} className="w-[300px] h-[400px] text-center flex flex-col items-center gap-5 overflow-hidden" >
                         <a href= {`/movie/${item.id}/${item.name}`}>
                         <img className = "w-full h-[350px] object-center rounded-lg duration-300 hover:opacity-20 aspect-auto"

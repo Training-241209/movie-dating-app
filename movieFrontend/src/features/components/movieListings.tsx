@@ -1,4 +1,5 @@
 import { useGetMovies } from "../hooks/use-getMovies";
+import { MovieTitle } from "./movieTitle";
 
 export function MovieListings({genreId,genreName}:{genreId: string,genreName:string}){
     
@@ -11,14 +12,12 @@ export function MovieListings({genreId,genreName}:{genreId: string,genreName:str
 
   return (
     <div>
-      <div className="text-4xl flex justify-center mb-10">
-        Please Select A {genreName} Movie
-      </div>
+      <MovieTitle genreName={genreName}/>
       <div className="columns-5 justify-items-center ml-5 mr-5">
-        {data.map((item) => (
+        {data.map((item:any) => (
           <div key={item.id} className="mb-5">
             <a
-              href={`https://image.tmdb.org/t/p/original/${item.poster_path}`}
+              href="/chat"
             >
               <img
                 className="rounded-lg w-[250px] h-[400px] transition-opacity duration-300 hover:opacity-20"
