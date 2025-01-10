@@ -1,8 +1,11 @@
 package com.moviedating.backend.Controller;
 
+import org.apache.tomcat.util.http.parser.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,8 +20,9 @@ import com.moviedating.backend.dtos.FavoritesDTO;
 
 @RestController
 @RequestMapping("/account")
+@CrossOrigin(origins = "http://localhost:5173")
 public class AccountController {
-    
+
     @Autowired
     AccountService accountService;
     @Autowired
@@ -46,25 +50,43 @@ public class AccountController {
     }
 
     @PostMapping("/choose-favorites")
-    public ResponseEntity<String>  chooseFavorites(
-        @RequestBody FavoritesDTO favorites,
-        @RequestHeader(name ="Authorization") String authHeader) {
+    public ResponseEntity<String> chooseFavorites(
+            @RequestBody FavoritesDTO favorites,
+            @RequestHeader(name = "Authorization") String authHeader) {
 
-            String token = authHeader.replace("Bearer ", "");
-
-            Account extractedAccount = jwtService.decodeToken(token);
-            String username = extractedAccount.getUsername();
-
-            accountService.saveLikes(username, favorites.getGenreId(), favorites.getMovieId());
-
-            return ResponseEntity.ok("User's liked genre and movie updated successfully!");
-        }
-
-    @DeleteMapping("/delete")
-    public ResponseEntity<String> deleteAccount(@RequestHeader("Authorization") String authHeader) {
         String token = authHeader.replace("Bearer ", "");
-        accountService.deleteAccount(token);
-        return ResponseEntity.ok("Account has been deleted");
+
+        Account extractedAccount = jwtService.decodeToken(token);
+        String username = extractedAccount.getUsername();
+
+        accountService.saveLikes(username, favorites.getGenreId(), favorites.getMovieId());
+
+        return ResponseEntity.ok("User's liked genre and movie updated successfully!");
     }
+
+    @PostMapping("/me")
+    public ResponseEntity<String> authCheck(@RequestHeader(name = "Authorization") String authHeader) {
+        if (authHeader == null || authHeader.trim().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String token = authHeader.replace("Bearer ", "");
+        System.out.println("token " + token);
+        Account account = jwtService.decodeToken(token);
+
+        if (account != null)
+            return ResponseEntity.status(HttpStatus.OK).body("Auth success");
+        else
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    /*
+     * @DeleteMapping("/delete")
+     * public ResponseEntity<String> deleteAccount(@RequestHeader("Authorization")
+     * String authHeader) {
+     * String token = authHeader.replace("Bearer ", "");
+     * accountService.deleteAccount(token);
+     * return ResponseEntity.ok("Account has been deleted");
+     * }
+     */
 
 }

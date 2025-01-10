@@ -1,4 +1,5 @@
 package com.moviedating.backend.Entity;
+
 import com.moviedating.backend.Entity.Movie;
 import com.moviedating.backend.Entity.enums.GenderType;
 import jakarta.persistence.*;
@@ -28,16 +29,16 @@ public class Account {
     @Column(nullable = false)
     private String password;
 
-//    @OneToOne
-//    @JoinColumn(name = "movieId", nullable = false)
+    // @OneToOne
+    // @JoinColumn(name = "movieId", nullable = false)
     @Column(nullable = true)
     private Integer favoriteMovie;
 
     @Column(nullable = true)
     private Integer favoriteGenre;
-    
+
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = true)
     private GenderType Gender;
 
 }
