@@ -7,6 +7,7 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.moviedating.backend.Entity.Account;
+import com.moviedating.backend.Repository.AccountRepository;
 import com.moviedating.backend.Service.AccountService;
 import com.moviedating.backend.Service.jwtService;
 import com.moviedating.backend.dtos.FavoritesDTO;
@@ -27,6 +29,8 @@ public class AccountController {
     AccountService accountService;
     @Autowired
     jwtService jwtService;
+    @Autowired
+    AccountRepository accountRepository;
 
     @PostMapping("/register")
     public ResponseEntity<Account> registerAccount(@RequestBody Account account) {
@@ -64,8 +68,10 @@ public class AccountController {
         return ResponseEntity.ok("User's liked genre and movie updated successfully!");
     }
 
-    @PostMapping("/me")
+    @GetMapping("/me")
     public ResponseEntity<Account> authCheck(@RequestHeader(name = "Authorization") String authHeader) {
+
+        System.out.println(authHeader);
         if (authHeader == null || authHeader.trim().isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -73,9 +79,10 @@ public class AccountController {
         System.out.println("token " + token);
         Account account = jwtService.decodeToken(token);
 
-        if (account != null)
-            return ResponseEntity.status(HttpStatus.OK).body(account);
-        else
+        if (account != null) {
+            Account realAccount = accountService.fillAccountInfo(account);
+            return ResponseEntity.status(HttpStatus.OK).body(realAccount);
+        } else
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 

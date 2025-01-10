@@ -47,4 +47,13 @@ public class AccountService {
 
         accountRepository.save(account);
     }
+
+    public Account fillAccountInfo(Account account) {
+        Optional<Account> accountFromDb = accountRepository.findByUsername(account.getUsername());
+        if (accountFromDb.isPresent())
+            return accountFromDb.get();
+        else
+            return null;
+    }
+
 }
