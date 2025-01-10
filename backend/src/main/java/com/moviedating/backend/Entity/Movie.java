@@ -1,5 +1,7 @@
 package com.moviedating.backend.Entity;
 
+import com.moviedating.backend.Entity.enums.GenreType;
+
 import jakarta.persistence.*;
 
 import lombok.Getter;
@@ -20,5 +22,5 @@ public class Movie {
     private String movieName;
 
     @Enumerated(EnumType.STRING)
-    private Genre movieGenre;
+    private GenreType movieGenre;
 }
