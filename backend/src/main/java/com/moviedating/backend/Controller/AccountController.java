@@ -65,7 +65,7 @@ public class AccountController {
     }
 
     @PostMapping("/me")
-    public ResponseEntity<String> authCheck(@RequestHeader(name = "Authorization") String authHeader) {
+    public ResponseEntity<Account> authCheck(@RequestHeader(name = "Authorization") String authHeader) {
         if (authHeader == null || authHeader.trim().isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -74,7 +74,7 @@ public class AccountController {
         Account account = jwtService.decodeToken(token);
 
         if (account != null)
-            return ResponseEntity.status(HttpStatus.OK).body("Auth success");
+            return ResponseEntity.status(HttpStatus.OK).body(account);
         else
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
