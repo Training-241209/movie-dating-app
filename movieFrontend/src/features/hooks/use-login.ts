@@ -12,7 +12,7 @@ export function useLogin() {
 
     return useMutation({
         mutationFn: async (values: LoginSchema) => {
-            const resp = await axiosInstance.post("/auth/login", values);
+            const resp = await axiosInstance.post("/account/login", values);
             return resp.data;
         },
         onSuccess: (data) => {

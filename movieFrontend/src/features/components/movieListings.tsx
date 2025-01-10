@@ -1,13 +1,15 @@
 import { useGetMovies } from "../hooks/use-getMovies";
+import { useSelectGenres } from "../hooks/use-SelectGenres";
 import { MovieTitle } from "./movieTitle";
 
 export function MovieListings({genreId,genreName}:{genreId: string,genreName:string}){
     
     const {data = []} = useGetMovies({genreId});
 
-  function onClick(movieName: string) {
-    console.log("CLICKED", movieName);
+  function onClick(movieId: string) {
+    console.log("CLICKED", movieId);
     console.log("Genre", genreId);
+    useSelectGenres({genreId,movieId})
   }
 
   return (

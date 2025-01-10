@@ -15,7 +15,7 @@ function Index() {
   useEffect(() => {
     console.log(auth);
     if (auth) {
-      router.navigate({ to: "/dashboard"});
+      router.navigate({ to: "/genrePicking"});
     }
     else{
       router.navigate({ to: "/auth/login"});

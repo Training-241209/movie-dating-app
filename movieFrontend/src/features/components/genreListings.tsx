@@ -4,7 +4,7 @@ import { useGetMovies } from "../hooks/use-getMovies";
 
 export function GenreListings(){
     const {data = []} = useGetGenres();
-    function onClick(genreId: string,genreName: string){
+    function onClick(genreId: number,genreName: string){
         console.log(genreId)
         useGetMovies({genreId});
         <Link to = {`/movie/$genreId/$genreName`} params={{ genreId:genreId,genreName:genreName }} key = {genreId}></Link>
