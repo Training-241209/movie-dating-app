@@ -41,4 +41,8 @@ public class Account {
     @Column(nullable = true)
     private GenderType Gender;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = true)
+    private GenderType genderPreference;
+
 }
