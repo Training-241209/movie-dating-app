@@ -20,10 +20,12 @@ export function useLogin() {
                 queryKey: ["auth"],
             });
             queryClient.setQueryData(["auth"], data);
+            console.log("Logged in successfuly.");
             toast.success("Logged in successfuly.");
             router.navigate({ to: "/genrePicking"});
         },
         onError: () => {
+            console.log("Failed to login.");
             toast.error("Failed to login.");
         },
     })
