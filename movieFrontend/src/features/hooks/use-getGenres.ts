@@ -7,7 +7,6 @@ export function useGetGenres() {
     return useQuery({
         queryKey: ['genre'],
         queryFn: async () => {
-            console.log(import.meta.env.VITE_TMDB_API_URL);
             const response = await axiosInstanceExternal.get("/3/genre/movie/list");
             const { genres } = response.data;
             return genres;
