@@ -1,5 +1,5 @@
 import { createLazyFileRoute } from '@tanstack/react-router'
-import { LoginForm } from "@/components/shared/loginform"
+import { LoginForm } from '@/components/shared/loginform'
 import {
   Card,
   CardContent,
@@ -7,10 +7,10 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Link } from "@tanstack/react-router"
-import logo from "@/assets/cinematchLogo.png"
-import bg from "@/assets/AdobeStock_1003020937.jpeg"
+} from '@/components/ui/card'
+import { Link } from '@tanstack/react-router'
+import logo from '@/assets/cinematchLogo.png'
+import bg from '@/assets/AdobeStock_1003020937.jpeg'
 
 export const Route = createLazyFileRoute('/_auth/auth/login')({
   component: RouteComponent,

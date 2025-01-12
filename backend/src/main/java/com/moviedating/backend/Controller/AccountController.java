@@ -1,6 +1,7 @@
 package com.moviedating.backend.Controller;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.moviedating.backend.Entity.Account;
+import com.moviedating.backend.Entity.enums.GenderType;
 import com.moviedating.backend.Repository.AccountRepository;
 import com.moviedating.backend.Service.AccountService;
 import com.moviedating.backend.Service.MatchingService;
@@ -47,13 +49,13 @@ public class AccountController {
         Account registeredAccount = accountService.registerAccount(account);
 
         if (registeredAccount != null) {
-            return ResponseEntity.status(HttpStatus.OK).build();
+            return ResponseEntity.status(HttpStatus.OK).body(registeredAccount);
         } else
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody Account account) {
+    public ResponseEntity<?> login(@RequestBody Account account) {
         Account loggedInAccount = accountService.login(account.getUsername(), account.getPassword());
 
         if (loggedInAccount != null) {
@@ -65,10 +67,15 @@ public class AccountController {
                 Account retrievedAccount = optionalAccount.get();
                 HashMap<String, String> response = new HashMap<>();
                 response.put("token", token);
+                response.put("username", retrievedAccount.getUsername());    
                 response.put("firstName", retrievedAccount.getFirstName());
                 response.put("lastName", retrievedAccount.getLastName());
+                response.put("gender", 
+                retrievedAccount.getGender() != null ? retrievedAccount.getGender().toString() : "");
+                response.put("genderPreference", 
+                retrievedAccount.getGenderPreference() != null ? retrievedAccount.getGenderPreference().toString() : "");
                 
-                return ResponseEntity.status(HttpStatus.OK).body(response.toString());
+                return ResponseEntity.status(HttpStatus.OK).body(response);
                 } else {
                     return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No account found");
                 }
@@ -80,14 +87,39 @@ public class AccountController {
     }
 
     @PatchMapping("/update-gender-and-preference")
-    public ResponseEntity<String> updateGenderAndPreference(@RequestBody GenderPreferenceDTO request, @RequestHeader("Authorization") String authHeader){
+    public ResponseEntity<String> updateGenderAndPreference(@RequestBody Map<String, String> request, @RequestHeader("Authorization") String authHeader) {
+
+        if (authHeader == null || authHeader.trim().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         String token = authHeader.replace("Bearer ", "");
+        System.out.println("token " + token);
+        Account account = jwtService.decodeToken(token);
 
-        accountService.updateGenderAndPreference(token, request.getGenderPreference(), request.getGender());
+        if (account != null) {
+            String newGenderPreference = request.get("genderPreference");
+            String newGender = request.get("gender");
 
-        return ResponseEntity.ok("Updated gender preferences");
+            GenderType genderPreference;
+            GenderType gender;
+
+            genderPreference = GenderType.valueOf(newGenderPreference.toUpperCase());
+            gender = GenderType.valueOf(newGender.toUpperCase());
+            Account user = accountRepository.findByUsername(account.getUsername()).orElse(null);
+
+            accountService.updateGenderAndPreference(user, genderPreference, gender);
+
+            return ResponseEntity.status(HttpStatus.OK).body("Gender and preference updated successfully");
+
+
+        } else
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+
     }
+    
+
 
     //endpoint for favorite genre and movie, also finds a match after updating
     @PostMapping("/choose-favorites")
@@ -124,8 +156,8 @@ public class AccountController {
         Account account = jwtService.decodeToken(token);
 
         if (account != null) {
-            Account realAccount = accountService.fillAccountInfo(account);
-            return ResponseEntity.status(HttpStatus.OK).body(realAccount);
+            Account temp = accountRepository.findByUsername(account.getUsername()).orElse(null);
+            return ResponseEntity.status(HttpStatus.OK).body(temp);
         } else
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }

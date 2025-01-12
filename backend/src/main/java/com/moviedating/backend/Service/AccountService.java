@@ -14,6 +14,7 @@ import com.moviedating.backend.Repository.AccountRepository;
 public class AccountService {
     @Autowired
     private AccountRepository accountRepository;
+    @Autowired
     jwtService jwtService;
 
 
@@ -51,15 +52,11 @@ public class AccountService {
         accountRepository.save(account);
     }
 
-    public void updateGenderAndPreference(String token, GenderType genderPreference, GenderType gender){
-        Account currentAccount = jwtService.decodeToken(token);
-
-        currentAccount.setGender(gender);
-        currentAccount.setGenderPreference(genderPreference);
-    
-        
-        accountRepository.save(currentAccount);
-    }
+        public void updateGenderAndPreference(Account user, GenderType genderPreference, GenderType gender){
+        user.setGenderPreference(genderPreference);    
+        user.setGender(gender);
+        accountRepository.save(user);
+        }
 
     public Account fillAccountInfo(Account account) {
         Optional<Account> accountFromDb = accountRepository.findByUsername(account.getUsername());

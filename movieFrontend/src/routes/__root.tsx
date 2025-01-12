@@ -1,12 +1,18 @@
-import { createRootRoute, Outlet } from '@tanstack/react-router'
+import { Toaster } from '@/components/ui/sonner'
 import QueryProvider from '@/providers/query-provider'
-import { Toaster } from '@/components/ui/toaster'
+import { createRootRoute, Outlet} from '@tanstack/react-router'
 
 export const Route = createRootRoute({
-  component: () => (
-    <QueryProvider>
-      <Outlet />
-      <Toaster/>
-    </QueryProvider>
-  ),
+  component: () => {
+
+
+    return (
+      <QueryProvider>
+      <div>
+        <Outlet />
+        <Toaster />
+      </div>
+      </QueryProvider>
+    )
+  },
 })

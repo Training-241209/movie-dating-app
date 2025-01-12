@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/form"
 
 import { Input } from "@/components/ui/input"
-import { loginSchema, LoginSchema } from "@/features/schemas/loginSchema"
+import { loginSchema, LoginSchema } from "@/features/schemas/loginShema"
 import { useLogin } from "@/features/hooks/use-login"
 
 export function LoginForm() {

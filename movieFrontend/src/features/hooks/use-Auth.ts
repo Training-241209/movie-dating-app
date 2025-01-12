@@ -4,6 +4,10 @@ import { useRouter } from "@tanstack/react-router";
 
 export function useAuth(): UseQueryResult<{
      username: string,
+     firstName: string,
+     lastName: string,
+     gender: string,
+     genderPreference: string
     }> {
   const router = useRouter();
 

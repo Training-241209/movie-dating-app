@@ -1,9 +1,12 @@
 import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "@tanstack/react-router";
-import { LoginSchema } from "../schemas/loginSchema";
+import { LoginSchema } from "../schemas/loginShema";
 import { axiosInstance } from "@/lib/axios-config";
+
+
 export function useLogin() {
+    const queryClient = useQueryClient();
     const router = useRouter();
 
     return useMutation({
@@ -12,15 +15,15 @@ export function useLogin() {
             return resp.data;
         },
         onSuccess: (data) => {
-            console.log("DATA ON SUCCESS: ",data)
-            localStorage.setItem("token",data)
-            axiosInstance.defaults.headers.common['Authorization'] = data;
-            console.log("Logged in successfuly.");
+            queryClient.invalidateQueries({
+                queryKey: ["auth"],
+            });
+            queryClient.setQueryData(["auth"], data);
+            localStorage.setItem("token", data.token);
             toast.success("Logged in successfuly.");
-            router.navigate({ to: "/genrePicking"});
+            router.navigate({ to: "/dashboard"});
         },
         onError: () => {
-            console.log("Failed to login.");
             toast.error("Failed to login.");
         },
     })

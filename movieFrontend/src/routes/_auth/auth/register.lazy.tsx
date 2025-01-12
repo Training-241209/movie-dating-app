@@ -1,5 +1,5 @@
 import { createLazyFileRoute } from '@tanstack/react-router'
-import { RegisterForm } from "@/components/shared/registerform"
+import { RegisterForm } from '@/components/shared/registerform'
 import {
     Card,
     CardContent,
@@ -20,7 +20,7 @@ function RouteComponent() {
   return(
     <div className="h-screen bg-cover bg-center" style={{ backgroundImage: `url(${reg_bg})` }}>
       <div className='flex justify-center items-center h-full'>
-        <Card className="w-[500px] bg-white bg-opacity-80 backdrop-blur-md ml-[600px]">
+        <Card className="w-[500px] bg-white bg-opacity-80 backdrop-blur-md ">
           <CardHeader>
           <div className='flex items-center justify-between w-full'>
               <CardTitle className="text-4xl font-bold">Welcome!</CardTitle>

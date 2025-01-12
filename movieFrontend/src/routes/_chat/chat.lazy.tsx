@@ -1,16 +1,13 @@
+import { createLazyFileRoute } from '@tanstack/react-router'
 import { ChatBoxCard, ChatBoxCentering, ChatBoxContents } from "@/components/shared/chat";
 import { Message } from "@/components/shared/message";
-import { createLazyFileRoute } from "@tanstack/react-router";
 
-export const Route = createLazyFileRoute("/_chat/chat")({
+export const Route = createLazyFileRoute('/_chat/chat')({
   component: RouteComponent,
-});
-
-
+})
 
 function RouteComponent() {
-  console.log(localStorage.getItem("token"));
-  return (
+  return(
     <ChatBoxCentering>
       <ChatBoxCard>
         <ChatBoxContents>
@@ -19,5 +16,5 @@ function RouteComponent() {
         </ChatBoxContents>
       </ChatBoxCard>
     </ChatBoxCentering>
-  );
+  )
 }

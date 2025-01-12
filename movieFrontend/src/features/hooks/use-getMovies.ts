@@ -2,7 +2,6 @@ import { useQuery, } from "@tanstack/react-query";
 import { axiosInstanceExternal } from "@/lib/axios-Externalconfig";
 import { useRouter } from "@tanstack/react-router";
 export function useGetMovies({genreId}:{genreId:number}){
-    const router = useRouter()
     return (
         useQuery({
             queryKey: ['movie'],
