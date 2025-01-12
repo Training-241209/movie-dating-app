@@ -31,7 +31,7 @@ function RouteComponent() {
                 </div>
             )
         }
-        else if (auth.genre == ""){
+        else if (auth.favoriteGenre == null){
             return(
                 <div>
                     <GenreListings/>
