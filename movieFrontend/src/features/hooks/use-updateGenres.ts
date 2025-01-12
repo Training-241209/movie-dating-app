@@ -1,14 +1,21 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "@/lib/axios-config";
 import { toast } from "sonner";
-
+import { useRouter } from "@tanstack/react-router";
 
 export function useUpdateGenres(){
     const queryClient = useQueryClient();
-
+    const router = useRouter()
     return useMutation({
         mutationFn: async ({genreId,movieId}:{genreId:number,movieId:number}) => {
-            const resp = await axiosInstance.patch("", {genreId,movieId},
+            const token = "Bearer " + queryClient.getQueryData<{ token: string }>(["auth"])?.token;
+            console.log(token)
+            const resp = await axiosInstance.patch("account/choose-favorites", {genreId,movieId},
+                {
+                    headers: {
+                        Authorization: token,
+                      },
+                }
             )
             return resp.data;
         },
@@ -16,7 +23,8 @@ export function useUpdateGenres(){
             toast.success("Movie and Genre Updated.");
             queryClient.invalidateQueries({
                 queryKey: ["users"],
-              });
+            });
+            router.navigate({to: '/dashboard'})
         },
         onError: (e: any) => {
             toast.error(e.response?.data);

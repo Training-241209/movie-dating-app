@@ -25,18 +25,10 @@ function RouteComponent() {
     if(auth){
 
         if(auth.gender == ""){
-            return(
-                <div>
-                    <GenderCard/>
-                </div>
-            )
+            router.navigate({to: '/genderSelection'})
         }
         else if (auth.favoriteGenre == null){
-            return(
-                <div>
-                    <GenreListings/>
-                </div>
-            )
+            router.navigate({to: '/genreSelection'})
         }
         else{
             router.navigate({ to: "/chat"});
