@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useUpdateGenderAndPreference } from "../hooks/use-UpdateGenderAndPreference"; // Adjust import path as needed
+import { useUpdateGenderAndPreference } from "../hooks/use-UpdateGenderAndPreference"; 
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"; // Import Card components from shadcn
 
