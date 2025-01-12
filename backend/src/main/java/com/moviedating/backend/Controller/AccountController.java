@@ -8,7 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +21,7 @@ import com.moviedating.backend.Repository.AccountRepository;
 import com.moviedating.backend.Service.AccountService;
 import com.moviedating.backend.Service.jwtService;
 import com.moviedating.backend.dtos.FavoritesDTO;
+import com.moviedating.backend.dtos.GenderPreferenceDTO;
 
 @RestController
 @RequestMapping("/account")
@@ -52,7 +55,16 @@ public class AccountController {
         } else
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
+    
+    @PatchMapping("/update-gender-and-preference")
+    public ResponseEntity<String> updateGenderAndPreference(@RequestBody GenderPreferenceDTO request, @RequestHeader("Authorization") String authHeader){
 
+        String token = authHeader.replace("Bearer ", "");
+
+        accountService.updateGenderAndPreference(token, request.getGenderPreference(), request.getGender());
+
+        return ResponseEntity.ok("Updated gender preferences");
+    }
     @PostMapping("/choose-favorites")
     public ResponseEntity<String> chooseFavorites(
             @RequestBody FavoritesDTO favorites,

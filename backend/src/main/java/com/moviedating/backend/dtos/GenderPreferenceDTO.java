@@ -5,5 +5,6 @@ import lombok.Data;
 @Data
 public class GenderPreferenceDTO {
     private GenderType genderPreference;
+    private GenderType gender;
 
 }

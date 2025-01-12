@@ -7,12 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.moviedating.backend.Entity.Account;
+import com.moviedating.backend.Entity.enums.GenderType;
 import com.moviedating.backend.Repository.AccountRepository;
 
 @Service
 public class AccountService {
     @Autowired
     private AccountRepository accountRepository;
+    jwtService jwtService;
+
 
     public Account registerAccount(Account account) {
         Optional<Account> existingAccount = accountRepository.findByUsername(account.getUsername());
@@ -46,6 +49,16 @@ public class AccountService {
         account.setFavoriteMovie(movieId);
 
         accountRepository.save(account);
+    }
+
+    public void updateGenderAndPreference(String token, GenderType genderPreference, GenderType gender){
+        Account currentAccount = jwtService.decodeToken(token);
+
+        currentAccount.setGender(gender);
+        currentAccount.setGenderPreference(genderPreference);
+    
+        
+        accountRepository.save(currentAccount);
     }
 
     public Account fillAccountInfo(Account account) {
