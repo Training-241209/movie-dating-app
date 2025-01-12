@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.moviedating.backend.Entity.Account;
 import com.moviedating.backend.Repository.AccountRepository;
 import com.moviedating.backend.Service.AccountService;
+import com.moviedating.backend.Service.MatchingService;
 import com.moviedating.backend.Service.jwtService;
 import com.moviedating.backend.dtos.FavoritesDTO;
 import com.moviedating.backend.dtos.GenderPreferenceDTO;
@@ -38,6 +39,8 @@ public class AccountController {
     jwtService jwtService;
     @Autowired
     AccountRepository accountRepository;
+    @Autowired
+    MatchingService matchingService;
 
     @PostMapping("/register")
     public ResponseEntity<Account> registerAccount(@RequestBody Account account) {
@@ -85,8 +88,10 @@ public class AccountController {
 
         return ResponseEntity.ok("Updated gender preferences");
     }
+
+    //endpoint for favorite genre and movie, also finds a match after updating
     @PostMapping("/choose-favorites")
-    public ResponseEntity<String> chooseFavorites(
+    public ResponseEntity<?> chooseFavorites(
             @RequestBody FavoritesDTO favorites,
             @RequestHeader(name = "Authorization") String authHeader) {
 
@@ -97,7 +102,14 @@ public class AccountController {
 
         accountService.saveLikes(username, favorites.getGenreId(), favorites.getMovieId());
 
-        return ResponseEntity.ok("User's liked genre and movie updated successfully!");
+        Optional<Account> match = matchingService.matchAccounts(extractedAccount);
+
+        if(match.isPresent()) {
+            ResponseEntity.ok(match.get());
+        } else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Couldn't find a match");
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error");
     }
 
     @GetMapping("/me")
