@@ -86,6 +86,20 @@ public class AccountController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
+    @PostMapping("logout")
+    public ResponseEntity<String> logoutUser(@RequestHeader(name = "Authorization") String authorizationHeader) {
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            String token = authorizationHeader.substring(7);
+            try {
+                jwtService.invalidateToken(token);
+                return ResponseEntity.ok("Logout successful.");
+            } catch (Exception e) {
+                return ResponseEntity.status(500).body("Failed to invalidate token.");
+            }
+        }
+        return ResponseEntity.status(400).body("Authorization header missing or invalid.");
+    }
+
     /*
      * @DeleteMapping("/delete")
      * public ResponseEntity<String> deleteAccount(@RequestHeader("Authorization")

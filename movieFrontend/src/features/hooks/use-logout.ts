@@ -15,7 +15,6 @@ export function useLogout() {
         localStorage.clear();
         queryClient.clear();
         router.navigate({ to: '/auth/login' })
-        
         },
         onError: () => {
         toast.error( "Failed to log out");

@@ -10,7 +10,7 @@ function RouteComponent() {
 
 
   useEffect(() => {
-    if (auth) {
+    if (localStorage.getItem("token") != null) {
       console.log("AUTH: ", auth)
       router.navigate({ to: "/genrePicking"});
     }
