@@ -6,7 +6,10 @@ export const Route = createLazyFileRoute("/_chat/chat")({
   component: RouteComponent,
 });
 
+
+
 function RouteComponent() {
+  console.log(localStorage.getItem("token"));
   return (
     <ChatBoxCentering>
       <ChatBoxCard>

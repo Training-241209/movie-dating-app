@@ -10,6 +10,8 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.crypto.SecretKey;
 
@@ -17,6 +19,12 @@ import javax.crypto.SecretKey;
 public class jwtService {
     @Value("${jwt.secret}")
     private String secretKey;
+
+    private final Set<String> invalidTokens = new HashSet<>();
+
+    public void invalidateToken(String token) {
+        invalidTokens.add(token);
+    }
 
     private SecretKey getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);

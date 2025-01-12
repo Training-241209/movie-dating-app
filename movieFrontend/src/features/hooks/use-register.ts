@@ -12,8 +12,6 @@ export function useRegister(){
 
     return useMutation({
         mutationFn: async (values: RegisterSchema) => {
-            console.log(values)
-            console.log(import.meta.env.VITE_API_URL+"/account/register")
             const resp = await axiosInstance.post("/account/register", values);
             return resp.data;
         },
@@ -23,7 +21,7 @@ export function useRegister(){
             router.navigate({ to: "/auth/login"});
             queryClient.invalidateQueries({
                 queryKey: ["users"],
-              });
+            });
         },
         onError: (e: any) => {
             console.log("Failed to register.");

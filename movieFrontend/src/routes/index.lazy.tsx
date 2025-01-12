@@ -13,13 +13,14 @@ function Index() {
 
 
   useEffect(() => {
-    console.log(auth);
-    if (auth) {
+    console.log("index_auth", auth);
+    if (localStorage.getItem("token") != "") {
       router.navigate({ to: "/genrePicking"});
     }
     else{
       router.navigate({ to: "/auth/login"});
     }
-  }, [auth]);
+  }, []);
 
+  return null;
 }

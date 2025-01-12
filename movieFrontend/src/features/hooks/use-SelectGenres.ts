@@ -1,20 +1,23 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { RegisterSchema } from "../schemas/registerSchema";
 import { axiosInstance } from "@/lib/axios-config";
 import { toast } from "sonner";
-import { useRouter } from "@tanstack/react-router";
+import { useAuth } from "./use-Auth";
 
 
-export function useSelectGenres({genreId,movieId}:{genreId:number,movieId:number}){
-
-    const router = useRouter();
+export function useSelectGenres(){
+    const {data: auth} = useAuth()
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async () => {
+        mutationFn: async ({genreId,movieId}:{genreId:number,movieId:number}) => {
+           
             console.log(genreId,movieId)
             console.log(import.meta.env.VITE_API_URL+"/account/choose-favorites")
-            const resp = await axiosInstance.post("/account/choose-favorites", {genreId,movieId});
+            const resp = await axiosInstance.post("/account/choose-favorites", {genreId,movieId},
+            //     {headers:{
+            //     Authorization: 'Bearer ' + auth
+            // }}
+            )
             return resp.data;
         },
         onSuccess: () => {

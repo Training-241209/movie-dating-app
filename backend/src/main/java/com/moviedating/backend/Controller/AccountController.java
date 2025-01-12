@@ -1,5 +1,9 @@
 package com.moviedating.backend.Controller;
 
+import java.util.HashMap;
+import java.util.Optional;
+
+
 import org.apache.tomcat.util.http.parser.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,7 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,8 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.moviedating.backend.Entity.Account;
 import com.moviedating.backend.Repository.AccountRepository;
 import com.moviedating.backend.Service.AccountService;
+import com.moviedating.backend.Service.MatchingService;
 import com.moviedating.backend.Service.jwtService;
 import com.moviedating.backend.dtos.FavoritesDTO;
+import com.moviedating.backend.dtos.GenderPreferenceDTO;
 
 @RestController
 @RequestMapping("/account")
@@ -31,6 +39,8 @@ public class AccountController {
     jwtService jwtService;
     @Autowired
     AccountRepository accountRepository;
+    @Autowired
+    MatchingService matchingService;
 
     @PostMapping("/register")
     public ResponseEntity<Account> registerAccount(@RequestBody Account account) {
@@ -48,13 +58,40 @@ public class AccountController {
 
         if (loggedInAccount != null) {
             String token = jwtService.generateToken(loggedInAccount);
-            return ResponseEntity.status(HttpStatus.OK).body(token);
-        } else
+            
+            Optional<Account> optionalAccount = accountRepository.findByUsername(loggedInAccount.getUsername());
+            
+            if(optionalAccount.isPresent()) {
+                Account retrievedAccount = optionalAccount.get();
+                HashMap<String, String> response = new HashMap<>();
+                response.put("token", token);
+                response.put("firstName", retrievedAccount.getFirstName());
+                response.put("lastName", retrievedAccount.getLastName());
+                
+                return ResponseEntity.status(HttpStatus.OK).body(response.toString());
+                } else {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No account found");
+                }
+            
+        } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+                
     }
 
+    @PatchMapping("/update-gender-and-preference")
+    public ResponseEntity<String> updateGenderAndPreference(@RequestBody GenderPreferenceDTO request, @RequestHeader("Authorization") String authHeader){
+
+        String token = authHeader.replace("Bearer ", "");
+
+        accountService.updateGenderAndPreference(token, request.getGenderPreference(), request.getGender());
+
+        return ResponseEntity.ok("Updated gender preferences");
+    }
+
+    //endpoint for favorite genre and movie, also finds a match after updating
     @PostMapping("/choose-favorites")
-    public ResponseEntity<String> chooseFavorites(
+    public ResponseEntity<?> chooseFavorites(
             @RequestBody FavoritesDTO favorites,
             @RequestHeader(name = "Authorization") String authHeader) {
 
@@ -65,7 +102,14 @@ public class AccountController {
 
         accountService.saveLikes(username, favorites.getGenreId(), favorites.getMovieId());
 
-        return ResponseEntity.ok("User's liked genre and movie updated successfully!");
+        Optional<Account> match = matchingService.matchAccounts(extractedAccount);
+
+        if(match.isPresent()) {
+            ResponseEntity.ok(match.get());
+        } else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Couldn't find a match");
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error");
     }
 
     @GetMapping("/me")
@@ -84,6 +128,20 @@ public class AccountController {
             return ResponseEntity.status(HttpStatus.OK).body(realAccount);
         } else
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    @PostMapping("logout")
+    public ResponseEntity<String> logoutUser(@RequestHeader(name = "Authorization") String authorizationHeader) {
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            String token = authorizationHeader.substring(7);
+            try {
+                jwtService.invalidateToken(token);
+                return ResponseEntity.ok("Logout successful.");
+            } catch (Exception e) {
+                return ResponseEntity.status(500).body("Failed to invalidate token.");
+            }
+        }
+        return ResponseEntity.status(400).body("Authorization header missing or invalid.");
     }
 
     /*
