@@ -1,5 +1,5 @@
 import { useAuth } from '@/features/hooks/use-auth';
-import { createLazyFileRoute } from '@tanstack/react-router'
+import { createLazyFileRoute, useRouter } from '@tanstack/react-router'
 import { GenreListings } from '@/features/components/genreListings';
 import { GenderCard } from '@/features/components/genderCard';
 import { useEffect } from 'react';
@@ -11,6 +11,7 @@ export const Route = createLazyFileRoute('/_protected/dashboard')({
 function RouteComponent() {
 
 
+    const router = useRouter();
     const { data: auth, refetch } = useAuth();
     console.log("dashboard", auth);
 
@@ -30,12 +31,15 @@ function RouteComponent() {
                 </div>
             )
         }
-        else{
+        else if (auth.genre == ""){
             return(
                 <div>
                     <GenreListings/>
                 </div>
             )
+        }
+        else{
+            router.navigate({ to: "/chat"});
         }
     }
 }
