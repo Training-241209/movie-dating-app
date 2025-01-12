@@ -3,11 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "@tanstack/react-router";
 import { LoginSchema } from "../schemas/loginSchema";
 import { axiosInstance } from "@/lib/axios-config";
-
-
-
 export function useLogin() {
-    const queryClient = useQueryClient();
     const router = useRouter();
 
     return useMutation({
@@ -16,10 +12,9 @@ export function useLogin() {
             return resp.data;
         },
         onSuccess: (data) => {
-            queryClient.invalidateQueries({
-                queryKey: ["auth"],
-            });
-            queryClient.setQueryData(["auth"], data);
+            console.log("DATA ON SUCCESS: ",data)
+            localStorage.setItem("token",data)
+            axiosInstance.defaults.headers.common['Authorization'] = data;
             console.log("Logged in successfuly.");
             toast.success("Logged in successfuly.");
             router.navigate({ to: "/genrePicking"});

@@ -17,9 +17,6 @@ function Index() {
     if (auth) {
       router.navigate({ to: "/genrePicking"});
     }
-    else{
-      router.navigate({ to: "/auth/login"});
-    }
   }, [auth]);
-
+  return null;
 }
