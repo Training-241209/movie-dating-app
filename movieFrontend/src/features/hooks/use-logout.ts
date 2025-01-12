@@ -7,7 +7,7 @@ export function useLogout() {
     const router = useRouter();
     return useMutation({
         mutationFn: async () => {
-        const resp = await axiosInstance.post("/auth/logout");
+        const resp = await axiosInstance.post("/account/logout");
         return resp.data;
         },
         onSuccess: () => {

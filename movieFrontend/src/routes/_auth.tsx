@@ -11,6 +11,7 @@ function RouteComponent() {
 
   useEffect(() => {
     if (auth) {
+      console.log("AUTH: ", auth)
       router.navigate({ to: "/genrePicking"});
     }
   }, [auth]);
