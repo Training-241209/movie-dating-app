@@ -1,4 +1,4 @@
-import { useAuth } from '@/features/hooks/use-auth';
+import { useAuth } from '@/features/hooks/use-Auth';
 import { createLazyFileRoute, useRouter } from '@tanstack/react-router'
 import { GenreListings } from '@/features/components/genreListings';
 import { GenderCard } from '@/features/components/genderCard';
