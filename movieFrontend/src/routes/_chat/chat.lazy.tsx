@@ -11,8 +11,8 @@ function RouteComponent() {
   const { data: auth} = useAuth();
       console.log("chat", auth);
   return(
-    <ChatBoxCentering>
-      <ChatBoxCard>
+    <ChatBoxCentering >
+      <ChatBoxCard >
         <ChatBoxContents>
           <Message user="me" message="Hello, how are you?" />
           <Message user="you" message="I'm good, thank you! How about you?" />

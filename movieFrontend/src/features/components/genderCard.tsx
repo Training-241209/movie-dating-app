@@ -16,7 +16,7 @@ export function GenderCard() {
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center bg-slate-800">
+    <div className="min-h-screen flex justify-center items-center">
         <Card className="max-w-sm mx-auto shadow-md">
         <CardHeader>
             <CardTitle className="text-2xl font-semibold text-center">Update Your Gender and Preferences</CardTitle>
@@ -39,7 +39,7 @@ export function GenderCard() {
             </div>
 
             <div className="mb-4">
-                <label className="block text-sm font-medium mb-3">Gender Preference</label>
+                <label className="block text-sm font-medium">Gender Preference</label>
                 <Select value={genderPreference} onValueChange={setGenderPreference} required>
                 <SelectTrigger >
                     <SelectValue placeholder="Select Gender Preference" />

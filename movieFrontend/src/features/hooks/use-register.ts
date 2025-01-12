@@ -4,22 +4,21 @@ import { axiosInstance } from "@/lib/axios-config";
 import { useRouter } from "@tanstack/react-router";
 import { toast } from "sonner";
 
-
-export function useRegister(){
-
+export function useRegister() {
     const router = useRouter();
 
     return useMutation({
         mutationFn: async (values: RegisterSchema) => {
-            const resp = await axiosInstance.post("/account/register", values);
-            return resp.data;
+            const response = await axiosInstance.post<{ message: string }>("/account/register", values);
+            return response.data;
         },
         onSuccess: () => {
-            toast.success("Registered successfuly.");
-            router.navigate({ to: "/auth/login"});
+            toast.success("Registered successfully.");
+            router.navigate({ to: "/auth/login" });
         },
-        onError: (e: any) => {
-            toast.error(e.response?.data);
+        onError: (error: any) => {
+            const errorMessage = error.response?.data?.message || "An error occurred. Please try again.";
+            toast.error(errorMessage);
         },
-    })
+    });
 }
