@@ -7,9 +7,9 @@ export function useAuth(): UseQueryResult<{
      firstName: string,
      lastName: string,
      gender: string,
-     genderPreference: string
-     movie: string
-     genre: string
+     genderPreference: string,
+     favoriteMovie: string,
+     favoriteGenre: string
     }> {
   const router = useRouter();
 
