@@ -41,11 +41,12 @@ public class jwtService {
     }
 
     public Account decodeToken(String token) {
+        @SuppressWarnings("deprecation")
         var claims = Jwts.parser()
                 .verifyWith(getSigningKey())
                 .build()
                 .parseSignedClaims(token)
-                .getPayload();
+                .getBody();
 
         Account account = new Account();
         account.setUsername(claims.get("username", String.class));

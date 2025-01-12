@@ -1,9 +1,13 @@
-import { useGetGenres } from "../hooks/use-getGenres";
+import { useAuth } from "../hooks/use-auth.ts";
+import { useGetGenres } from "../hooks/use-getGenres.ts";
 import { useRouter } from "@tanstack/react-router";
 
 export function GenreListings() {
     const { data = [] } = useGetGenres();
     const router = useRouter();
+
+    const { data: auth } = useAuth();
+    console.log("genre", auth);
 
     function onClick(genreId: number, genreName: string) {
         console.log(genreId);

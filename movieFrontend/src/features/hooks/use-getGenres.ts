@@ -1,6 +1,5 @@
-import { QueryClient, useQuery,useQueryClient } from "@tanstack/react-query";
-import { axiosInstanceExternal } from "@/lib/axios-Externalconfig";
-import { useRouter } from "@tanstack/react-router";
+import { useQuery} from "@tanstack/react-query";
+import {axiosInstanceExternal} from "@/lib/axios-Externalconfig";
 
 
 export function useGetGenres() {

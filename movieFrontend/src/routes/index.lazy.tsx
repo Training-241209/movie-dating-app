@@ -1,6 +1,6 @@
-import { useAuth } from '@/features/hooks/use-Auth';
+import { useAuth } from '@/features/hooks/use-auth'
 import { createLazyFileRoute, useRouter } from '@tanstack/react-router'
-import { useEffect } from 'react';
+import { useEffect } from 'react'
 
 export const Route = createLazyFileRoute('/')({
   component: Index,
@@ -8,19 +8,18 @@ export const Route = createLazyFileRoute('/')({
 
 function Index() {
 
-  const {data: auth} = useAuth();
-  const router = useRouter();
+    const { data: auth } =  useAuth();
 
+    const router = useRouter();
 
-  useEffect(() => {
-    console.log("index_auth", auth);
-    if (localStorage.getItem("token") != "") {
-      router.navigate({ to: "/genrePicking"});
-    }
-    else{
-      router.navigate({ to: "/auth/login"});
-    }
-  }, []);
-
-  return null;
+    useEffect(() => {
+      if (auth) {
+        console.log("auth", auth);
+        router.navigate({ to: "/dashboard"});
+      }
+      else{
+        console.log("no auth");
+        router.navigate({ to: "/auth/login"});
+      }
+    });
 }

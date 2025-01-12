@@ -1,11 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "@/lib/axios-config";
 import { toast } from "sonner";
-import { useAuth } from "./use-Auth";
 
 
 export function useSelectGenres(){
-    const {data: auth} = useAuth()
     const queryClient = useQueryClient();
 
     return useMutation({

@@ -7,5 +7,9 @@ export const Route = createFileRoute('/_protected/movie/$genreId/$genreName')({
 
 function RouteComponent() {
   const { genreId, genreName } = Route.useParams()
-  return <div>{<MovieListings genreId={parseInt(genreId)} genreName={genreName} />}</div>
+  return (
+    <div>
+      {<MovieListings genreId={parseInt(genreId)} genreName={genreName} />}
+    </div>
+  )
 }
