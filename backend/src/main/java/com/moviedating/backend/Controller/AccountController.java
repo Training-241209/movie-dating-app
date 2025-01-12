@@ -1,5 +1,9 @@
 package com.moviedating.backend.Controller;
 
+import java.util.HashMap;
+import java.util.Optional;
+
+
 import org.apache.tomcat.util.http.parser.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,11 +55,27 @@ public class AccountController {
 
         if (loggedInAccount != null) {
             String token = jwtService.generateToken(loggedInAccount);
-            return ResponseEntity.status(HttpStatus.OK).body(token);
-        } else
+            
+            Optional<Account> optionalAccount = accountRepository.findByUsername(loggedInAccount.getUsername());
+            
+            if(optionalAccount.isPresent()) {
+                Account retrievedAccount = optionalAccount.get();
+                HashMap<String, String> response = new HashMap<>();
+                response.put("token", token);
+                response.put("firstName", retrievedAccount.getFirstName());
+                response.put("lastName", retrievedAccount.getLastName());
+                
+                return ResponseEntity.status(HttpStatus.OK).body(response.toString());
+                } else {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No account found");
+                }
+            
+        } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+                
     }
-    
+
     @PatchMapping("/update-gender-and-preference")
     public ResponseEntity<String> updateGenderAndPreference(@RequestBody GenderPreferenceDTO request, @RequestHeader("Authorization") String authHeader){
 
