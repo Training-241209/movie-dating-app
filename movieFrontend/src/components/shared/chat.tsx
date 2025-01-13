@@ -10,6 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Message } from "@/components/shared/message";
+import { useStompClient, useSubscription } from "react-stomp-hooks";
+
 
 export function ChatBoxCentering({ children }: { children: React.ReactNode }) {
   return <div className="min-h-screen flex justify-center items-center">{children}</div>;
@@ -20,6 +22,9 @@ export function ChatBoxCard({ children }: { children: React.ReactNode }) {
 }
 
 export function ChatBoxContents({ children }: { children: React.ReactNode }) {
+  const stompClient = useStompClient();
+  //stompClient?.subscribe(`/user/${}/queue/messages`, (message) => {console.log(message)});
+  
   const form = useForm<MessageSchema>({
     resolver: zodResolver(messageSchema),
     defaultValues: {
@@ -28,6 +33,18 @@ export function ChatBoxContents({ children }: { children: React.ReactNode }) {
   });
 
   function onSubmit(values: MessageSchema) {
+    if(stompClient){
+      const chatMessage = {
+        senderId: "alice",
+        recipientId: "bob",
+        content: values.message,
+        timestamp: new Date(),
+      }
+      stompClient.publish({
+        destination: "/app/chat",
+        body: JSON.stringify(chatMessage)
+      });
+    }
     console.log(values);
     form.reset();
   }
