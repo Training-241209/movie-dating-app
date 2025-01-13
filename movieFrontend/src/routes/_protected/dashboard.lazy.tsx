@@ -14,34 +14,23 @@ function RouteComponent() {
     console.log("dashboard", auth);
   
     useEffect(() => {
-      if (auth && (auth.gender !== "" || auth.genderPreference !== "")) {
-        refetch(); // Trigger a refetch if the auth data is incomplete or changed
-      }
-    }, [auth, refetch]);
-  
-    useEffect(() => {
-      if (auth) {
-        if (auth.gender !== "" && auth.genre !== "") {
-          // Navigate to the chat route only when both are non-empty
-          router.navigate({ to: "/chat" });
+        if (auth && (auth.gender != "" || auth.genderPreference != "")) {
+          refetch(); // Trigger a refetch if the auth data is incomplete or changed
         }
-      }
-    }, [auth, router]);
-  
-    if (auth) {
-      if (auth.gender === "") {
-        return (
-          <div>
-            <GenderCard />
-          </div>
-        );
-      } else if (auth.genre === "") {
-        return (
-          <div>
-            <GenreListings />
-          </div>
-        );
-      }
+      }, [auth, refetch]);
+
+
+    if(auth){
+
+        if(auth.gender == ""){
+            router.navigate({to: '/genderSelection'})
+        }
+        else if (auth.favoriteGenre == null){
+            router.navigate({to: '/genreSelection'})
+        }
+        else{
+            router.navigate({ to: "/chat"});
+        }
     }
   
     // Optionally, render a loading or fallback UI if `auth` is undefined or null

@@ -8,8 +8,8 @@ export function useAuth(): UseQueryResult<{
      lastName: string,
      gender: string,
      genderPreference: string,
-     movie: string,
-     genre: string
+     favoriteMovie: string,
+     favoriteGenre: string
     }> {
   const router = useRouter();
 

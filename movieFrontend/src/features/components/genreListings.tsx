@@ -1,5 +1,5 @@
-import { useAuth } from "../hooks/use-auth.ts";
-import { useGetGenres } from "../hooks/use-getGenres.ts";
+import { useAuth } from "../hooks/use-auth";
+import { useGetGenres } from "../hooks/use-getGenres";
 import { useRouter } from "@tanstack/react-router";
 
 export function GenreListings() {

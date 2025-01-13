@@ -28,11 +28,6 @@ public class AccountService {
                 || password.trim().isEmpty()) {
             return null;
         }
-
-        //input validation
-        validateUsername(account.getUsername());
-        validatePassword(account.getPassword());
-
         String hashedPass = BCrypt.hashpw(account.getPassword(), BCrypt.gensalt());
         account.setPassword(hashedPass);
         return accountRepository.save(account);
@@ -70,34 +65,5 @@ public class AccountService {
         else
             return null;
     }
-
-    //methods for input validation
-    private void validateUsername(String username){
-        if (username == null || username.length() < 5 || username.length() > 20) {
-            throw new IllegalArgumentException("Username must be between 5 and 20 characters.");
-        }
-        if (!username.matches("^[a-zA-Z0-9_.-]*$")) {
-            throw new IllegalArgumentException("Username can only contain letters, numbers, dots, dashes, and underscores.");
-        }
-    }
-
-    private void validatePassword(String password) {
-        if(password == null || password.length() < 8){
-            throw new IllegalArgumentException("Password must be 8 characters minimum.");
-        }
-        if(!password.matches(".*[A-Z].*")) {
-            throw new IllegalArgumentException("Password must contain an uppercase letter.");
-        }
-        if (!password.matches(".*[a-z].*")) {
-            throw new IllegalArgumentException("Password must contain at least one lowercase letter.");
-        }
-        if (!password.matches(".*\\d.*")) {
-            throw new IllegalArgumentException("Password must contain at least one number.");
-        }
-        if (!password.matches(".*[!@#$%^&*(),.?\":{}|<>].*")) {
-            throw new IllegalArgumentException("Password must contain at least one special character.");
-        }
-    }
-
 
 }

@@ -21,6 +21,12 @@ import { Route as ProtectedMovieGenreIdGenreNameRouteImport } from './routes/_pr
 
 const AboutLazyImport = createFileRoute('/about')()
 const IndexLazyImport = createFileRoute('/')()
+const ProtectedGenreSelectionLazyImport = createFileRoute(
+  '/_protected/genreSelection',
+)()
+const ProtectedGenderSelectionLazyImport = createFileRoute(
+  '/_protected/genderSelection',
+)()
 const ProtectedDashboardLazyImport = createFileRoute('/_protected/dashboard')()
 const ChatChatLazyImport = createFileRoute('/_chat/chat')()
 const AuthAuthRegisterLazyImport = createFileRoute('/_auth/auth/register')()
@@ -49,6 +55,24 @@ const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+
+const ProtectedGenreSelectionLazyRoute =
+  ProtectedGenreSelectionLazyImport.update({
+    id: '/genreSelection',
+    path: '/genreSelection',
+    getParentRoute: () => ProtectedRoute,
+  } as any).lazy(() =>
+    import('./routes/_protected/genreSelection.lazy').then((d) => d.Route),
+  )
+
+const ProtectedGenderSelectionLazyRoute =
+  ProtectedGenderSelectionLazyImport.update({
+    id: '/genderSelection',
+    path: '/genderSelection',
+    getParentRoute: () => ProtectedRoute,
+  } as any).lazy(() =>
+    import('./routes/_protected/genderSelection.lazy').then((d) => d.Route),
+  )
 
 const ProtectedDashboardLazyRoute = ProtectedDashboardLazyImport.update({
   id: '/dashboard',
@@ -133,6 +157,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedDashboardLazyImport
       parentRoute: typeof ProtectedImport
     }
+    '/_protected/genderSelection': {
+      id: '/_protected/genderSelection'
+      path: '/genderSelection'
+      fullPath: '/genderSelection'
+      preLoaderRoute: typeof ProtectedGenderSelectionLazyImport
+      parentRoute: typeof ProtectedImport
+    }
+    '/_protected/genreSelection': {
+      id: '/_protected/genreSelection'
+      path: '/genreSelection'
+      fullPath: '/genreSelection'
+      preLoaderRoute: typeof ProtectedGenreSelectionLazyImport
+      parentRoute: typeof ProtectedImport
+    }
     '/_auth/auth/login': {
       id: '/_auth/auth/login'
       path: '/auth/login'
@@ -171,11 +209,15 @@ const ChatRouteWithChildren = ChatRoute._addFileChildren(ChatRouteChildren)
 
 interface ProtectedRouteChildren {
   ProtectedDashboardLazyRoute: typeof ProtectedDashboardLazyRoute
+  ProtectedGenderSelectionLazyRoute: typeof ProtectedGenderSelectionLazyRoute
+  ProtectedGenreSelectionLazyRoute: typeof ProtectedGenreSelectionLazyRoute
   ProtectedMovieGenreIdGenreNameRouteRoute: typeof ProtectedMovieGenreIdGenreNameRouteRoute
 }
 
 const ProtectedRouteChildren: ProtectedRouteChildren = {
   ProtectedDashboardLazyRoute: ProtectedDashboardLazyRoute,
+  ProtectedGenderSelectionLazyRoute: ProtectedGenderSelectionLazyRoute,
+  ProtectedGenreSelectionLazyRoute: ProtectedGenreSelectionLazyRoute,
   ProtectedMovieGenreIdGenreNameRouteRoute:
     ProtectedMovieGenreIdGenreNameRouteRoute,
 }
@@ -190,6 +232,8 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutLazyRoute
   '/chat': typeof ChatChatLazyRoute
   '/dashboard': typeof ProtectedDashboardLazyRoute
+  '/genderSelection': typeof ProtectedGenderSelectionLazyRoute
+  '/genreSelection': typeof ProtectedGenreSelectionLazyRoute
   '/auth/login': typeof AuthAuthLoginLazyRoute
   '/auth/register': typeof AuthAuthRegisterLazyRoute
   '/movie/$genreId/$genreName': typeof ProtectedMovieGenreIdGenreNameRouteRoute
@@ -201,6 +245,8 @@ export interface FileRoutesByTo {
   '/about': typeof AboutLazyRoute
   '/chat': typeof ChatChatLazyRoute
   '/dashboard': typeof ProtectedDashboardLazyRoute
+  '/genderSelection': typeof ProtectedGenderSelectionLazyRoute
+  '/genreSelection': typeof ProtectedGenreSelectionLazyRoute
   '/auth/login': typeof AuthAuthLoginLazyRoute
   '/auth/register': typeof AuthAuthRegisterLazyRoute
   '/movie/$genreId/$genreName': typeof ProtectedMovieGenreIdGenreNameRouteRoute
@@ -214,6 +260,8 @@ export interface FileRoutesById {
   '/about': typeof AboutLazyRoute
   '/_chat/chat': typeof ChatChatLazyRoute
   '/_protected/dashboard': typeof ProtectedDashboardLazyRoute
+  '/_protected/genderSelection': typeof ProtectedGenderSelectionLazyRoute
+  '/_protected/genreSelection': typeof ProtectedGenreSelectionLazyRoute
   '/_auth/auth/login': typeof AuthAuthLoginLazyRoute
   '/_auth/auth/register': typeof AuthAuthRegisterLazyRoute
   '/_protected/movie/$genreId/$genreName': typeof ProtectedMovieGenreIdGenreNameRouteRoute
@@ -227,6 +275,8 @@ export interface FileRouteTypes {
     | '/about'
     | '/chat'
     | '/dashboard'
+    | '/genderSelection'
+    | '/genreSelection'
     | '/auth/login'
     | '/auth/register'
     | '/movie/$genreId/$genreName'
@@ -237,6 +287,8 @@ export interface FileRouteTypes {
     | '/about'
     | '/chat'
     | '/dashboard'
+    | '/genderSelection'
+    | '/genreSelection'
     | '/auth/login'
     | '/auth/register'
     | '/movie/$genreId/$genreName'
@@ -248,6 +300,8 @@ export interface FileRouteTypes {
     | '/about'
     | '/_chat/chat'
     | '/_protected/dashboard'
+    | '/_protected/genderSelection'
+    | '/_protected/genreSelection'
     | '/_auth/auth/login'
     | '/_auth/auth/register'
     | '/_protected/movie/$genreId/$genreName'
@@ -303,6 +357,8 @@ export const routeTree = rootRoute
       "filePath": "_protected.tsx",
       "children": [
         "/_protected/dashboard",
+        "/_protected/genderSelection",
+        "/_protected/genreSelection",
         "/_protected/movie/$genreId/$genreName"
       ]
     },
@@ -315,6 +371,14 @@ export const routeTree = rootRoute
     },
     "/_protected/dashboard": {
       "filePath": "_protected/dashboard.lazy.tsx",
+      "parent": "/_protected"
+    },
+    "/_protected/genderSelection": {
+      "filePath": "_protected/genderSelection.lazy.tsx",
+      "parent": "/_protected"
+    },
+    "/_protected/genreSelection": {
+      "filePath": "_protected/genreSelection.lazy.tsx",
       "parent": "/_protected"
     },
     "/_auth/auth/login": {

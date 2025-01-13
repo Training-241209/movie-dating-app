@@ -12,9 +12,6 @@ export function useSelectGenres(){
             console.log(genreId,movieId)
             console.log(import.meta.env.VITE_API_URL+"/account/choose-favorites")
             const resp = await axiosInstance.post("/account/choose-favorites", {genreId,movieId},
-            //     {headers:{
-            //     Authorization: 'Bearer ' + auth
-            // }}
             )
             return resp.data;
         },
