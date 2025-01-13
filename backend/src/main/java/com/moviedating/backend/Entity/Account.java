@@ -1,5 +1,6 @@
 package com.moviedating.backend.Entity;
 
+import org.hibernate.annotations.DynamicUpdate;
 import com.moviedating.backend.Entity.Movie;
 import com.moviedating.backend.Entity.enums.GenderType;
 import jakarta.persistence.*;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
+@DynamicUpdate
 @Getter
 @Setter
 @NoArgsConstructor
