@@ -10,6 +10,9 @@ import com.moviedating.backend.Entity.Account;
 import com.moviedating.backend.Entity.enums.GenderType;
 import com.moviedating.backend.Repository.AccountRepository;
 import com.moviedating.backend.dtos.UpdateUsernameDTO;
+
+import jakarta.transaction.Transactional;
+
 import com.moviedating.backend.dtos.UpdatePasswordDTO;
 
 @Service
@@ -81,6 +84,7 @@ public class AccountService {
         return accountRepository.save(currentAccount);
     }
 
+    @Transactional
     public void updatePassword(String token, String newPassword) {
         Account currentAccount = jwtService.decodeToken(token);
 
@@ -90,7 +94,7 @@ public class AccountService {
         validatePassword(newPassword);
         String hashedPass = BCrypt.hashpw(newPassword, BCrypt.gensalt());
         currentAccount.setPassword(hashedPass);
-        accountRepository.save(currentAccount);
+        accountRepository.updatePassword(currentAccount.getUsername(), hashedPass);
     }
 
     public void updateGenderAndPreference(Account user, GenderType genderPreference, GenderType gender){
