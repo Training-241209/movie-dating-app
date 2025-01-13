@@ -12,13 +12,14 @@ export function GenderCard() {
   const {mutate: updateGender} = useUpdateGenderFromDashboard()
   const {data: auth} = useAuth()
   const handleSubmit = (e: React.FormEvent) => {
-    
-    if(auth?.gender!=="" && auth?.genderPreference!== ""){
-      updateGender({ gender, genderPreference })
-    }else{
-      mutate({ gender, genderPreference });
-    }
-    e.preventDefault();
+     e.preventDefault();
+     updateGender({ gender, genderPreference })
+    // if(auth?.gender!=="" && auth?.genderPreference!== ""){
+      
+    // }else{
+    //   mutate({ gender, genderPreference });
+    // }
+   
   };
 
   return (
