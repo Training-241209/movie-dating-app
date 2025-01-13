@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useUpdateGenderAndPreference } from "../hooks/use-UpdateGenderAndPreference";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useAuth } from "../hooks/use-auth";
+import { useAuth } from "../hooks/use-Auth";
 import { useUpdateGenderFromDashboard } from "../hooks/use-updateGenderFromDashboard";
 
 export function GenderCard() {

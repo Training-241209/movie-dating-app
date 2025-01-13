@@ -2,23 +2,24 @@ import { Link } from "@tanstack/react-router";
 import { useGetMovies } from "../hooks/use-getMovies";
 import { useSelectGenres } from "../hooks/use-SelectGenres";
 import { MovieTitle } from "./movieTitle";
-import { updateGenre } from "../hooks/use-updateGenre";
-import { useAuth } from "../hooks/use-auth";
+import { useAuth } from "../hooks/use-Auth";
+import { useUpdateGenres } from "../hooks/use-updateGenres";
 
 export function MovieListings({genreId,genreName}:{genreId: number,genreName:string}){
     const {data: auth } = useAuth();
     const {data = []} = useGetMovies({genreId});
-    const {mutate: selectGenres} = useSelectGenres();
-
+    const {mutate: selectGenres} = useSelectGenres()
+    const {mutate: updateGenre} = useUpdateGenres()
     function onClick(genreId: number,movieId: number) {
         console.log("CLICKED", movieId);
         console.log("Genre", genreId);
         console.log("auth?.favoriteGenre: ", auth?.favoriteGenre)
-         if(auth?.favoriteGenre == null ){
+        if(auth?.favoriteGenre == null ){   
             selectGenres({genreId,movieId})
         }else{
-             updateGenre({genreId,movieId})
-         }       
+            console.log("UPDATING")
+            updateGenre({genreId,movieId})
+        }       
     }
 
   return (
