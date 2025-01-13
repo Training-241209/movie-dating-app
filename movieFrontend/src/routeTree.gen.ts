@@ -28,6 +28,9 @@ const ProtectedGenderSelectionLazyImport = createFileRoute(
   '/_protected/genderSelection',
 )()
 const ProtectedDashboardLazyImport = createFileRoute('/_protected/dashboard')()
+const ProtectedCredentialLazyImport = createFileRoute(
+  '/_protected/credential',
+)()
 const ChatChatLazyImport = createFileRoute('/_chat/chat')()
 const AuthAuthRegisterLazyImport = createFileRoute('/_auth/auth/register')()
 const AuthAuthLoginLazyImport = createFileRoute('/_auth/auth/login')()
@@ -80,6 +83,14 @@ const ProtectedDashboardLazyRoute = ProtectedDashboardLazyImport.update({
   getParentRoute: () => ProtectedRoute,
 } as any).lazy(() =>
   import('./routes/_protected/dashboard.lazy').then((d) => d.Route),
+)
+
+const ProtectedCredentialLazyRoute = ProtectedCredentialLazyImport.update({
+  id: '/credential',
+  path: '/credential',
+  getParentRoute: () => ProtectedRoute,
+} as any).lazy(() =>
+  import('./routes/_protected/credential.lazy').then((d) => d.Route),
 )
 
 const ChatChatLazyRoute = ChatChatLazyImport.update({
@@ -150,6 +161,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ChatChatLazyImport
       parentRoute: typeof ChatImport
     }
+    '/_protected/credential': {
+      id: '/_protected/credential'
+      path: '/credential'
+      fullPath: '/credential'
+      preLoaderRoute: typeof ProtectedCredentialLazyImport
+      parentRoute: typeof ProtectedImport
+    }
     '/_protected/dashboard': {
       id: '/_protected/dashboard'
       path: '/dashboard'
@@ -208,6 +226,7 @@ const ChatRouteChildren: ChatRouteChildren = {
 const ChatRouteWithChildren = ChatRoute._addFileChildren(ChatRouteChildren)
 
 interface ProtectedRouteChildren {
+  ProtectedCredentialLazyRoute: typeof ProtectedCredentialLazyRoute
   ProtectedDashboardLazyRoute: typeof ProtectedDashboardLazyRoute
   ProtectedGenderSelectionLazyRoute: typeof ProtectedGenderSelectionLazyRoute
   ProtectedGenreSelectionLazyRoute: typeof ProtectedGenreSelectionLazyRoute
@@ -215,6 +234,7 @@ interface ProtectedRouteChildren {
 }
 
 const ProtectedRouteChildren: ProtectedRouteChildren = {
+  ProtectedCredentialLazyRoute: ProtectedCredentialLazyRoute,
   ProtectedDashboardLazyRoute: ProtectedDashboardLazyRoute,
   ProtectedGenderSelectionLazyRoute: ProtectedGenderSelectionLazyRoute,
   ProtectedGenreSelectionLazyRoute: ProtectedGenreSelectionLazyRoute,
@@ -231,6 +251,7 @@ export interface FileRoutesByFullPath {
   '': typeof ProtectedRouteWithChildren
   '/about': typeof AboutLazyRoute
   '/chat': typeof ChatChatLazyRoute
+  '/credential': typeof ProtectedCredentialLazyRoute
   '/dashboard': typeof ProtectedDashboardLazyRoute
   '/genderSelection': typeof ProtectedGenderSelectionLazyRoute
   '/genreSelection': typeof ProtectedGenreSelectionLazyRoute
@@ -244,6 +265,7 @@ export interface FileRoutesByTo {
   '': typeof ProtectedRouteWithChildren
   '/about': typeof AboutLazyRoute
   '/chat': typeof ChatChatLazyRoute
+  '/credential': typeof ProtectedCredentialLazyRoute
   '/dashboard': typeof ProtectedDashboardLazyRoute
   '/genderSelection': typeof ProtectedGenderSelectionLazyRoute
   '/genreSelection': typeof ProtectedGenreSelectionLazyRoute
@@ -259,6 +281,7 @@ export interface FileRoutesById {
   '/_protected': typeof ProtectedRouteWithChildren
   '/about': typeof AboutLazyRoute
   '/_chat/chat': typeof ChatChatLazyRoute
+  '/_protected/credential': typeof ProtectedCredentialLazyRoute
   '/_protected/dashboard': typeof ProtectedDashboardLazyRoute
   '/_protected/genderSelection': typeof ProtectedGenderSelectionLazyRoute
   '/_protected/genreSelection': typeof ProtectedGenreSelectionLazyRoute
@@ -274,6 +297,7 @@ export interface FileRouteTypes {
     | ''
     | '/about'
     | '/chat'
+    | '/credential'
     | '/dashboard'
     | '/genderSelection'
     | '/genreSelection'
@@ -286,6 +310,7 @@ export interface FileRouteTypes {
     | ''
     | '/about'
     | '/chat'
+    | '/credential'
     | '/dashboard'
     | '/genderSelection'
     | '/genreSelection'
@@ -299,6 +324,7 @@ export interface FileRouteTypes {
     | '/_protected'
     | '/about'
     | '/_chat/chat'
+    | '/_protected/credential'
     | '/_protected/dashboard'
     | '/_protected/genderSelection'
     | '/_protected/genreSelection'
@@ -356,6 +382,7 @@ export const routeTree = rootRoute
     "/_protected": {
       "filePath": "_protected.tsx",
       "children": [
+        "/_protected/credential",
         "/_protected/dashboard",
         "/_protected/genderSelection",
         "/_protected/genreSelection",
@@ -368,6 +395,10 @@ export const routeTree = rootRoute
     "/_chat/chat": {
       "filePath": "_chat/chat.lazy.tsx",
       "parent": "/_chat"
+    },
+    "/_protected/credential": {
+      "filePath": "_protected/credential.lazy.tsx",
+      "parent": "/_protected"
     },
     "/_protected/dashboard": {
       "filePath": "_protected/dashboard.lazy.tsx",
