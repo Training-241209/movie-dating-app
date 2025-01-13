@@ -113,18 +113,8 @@ public class AccountController {
         accountService.updatePassword(token, passwordRequest.getPassword());
 
         return ResponseEntity.ok(Map.of("message", "Password updated"));
-
-    @PatchMapping("/update-username-password")
-    public ResponseEntity<String> updateUsernameAndPassword(@RequestBody AccountCredentialsDTO credentials,
-            @RequestHeader("Authorization") String authHeader) {
-        if (authHeader == null || authHeader.trim().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-
-        String token = authHeader.replace("Bearer ", "");
-        accountService.updateAccountCredentials(token, credentials);
-        return ResponseEntity.ok("Updated user credentials");
-    }
+   
 
     @PatchMapping("/update-gender-and-preference")
     public ResponseEntity<String> updateGenderAndPreference(@RequestBody Map<String, String> request,
