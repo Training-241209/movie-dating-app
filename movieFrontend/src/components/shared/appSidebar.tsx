@@ -36,9 +36,11 @@ export function AppSidebar() {
                 Update Gender
               </SidebarMenuButton>
               </Link>              
+              <Link to="/credential">
               <SidebarMenuButton>
-                Update Username
+                Update Credentials
               </SidebarMenuButton>
+              </Link>    
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

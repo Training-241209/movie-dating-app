@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useUpdateGenderAndPreference } from "../hooks/use-UpdateGenderAndPreference"; 
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"; // Import Card components from shadcn
-import { useRouter } from "@tanstack/react-router";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useAuth } from "../hooks/use-Auth";
 import { useUpdateGenderFromDashboard } from "../hooks/use-updateGenderFromDashboard";
 
@@ -11,11 +10,10 @@ export function GenderCard() {
   const [genderPreference, setGenderPreference] = useState<string>("");
   const { mutate } = useUpdateGenderAndPreference();
   const {mutate: updateGender} = useUpdateGenderFromDashboard()
-  const router = useRouter()
   const {data: auth} = useAuth()
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if(auth?.gender!="" && auth?.genderPreference!= ""){
+    if(auth?.gender!=null && auth?.genderPreference!= null){
       updateGender({ gender, genderPreference })
     }else{
       mutate({ gender, genderPreference });
