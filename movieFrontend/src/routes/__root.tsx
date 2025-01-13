@@ -7,7 +7,6 @@ import { StompSessionProvider } from 'react-stomp-hooks'
 export const Route = createRootRoute({
   component: () => {
 
-
     return (
       <StompSessionProvider
             url="ws://localhost:8080/websocket"

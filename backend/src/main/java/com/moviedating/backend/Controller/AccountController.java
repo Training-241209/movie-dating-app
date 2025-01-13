@@ -78,6 +78,7 @@ public class AccountController {
                                 ? retrievedAccount.getGenderPreference().toString()
                                 : "");
 
+
                 return ResponseEntity.status(HttpStatus.OK).body(response);
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No account found");

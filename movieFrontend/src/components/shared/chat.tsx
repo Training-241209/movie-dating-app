@@ -9,7 +9,7 @@ import { messageSchema, MessageSchema } from "@/features/schemas/messageSchema";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
-import { Message } from "@/components/shared/message";
+import {useAuth} from "@/features/hooks/use-Auth";
 import { useStompClient, useSubscription } from "react-stomp-hooks";
 
 
@@ -22,8 +22,9 @@ export function ChatBoxCard({ children }: { children: React.ReactNode }) {
 }
 
 export function ChatBoxContents({ children }: { children: React.ReactNode }) {
+  const {data:auth} = useAuth();
   const stompClient = useStompClient();
-  stompClient?.subscribe(`/user/{alice}/queue/messages`, (message) => {
+  stompClient?.subscribe(`/user/${auth?.username}/queue/messages`, (message) => {
     const textDecode = new TextDecoder('Utf-8');
     const body = textDecode.decode(message.binaryBody);
     console.log("message: ", JSON.parse(body));
@@ -40,7 +41,7 @@ export function ChatBoxContents({ children }: { children: React.ReactNode }) {
   function onSubmit(values: MessageSchema) {
     if(stompClient){
       const chatMessage = {
-        senderId: "alice",
+        senderId: auth?.username,
         recipientId: "bob",
         content: values.message,
         timestamp: new Date(),

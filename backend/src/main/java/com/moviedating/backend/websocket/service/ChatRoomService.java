@@ -27,22 +27,24 @@ public class ChatRoomService {
         return chatRoom.map(ChatRoom::getId);
     }
 
-    private String createNewChatId(String senderId, String recipientId){
-        String chatId = String.format(("%s_%s"), senderId, recipientId);
-
-        ChatRoom senderRecipient = new ChatRoom();
-        senderRecipient.setId(chatId);
-        senderRecipient.setSenderId(senderId);
-        senderRecipient.setRecipientId(recipientId);
-
-        ChatRoom recipientSender = new ChatRoom();
-        recipientSender.setId(chatId);
-        recipientSender.setSenderId(recipientId);
-        recipientSender.setRecipientId(senderId);
-
-        chatRoomRepo.save(senderRecipient);
-        chatRoomRepo.save(recipientSender);
-        return chatId;
+    private String createNewChatId(String senderId, String recipientId) {
+        String chatIdSender = String.format("%s_%s", senderId, recipientId);
+        String chatIdRecipient = String.format("%s_%s", recipientId, senderId);
+    
+        ChatRoom senderToRecipient = new ChatRoom();
+        senderToRecipient.setId(chatIdSender);
+        senderToRecipient.setSenderId(senderId);
+        senderToRecipient.setRecipientId(recipientId);
+    
+        ChatRoom recipientToSender = new ChatRoom();
+        recipientToSender.setId(chatIdRecipient);
+        recipientToSender.setSenderId(recipientId);
+        recipientToSender.setRecipientId(senderId);
+    
+        chatRoomRepo.save(senderToRecipient);
+        chatRoomRepo.save(recipientToSender);
+    
+        return chatIdSender; 
     }
 
     public List<ChatRoom> getAllSenderChatRooms(String senderId){
