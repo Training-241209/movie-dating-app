@@ -1,6 +1,8 @@
 package com.moviedating.backend.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +70,22 @@ public class AccountService {
         account.setFavoriteMovie(movieId);
     }
 
+    public List<Account> findMatches(String username) {
+        Optional<Account> user = accountRepository.findByUsername(username);
+        if (user.get() == null) {
+            throw new IllegalArgumentException("User not found");
+        }
+        Account temp = user.get();
+        
+        String favoriteMovie = temp.getFavoriteMovie().toString();
+
+        // Find users with the same favorite movie, excluding the current user
+        return accountRepository.findByFavoriteMovie(Integer.valueOf(favoriteMovie)).stream()
+                .filter(account -> !account.getUsername().equals(username))  // Exclude the current user
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
     public Account updateUsername(String token, String newUsername){
         Account currentAccount = jwtService.decodeToken(token);
 
@@ -80,8 +98,10 @@ public class AccountService {
         }
         
         validateUsername(newUsername);
+        accountRepository.updateUsername( currentAccount.getAccountId(), newUsername);
         currentAccount.setUsername(newUsername);
-        return accountRepository.save(currentAccount);
+        return currentAccount;
+        
     }
 
     @Transactional

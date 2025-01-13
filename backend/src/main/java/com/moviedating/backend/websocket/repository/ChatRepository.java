@@ -9,4 +9,6 @@ import com.moviedating.backend.websocket.entity.Chat;
 
 public interface ChatRepository extends JpaRepository<Chat, Long> {
     List<Chat> findByChatId(String chatId);
+
+    List<Chat> findBySenderIdAndRecipientId(String senderId, String recipientId);
 }

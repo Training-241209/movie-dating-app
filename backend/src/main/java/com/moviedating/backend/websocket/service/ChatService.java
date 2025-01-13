@@ -25,12 +25,8 @@ public class ChatService {
         return chatRepo.save(message);
     }
 
-    public List<Chat> findChats(String senderId, String recipientId){
-        Optional<String> chatId = chatRoomService.getChatRoomId(senderId, recipientId, false);
-        if(chatId.isEmpty()){
-            throw new RuntimeException("Chat Room Not Found");
-        }
-        return chatRepo.findByChatId(chatId.get());
+    public List<Chat> findChats(String senderId, String recipientId) {
+        return chatRepo.findBySenderIdAndRecipientId(senderId, recipientId);
     }
 
 

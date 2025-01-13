@@ -68,6 +68,7 @@ public class AccountController {
                 Account retrievedAccount = optionalAccount.get();
                 HashMap<String, String> response = new HashMap<>();
                 response.put("token", token);
+                response.put("id", retrievedAccount.getAccountId().toString());
                 response.put("username", retrievedAccount.getUsername());
                 response.put("firstName", retrievedAccount.getFirstName());
                 response.put("lastName", retrievedAccount.getLastName());
