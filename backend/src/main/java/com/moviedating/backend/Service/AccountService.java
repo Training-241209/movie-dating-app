@@ -87,6 +87,7 @@ public class AccountService {
         if(newPassword.isEmpty()){
             throw new IllegalArgumentException("Password cannot be empty");
         }
+        validatePassword(newPassword);
         String hashedPass = BCrypt.hashpw(newPassword, BCrypt.gensalt());
         currentAccount.setPassword(hashedPass);
         accountRepository.save(currentAccount);
