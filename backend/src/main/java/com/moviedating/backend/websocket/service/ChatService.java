@@ -1,6 +1,5 @@
 package com.moviedating.backend.websocket.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,8 +28,10 @@ public class ChatService {
     public List<Chat> findChats(String senderId, String recipientId){
         Optional<String> chatId = chatRoomService.getChatRoomId(senderId, recipientId, false);
         if(chatId.isEmpty()){
-            return new ArrayList<>();
+            throw new RuntimeException("Chat Room Not Found");
         }
         return chatRepo.findByChatId(chatId.get());
     }
+
+
 }
