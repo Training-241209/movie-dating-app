@@ -1,10 +1,7 @@
 package com.moviedating.backend.dtos;
-
 import lombok.Data;
 
 @Data
-public class AccountCredentialsDTO {
+public class UpdateUsernameDTO {
     private String username;
-    private String password;
-
 }

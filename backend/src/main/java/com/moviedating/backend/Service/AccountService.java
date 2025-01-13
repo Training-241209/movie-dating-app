@@ -9,7 +9,8 @@ import org.springframework.stereotype.Service;
 import com.moviedating.backend.Entity.Account;
 import com.moviedating.backend.Entity.enums.GenderType;
 import com.moviedating.backend.Repository.AccountRepository;
-import com.moviedating.backend.dtos.AccountCredentialsDTO;
+import com.moviedating.backend.dtos.UpdateUsernameDTO;
+import com.moviedating.backend.dtos.UpdatePasswordDTO;
 
 @Service
 public class AccountService {
@@ -56,27 +57,41 @@ public class AccountService {
         accountRepository.save(account);
     }
 
-    public void updateAccountCredentials(String token, AccountCredentialsDTO credentials) {
+    public void updateLikes(String username, Integer genreId, Integer movieId) {
+        Account account = accountRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("Account cannot be found"));
 
-        Account currentAccount = jwtService.decodeToken(token);
-
-        if(credentials.getUsername() != null && !credentials.getUsername().isEmpty()) {
-            if(accountRepository.existsByUsername(credentials.getUsername())){
-                throw new IllegalArgumentException("Username taken");
-            }
-            validateUsername(currentAccount.getUsername());
-            currentAccount.setUsername(credentials.getUsername());
-        }
-        
-        if(credentials.getPassword() != null && !credentials.getPassword().isEmpty()) {
-            validatePassword(currentAccount.getPassword());
-            String hashedPass = BCrypt.hashpw(currentAccount.getPassword(), BCrypt.gensalt());
-            currentAccount.setPassword(hashedPass);
-        }
-
-        accountRepository.save(currentAccount);
+        account.setFavoriteGenre(genreId);
+        account.setFavoriteMovie(movieId);
     }
 
+    public Account updateUsername(String token, String newUsername){
+        Account currentAccount = jwtService.decodeToken(token);
+
+        if(newUsername == null || newUsername.isEmpty()){
+            throw new IllegalArgumentException("Username cannot be empty");
+        }
+
+        if(accountRepository.existsByUsername(newUsername)){
+            throw new IllegalArgumentException("Username already exists");
+        }
+        
+        validateUsername(newUsername);
+        currentAccount.setUsername(newUsername);
+        return accountRepository.save(currentAccount);
+    }
+
+    public void updatePassword(String token, String newPassword) {
+        Account currentAccount = jwtService.decodeToken(token);
+
+        if(newPassword.isEmpty()){
+            throw new IllegalArgumentException("Password cannot be empty");
+        }
+        validatePassword(newPassword);
+        String hashedPass = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+        currentAccount.setPassword(hashedPass);
+        accountRepository.save(currentAccount);
+    }
 
     public void updateGenderAndPreference(Account user, GenderType genderPreference, GenderType gender){
         user.setGenderPreference(genderPreference);    
