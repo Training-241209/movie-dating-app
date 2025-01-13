@@ -6,11 +6,15 @@ export const passwordSchema = z.object({
     .string({
       message: "Password is required",
     })
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+      "Password must be a minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character")
     .min(1, "Password is required"),
+    
   newPassword: z
     .string({
       message: "Password is required",
-    })
+    }).regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+      "Password must be a minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character")
     .min(1, "Password is required"),
   confirmNewPassword: z
     .string({

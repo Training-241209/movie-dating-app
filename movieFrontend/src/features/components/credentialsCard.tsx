@@ -38,7 +38,7 @@ export function CredentialsCard(){
     const {mutate: updatePassword} = useUpdatePassword()
     
     function submitUsername(values:UsernameSchema){
-        //updateUsername(values.newUsername)
+        // updateUsername(values.newUsername)
         console.log("Updated Username: ",values.newUsername)
         formUser.reset()
     }
@@ -51,7 +51,13 @@ export function CredentialsCard(){
             });
             return;
         }
-        // updatePassword(values.newPassword)
+        if(values.password === values.newPassword){
+            formPassword.setError("confirmNewPassword", {
+                message: "Can not update to same password.",
+            });
+            return;
+        }
+        updatePassword(values.newPassword)
         console.log("Update Password: ", values.newPassword)
         formPassword.reset()
     }
