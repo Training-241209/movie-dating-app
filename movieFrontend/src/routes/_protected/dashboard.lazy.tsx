@@ -16,17 +16,18 @@ function RouteComponent() {
     console.log("dashboard", auth);
 
     useEffect(() => {
-        if (auth && (auth.gender != "" || auth.genderPreference != "")) {
+        if (auth && (auth.gender !== "" || auth.genderPreference !== "")) {
           refetch(); // Trigger a refetch if the auth data is incomplete or changed
         }
       }, [auth, refetch]);
 
 
     if(auth){
-        if(auth.gender == ""){
+
+        if(auth.gender === ""){
             router.navigate({to: '/genderSelection'})
         }
-        else if (auth.favoriteGenre == null){
+        else if (auth.favoriteGenre === null){
             router.navigate({to: '/genreSelection'})
         }
         else{

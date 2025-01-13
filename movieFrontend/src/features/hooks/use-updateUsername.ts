@@ -17,11 +17,17 @@ export function useUpdateUsername(){
             )
             return resp.data;
         },
-        onSuccess: () => {
+        onSuccess: (data) => {
             toast.success("UsernameUpdated.");
+            localStorage.removeItem("token")
             queryClient.invalidateQueries({
                 queryKey: ["users"],
             });
+            queryClient.invalidateQueries({
+                queryKey: ["auth"],
+            });
+            queryClient.setQueryData(["auth"], data);
+            localStorage.setItem("token", data.token);
         },
         onError: (e: any) => {
             toast.error(e.response?.data);

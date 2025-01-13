@@ -5,11 +5,15 @@ export const registerSchema = z.object({
     .string({
       message: "Username is required",
     })
+    .regex(/^[a-zA-Z0-9_.-]{5,20}$/,
+      "Username must be in between 5 - 20 characters and only contain letters, numbers, dots, dashes, and underscores")
     .min(1, "Username is required"),
   password: z
     .string({
       message: "Password is required",
     })
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+      "Password must be a minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character")
     .min(1, "Password is required"),
   confirmPassword: z
     .string({

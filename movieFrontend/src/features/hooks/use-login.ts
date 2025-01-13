@@ -1,7 +1,7 @@
 import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "@tanstack/react-router";
-import { LoginSchema } from "../schemas/loginShema";
+import { LoginSchema } from "../schemas/loginSchema";
 import { axiosInstance } from "@/lib/axios-config";
 
 
