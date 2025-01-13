@@ -27,6 +27,7 @@ import com.moviedating.backend.Repository.AccountRepository;
 import com.moviedating.backend.Service.AccountService;
 import com.moviedating.backend.Service.MatchingService;
 import com.moviedating.backend.Service.jwtService;
+import com.moviedating.backend.dtos.AccountCredentialsDTO;
 import com.moviedating.backend.dtos.FavoritesDTO;
 import com.moviedating.backend.dtos.GenderPreferenceDTO;
 
@@ -86,6 +87,18 @@ public class AccountController {
                 
     }
 
+    @PatchMapping("/update-username-password")
+    public ResponseEntity<String> updateUsernameAndPassword(@RequestBody AccountCredentialsDTO credentials,
+        @RequestHeader("Authorization") String authHeader) {
+            if (authHeader == null || authHeader.trim().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+            
+            String token = authHeader.replace("Bearer ", "");
+            accountService.updateAccountCredentials(token, credentials);
+            return ResponseEntity.ok("Updated user credentials");  
+    }
+
     @PatchMapping("/update-gender-and-preference")
     public ResponseEntity<String> updateGenderAndPreference(@RequestBody Map<String, String> request, @RequestHeader("Authorization") String authHeader) {
 
@@ -137,10 +150,13 @@ public class AccountController {
         String username = extractedAccount.getUsername();
 
         accountService.saveLikes(username, favorites.getGenreId(), favorites.getMovieId());
+        return ResponseEntity.ok("Favorite genre and movie updated successfully");
 
-        Optional<Account> match = matchingService.matchAccounts(extractedAccount);
-
+      
         //incomplete, finish later 
+
+        /*
+        //Optional<Account> match = matchingService.matchAccounts(extractedAccount);
 
         if(match.isPresent()) {
             ResponseEntity.ok(match.get());
@@ -148,6 +164,7 @@ public class AccountController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Couldn't find a match");
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error");
+        */
     }
 
     @GetMapping("/me")
