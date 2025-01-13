@@ -51,6 +51,12 @@ export function CredentialsCard(){
             });
             return;
         }
+        if(values.password !== values.newPassword){
+            formPassword.setError("confirmNewPassword", {
+                message: "Can not update to same password.",
+            });
+            return;
+        }
         // updatePassword(values.newPassword)
         console.log("Update Password: ", values.newPassword)
         formPassword.reset()
