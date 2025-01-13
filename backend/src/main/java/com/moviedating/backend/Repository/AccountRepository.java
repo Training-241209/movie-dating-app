@@ -16,10 +16,16 @@ import com.moviedating.backend.Entity.Movie;
 public interface AccountRepository extends JpaRepository<Account, Integer> {
 
     Optional<Account> findByUsername(String username);
+
     boolean existsByUsername(String username);
+
     @Modifying
     @Query("UPDATE Account a SET a.password = :password WHERE a.username = :username")
     void updatePassword(@Param("username") String username, @Param("password") String password);
+
+    @Query("UPDATE Account a SET a.username = :username WHERE a.accountId = :accountId")
+    void updateUsername(@Param("accountId") Integer accountId, @Param("username") String username);
+    
     @Query("SELECT a from Account a WHERE a.favoriteMovie = :movieId AND a.favoriteGenre = :genreId AND a.accountId != :currentAccountId")
     List<Account> findByFavoriteMovieAndFavoriteGenre(
         @Param("movieId") Integer movieId,

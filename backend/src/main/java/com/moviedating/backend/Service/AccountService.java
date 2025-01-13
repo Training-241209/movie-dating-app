@@ -68,6 +68,7 @@ public class AccountService {
         account.setFavoriteMovie(movieId);
     }
 
+    @Transactional
     public Account updateUsername(String token, String newUsername){
         Account currentAccount = jwtService.decodeToken(token);
 
@@ -80,8 +81,10 @@ public class AccountService {
         }
         
         validateUsername(newUsername);
+        accountRepository.updateUsername( currentAccount.getAccountId(), newUsername);
         currentAccount.setUsername(newUsername);
-        return accountRepository.save(currentAccount);
+        return currentAccount;
+        
     }
 
     @Transactional
