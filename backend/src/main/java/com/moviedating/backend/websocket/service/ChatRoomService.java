@@ -15,10 +15,10 @@ import lombok.RequiredArgsConstructor;
 public class ChatRoomService {
     private final ChatRoomRepository chatRoomRepo;
 
-    public Optional<String> getChatRoomId(String senderId, String recipientId, boolean createChatRoomIFNotExist){
+    public Optional<String> getChatRoomId(String senderId, String recipientId, boolean createChatRoomIFNotExist) {
         Optional<ChatRoom> chatRoom = chatRoomRepo.findBySenderIdAndRecipientId(senderId, recipientId);
-        if(chatRoom.isEmpty()){
-            if(createChatRoomIFNotExist){
+        if (chatRoom.isEmpty()) {
+            if (createChatRoomIFNotExist) {
                 String chatId = createNewChatId(senderId, recipientId);
                 return Optional.of(chatId);
             }
@@ -27,25 +27,28 @@ public class ChatRoomService {
         return chatRoom.map(ChatRoom::getId);
     }
 
-    private String createNewChatId(String senderId, String recipientId){
-        String chatId = String.format(("%s_%s"), senderId, recipientId);
+    private String createNewChatId(String senderId, String recipientId) {
+        String chatIdSender = String.format(("%s_%s"), senderId, recipientId);
+        String chatIdRecipent = String.format(("%s_%s"), recipientId, senderId);
 
         ChatRoom senderRecipient = new ChatRoom();
-        senderRecipient.setId(chatId);
+        senderRecipient.setId(chatIdSender);
+        senderRecipient.setChatId(chatIdSender);
         senderRecipient.setSenderId(senderId);
         senderRecipient.setRecipientId(recipientId);
 
         ChatRoom recipientSender = new ChatRoom();
-        recipientSender.setId(chatId);
+        recipientSender.setId(chatIdRecipent);
+        recipientSender.setChatId(chatIdRecipent);
         recipientSender.setSenderId(recipientId);
         recipientSender.setRecipientId(senderId);
 
         chatRoomRepo.save(senderRecipient);
         chatRoomRepo.save(recipientSender);
-        return chatId;
+        return chatIdSender;
     }
 
-    public List<ChatRoom> getAllSenderChatRooms(String senderId){
+    public List<ChatRoom> getAllSenderChatRooms(String senderId) {
         return chatRoomRepo.findBySenderId(senderId);
     }
 }
