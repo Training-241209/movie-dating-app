@@ -1,7 +1,7 @@
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { ChatBoxCard, ChatBoxCentering, ChatBoxContents } from "@/components/shared/chat";
 import { Message } from "@/components/shared/message";
-import { useAuth } from '@/features/hooks/use-auth';
+import { useAuth } from '@/features/hooks/use-Auth';
 
 export const Route = createLazyFileRoute('/_chat/chat')({
   component: RouteComponent,
