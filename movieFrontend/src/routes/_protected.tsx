@@ -5,5 +5,10 @@ export const Route = createFileRoute('/_protected')({
 })
 
 function RouteComponent() {
-  return (<Outlet/>)
+  return (
+    <div className='bg-slate-800'>
+        <Outlet/> 
+    </div>
+ 
+)
 }
