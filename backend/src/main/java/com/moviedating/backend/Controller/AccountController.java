@@ -113,7 +113,8 @@ public class AccountController {
         accountService.updatePassword(token, passwordRequest.getPassword());
 
         return ResponseEntity.ok(Map.of("message", "Password updated"));
-    }
+        }
+   
 
     @PatchMapping("/update-gender-and-preference")
     public ResponseEntity<String> updateGenderAndPreference(@RequestBody Map<String, String> request,
