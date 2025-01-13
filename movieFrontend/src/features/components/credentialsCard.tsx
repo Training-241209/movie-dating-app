@@ -38,7 +38,7 @@ export function CredentialsCard(){
     const {mutate: updatePassword} = useUpdatePassword()
     
     function submitUsername(values:UsernameSchema){
-        // updateUsername(values.newUsername)
+        // updateUsername(values.username)
         console.log("Updated Username: ",values.newUsername)
         formUser.reset()
     }
@@ -51,14 +51,16 @@ export function CredentialsCard(){
             });
             return;
         }
-        if(values.password !== values.newPassword){
+        if(values.password === values.newPassword){
             formPassword.setError("confirmNewPassword", {
                 message: "Can not update to same password.",
             });
             return;
         }
-        // updatePassword(values.newPassword)
-        console.log("Update Password: ", values.newPassword)
+        const password = values.newPassword
+        console.log("Update Password: ",password)
+        updatePassword({password})
+        
         formPassword.reset()
     }
     function clearUsername(){
@@ -143,7 +145,7 @@ export function CredentialsCard(){
                             render={({ field }) => (
                                 <FormItem className = "w-full">
                                     <FormControl>
-                                        <Input type="password" placeholder=" Confirm New Password" {...field} />
+                                        <Input type="password" placeholder="Confirm New Password" {...field} />
                                     </FormControl>
                                 <FormMessage />
                                 </FormItem>

@@ -2,18 +2,16 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "@/lib/axios-config";
 import { toast } from "sonner";
 
+interface passwordDTO{
+    password: string
+}
 export function useUpdatePassword(){
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: async(password:string) =>{
-            const token = "Bearer " + queryClient.getQueryData<{ token: string }>(["auth"])?.token;
-            console.log(token)
-            const resp = await axiosInstance.patch("", {password},
-                {
-                    headers: {
-                        Authorization: token,
-                      },
-                }
+        mutationFn: async(data: passwordDTO) =>{
+            console.log(data)
+            const resp = await axiosInstance.patch("/account/update-password", data,
+               
             )
             return resp.data;
         },
