@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.moviedating.backend.Entity.Account;
 import com.moviedating.backend.Entity.enums.GenderType;
 import com.moviedating.backend.Repository.AccountRepository;
+import com.moviedating.backend.dtos.AccountCredentialsDTO;
 
 @Service
 public class AccountService {
@@ -28,6 +29,9 @@ public class AccountService {
                 || password.trim().isEmpty()) {
             return null;
         }
+        validateUsername(account.getUsername());
+        validatePassword(account.getPassword());
+
         String hashedPass = BCrypt.hashpw(account.getPassword(), BCrypt.gensalt());
         account.setPassword(hashedPass);
         return accountRepository.save(account);
@@ -52,11 +56,33 @@ public class AccountService {
         accountRepository.save(account);
     }
 
-        public void updateGenderAndPreference(Account user, GenderType genderPreference, GenderType gender){
+    public void updateAccountCredentials(String token, AccountCredentialsDTO credentials) {
+
+        Account currentAccount = jwtService.decodeToken(token);
+
+        if(credentials.getUsername() != null && !credentials.getUsername().isEmpty()) {
+            if(accountRepository.existsByUsername(credentials.getUsername())){
+                throw new IllegalArgumentException("Username taken");
+            }
+            validateUsername(currentAccount.getUsername());
+            currentAccount.setUsername(credentials.getUsername());
+        }
+        
+        if(credentials.getPassword() != null && !credentials.getPassword().isEmpty()) {
+            validatePassword(currentAccount.getPassword());
+            String hashedPass = BCrypt.hashpw(currentAccount.getPassword(), BCrypt.gensalt());
+            currentAccount.setPassword(hashedPass);
+        }
+
+        accountRepository.save(currentAccount);
+    }
+
+
+    public void updateGenderAndPreference(Account user, GenderType genderPreference, GenderType gender){
         user.setGenderPreference(genderPreference);    
         user.setGender(gender);
         accountRepository.save(user);
-        }
+    }
 
     public Account fillAccountInfo(Account account) {
         Optional<Account> accountFromDb = accountRepository.findByUsername(account.getUsername());
@@ -64,6 +90,34 @@ public class AccountService {
             return accountFromDb.get();
         else
             return null;
+    }
+
+    //input validation methods
+private void validateUsername(String username){
+        if (username == null || username.length() < 5 || username.length() > 20) {
+            throw new IllegalArgumentException("Username must be between 5 and 20 characters.");
+        }
+        if (!username.matches("^[a-zA-Z0-9_.-]*$")) {
+            throw new IllegalArgumentException("Username can only contain letters, numbers, dots, dashes, and underscores.");
+        }
+    }
+    
+    private void validatePassword(String password) {
+        if(password == null || password.length() < 8){
+            throw new IllegalArgumentException("Password must be 8 characters minimum.");
+        }
+        if(!password.matches(".*[A-Z].*")) {
+            throw new IllegalArgumentException("Password must contain an uppercase letter.");
+        }
+        if (!password.matches(".*[a-z].*")) {
+            throw new IllegalArgumentException("Password must contain at least one lowercase letter.");
+        }
+        if (!password.matches(".*\\d.*")) {
+            throw new IllegalArgumentException("Password must contain at least one number.");
+        }
+        if (!password.matches(".*[!@#$%^&*(),.?\":{}|<>].*")) {
+            throw new IllegalArgumentException("Password must contain at least one special character.");
+        }
     }
 
 }
