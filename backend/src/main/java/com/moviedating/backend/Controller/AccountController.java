@@ -122,19 +122,25 @@ public class AccountController {
 
 
     //endpoint for favorite genre and movie, also finds a match after updating
-    @PostMapping("/choose-favorites")
+    @PatchMapping("/choose-favorites")
     public ResponseEntity<?> chooseFavorites(
             @RequestBody FavoritesDTO favorites,
             @RequestHeader(name = "Authorization") String authHeader) {
 
-        String token = authHeader.replace("Bearer ", "");
+        if (authHeader == null || authHeader.trim().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
+        String token = authHeader.replace("Bearer ", "");
+        System.out.println("token " + token);
         Account extractedAccount = jwtService.decodeToken(token);
         String username = extractedAccount.getUsername();
 
         accountService.saveLikes(username, favorites.getGenreId(), favorites.getMovieId());
 
         Optional<Account> match = matchingService.matchAccounts(extractedAccount);
+
+        //incomplete, finish later 
 
         if(match.isPresent()) {
             ResponseEntity.ok(match.get());

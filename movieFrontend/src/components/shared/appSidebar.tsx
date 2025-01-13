@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/sidebar"
 import { Button } from "../ui/button"
 import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
 export function AppSidebar() {
   const queryClient = useQueryClient();
   const router = useRouter()
@@ -23,11 +23,21 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupLabel>Settings</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
+              <Link to="/genreSelection">
               <SidebarMenuButton>
-                Settings
+                Update Genre
+              </SidebarMenuButton>
+              </Link>
+              <Link to="/genderSelection">
+              <SidebarMenuButton>
+                Update Gender
+              </SidebarMenuButton>
+              </Link>              
+              <SidebarMenuButton>
+                Update Username
               </SidebarMenuButton>
             </SidebarMenu>
           </SidebarGroupContent>

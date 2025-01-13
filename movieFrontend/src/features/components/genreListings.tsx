@@ -1,4 +1,4 @@
-import { useAuth } from "../hooks/use-auth.ts";
+import { useAuth } from "../hooks/use-Auth.ts";
 import { useGetGenres } from "../hooks/use-getGenres.ts";
 import { useRouter } from "@tanstack/react-router";
 
