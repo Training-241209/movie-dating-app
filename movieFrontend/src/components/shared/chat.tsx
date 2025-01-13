@@ -23,7 +23,7 @@ export function ChatBoxCard({ children }: { children: React.ReactNode }) {
 
 export function ChatBoxContents({ children }: { children: React.ReactNode }) {
   const stompClient = useStompClient();
-  //stompClient?.subscribe(`/user/${}/queue/messages`, (message) => {console.log(message)});
+  stompClient?.subscribe(`/user/{alice}/queue/messages`, (message) => {console.log(message)});
   
   const form = useForm<MessageSchema>({
     resolver: zodResolver(messageSchema),
@@ -45,7 +45,7 @@ export function ChatBoxContents({ children }: { children: React.ReactNode }) {
         body: JSON.stringify(chatMessage)
       });
     }
-    console.log(values);
+    //console.log(values);
     form.reset();
   }
 
