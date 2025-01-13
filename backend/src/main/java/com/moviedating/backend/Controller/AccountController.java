@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-
 import org.apache.tomcat.util.http.parser.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -62,43 +61,45 @@ public class AccountController {
 
         if (loggedInAccount != null) {
             String token = jwtService.generateToken(loggedInAccount);
-            
+
             Optional<Account> optionalAccount = accountRepository.findByUsername(loggedInAccount.getUsername());
-            
-            if(optionalAccount.isPresent()) {
+
+            if (optionalAccount.isPresent()) {
                 Account retrievedAccount = optionalAccount.get();
                 HashMap<String, String> response = new HashMap<>();
                 response.put("token", token);
-                response.put("username", retrievedAccount.getUsername());    
+                response.put("username", retrievedAccount.getUsername());
                 response.put("firstName", retrievedAccount.getFirstName());
                 response.put("lastName", retrievedAccount.getLastName());
-                response.put("gender", 
-                retrievedAccount.getGender() != null ? retrievedAccount.getGender().toString() : "");
-                response.put("genderPreference", 
-                retrievedAccount.getGenderPreference() != null ? retrievedAccount.getGenderPreference().toString() : "");
-                
+                response.put("gender",
+                        retrievedAccount.getGender() != null ? retrievedAccount.getGender().toString() : "");
+                response.put("genderPreference",
+                        retrievedAccount.getGenderPreference() != null
+                                ? retrievedAccount.getGenderPreference().toString()
+                                : "");
+
                 return ResponseEntity.status(HttpStatus.OK).body(response);
-                } else {
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No account found");
-                }
-            
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No account found");
+            }
+
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-                
+
     }
 
     @PatchMapping("/update-username")
     public ResponseEntity<?> updateUsername(@RequestBody UpdateUsernameDTO usernameRequest,
-        @RequestHeader("Authorization") String authHeader) {
-            if (authHeader == null || authHeader.trim().isEmpty()) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            }
-            
-            String token = authHeader.replace("Bearer ", "");
-            Account updatedAccount = accountService.updateUsername(token, usernameRequest.getUsername());
-            String newToken = jwtService.generateToken(updatedAccount);
-            return ResponseEntity.ok(Map.of("message", "Username updated", "newToken", newToken));  
+            @RequestHeader("Authorization") String authHeader) {
+        if (authHeader == null || authHeader.trim().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        String token = authHeader.replace("Bearer ", "");
+        Account updatedAccount = accountService.updateUsername(token, usernameRequest.getUsername());
+        String newToken = jwtService.generateToken(updatedAccount);
+        return ResponseEntity.ok(Map.of("message", "Username updated", "newToken", newToken));
     }
 
     @PatchMapping("/update-password")
@@ -112,11 +113,22 @@ public class AccountController {
         accountService.updatePassword(token, passwordRequest.getPassword());
 
         return ResponseEntity.ok(Map.of("message", "Password updated"));
+
+    @PatchMapping("/update-username-password")
+    public ResponseEntity<String> updateUsernameAndPassword(@RequestBody AccountCredentialsDTO credentials,
+            @RequestHeader("Authorization") String authHeader) {
+        if (authHeader == null || authHeader.trim().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        String token = authHeader.replace("Bearer ", "");
+        accountService.updateAccountCredentials(token, credentials);
+        return ResponseEntity.ok("Updated user credentials");
     }
 
-
     @PatchMapping("/update-gender-and-preference")
-    public ResponseEntity<String> updateGenderAndPreference(@RequestBody Map<String, String> request, @RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<String> updateGenderAndPreference(@RequestBody Map<String, String> request,
+            @RequestHeader("Authorization") String authHeader) {
 
         if (authHeader == null || authHeader.trim().isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -141,16 +153,12 @@ public class AccountController {
 
             return ResponseEntity.status(HttpStatus.OK).body("Gender and preference updated successfully");
 
-
         } else
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
-
     }
-    
 
-
-    //endpoint for favorite genre and movie, also finds a match after updating
+    // endpoint for favorite genre and movie, also finds a match after updating
     @PostMapping("/choose-favorites")
     public ResponseEntity<?> chooseFavorites(
             @RequestBody FavoritesDTO favorites,
@@ -168,19 +176,19 @@ public class AccountController {
         accountService.saveLikes(username, favorites.getGenreId(), favorites.getMovieId());
         return ResponseEntity.ok("Favorite genre and movie updated successfully");
 
-      
-        //incomplete, finish later 
+        // incomplete, finish later
 
         /*
-        //Optional<Account> match = matchingService.matchAccounts(extractedAccount);
-
-        if(match.isPresent()) {
-            ResponseEntity.ok(match.get());
-        } else{
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Couldn't find a match");
-        }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error");
-        */
+         * //Optional<Account> match = matchingService.matchAccounts(extractedAccount);
+         * 
+         * if(match.isPresent()) {
+         * ResponseEntity.ok(match.get());
+         * } else{
+         * return
+         * ResponseEntity.status(HttpStatus.NOT_FOUND).body("Couldn't find a match");
+         * }
+         * return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error");
+         */
     }
 
     @PatchMapping("/update-favorites")
@@ -200,21 +208,20 @@ public class AccountController {
         accountService.updateLikes(username, favorites.getGenreId(), favorites.getMovieId());
         return ResponseEntity.ok("Favorite genre and movie updated successfully");
 
-      
-        //incomplete, finish later 
+        // incomplete, finish later
 
         /*
-        //Optional<Account> match = matchingService.matchAccounts(extractedAccount);
-
-        if(match.isPresent()) {
-            ResponseEntity.ok(match.get());
-        } else{
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Couldn't find a match");
-        }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error");
-        */
+         * //Optional<Account> match = matchingService.matchAccounts(extractedAccount);
+         * 
+         * if(match.isPresent()) {
+         * ResponseEntity.ok(match.get());
+         * } else{
+         * return
+         * ResponseEntity.status(HttpStatus.NOT_FOUND).body("Couldn't find a match");
+         * }
+         * return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error");
+         */
     }
-
 
     @GetMapping("/me")
     public ResponseEntity<Account> authCheck(@RequestHeader(name = "Authorization") String authHeader) {
