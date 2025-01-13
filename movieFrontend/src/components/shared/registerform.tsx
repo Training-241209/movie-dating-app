@@ -17,9 +17,11 @@ import {
   RegisterSchema,
 } from "@/features/schemas/registerSchema";
 import { useRegister } from "@/features/hooks/use-register";
+import { useStompClient } from "react-stomp-hooks";
 
 export function RegisterForm() {
   const { mutate: register, isPending } = useRegister();
+  const stompClient = useStompClient();
 
   const form = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
@@ -32,7 +34,21 @@ export function RegisterForm() {
     },
   });
 
+  function createChatUser(){
+
+    if(stompClient){
+      stompClient.subscribe(`/user/${form.getValues("username")}`, (message) => {console.log(message)});
+      stompClient.publish({
+        destination: "/app/addUser",
+        body: JSON.stringify({name: form.getValues("username"), status: "OFFLINE"})
+      })
+    } else {
+      console.error("No stomp client");
+    }
+  };
+
   function onSubmit(values: RegisterSchema) {
+    createChatUser();
     register(values);
   }
 

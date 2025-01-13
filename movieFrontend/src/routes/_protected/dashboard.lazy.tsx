@@ -21,7 +21,6 @@ function RouteComponent() {
 
 
     if(auth){
-
         if(auth.gender == ""){
             router.navigate({to: '/genderSelection'})
         }

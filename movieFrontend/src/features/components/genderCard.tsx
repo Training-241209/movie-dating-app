@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useUpdateGenderAndPreference } from "../hooks/use-UpdateGenderAndPreference";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useAuth } from "../hooks/use-Auth";
 import { useUpdateGenderFromDashboard } from "../hooks/use-updateGenderFromDashboard";
 
@@ -9,15 +9,13 @@ export function GenderCard() {
   const [gender, setGender] = useState<string>("");
   const [genderPreference, setGenderPreference] = useState<string>("");
   const { mutate } = useUpdateGenderAndPreference();
-  const { mutate: updateGender } = useUpdateGenderFromDashboard();
-  const { data: auth } = useAuth();
-
+  const {mutate: updateGender} = useUpdateGenderFromDashboard()
+  const {data: auth} = useAuth()
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (auth?.gender && auth?.genderPreference) {
-      updateGender({ gender, genderPreference });
-    } else {
+    if(auth?.gender!=null && auth?.genderPreference!= null){
+      updateGender({ gender, genderPreference })
+    }else{
       mutate({ gender, genderPreference });
     }
   };

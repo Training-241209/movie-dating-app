@@ -1,5 +1,6 @@
 package com.moviedating.backend.websocket.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -42,5 +43,9 @@ public class ChatRoomService {
         chatRoomRepo.save(senderRecipient);
         chatRoomRepo.save(recipientSender);
         return chatId;
+    }
+
+    public List<ChatRoom> getAllSenderChatRooms(String senderId){
+        return chatRoomRepo.findBySenderId(senderId);
     }
 }

@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.moviedating.backend.websocket.entity.Chat;
 
 
-public interface ChatRepository extends JpaRepository<Chat, String> {
+public interface ChatRepository extends JpaRepository<Chat, Long> {
     List<Chat> findByChatId(String chatId);
 }

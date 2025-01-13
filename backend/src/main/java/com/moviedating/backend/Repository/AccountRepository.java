@@ -15,7 +15,8 @@ import com.moviedating.backend.Entity.Movie;
 public interface AccountRepository extends JpaRepository<Account, Integer> {
 
     Optional<Account> findByUsername(String username);
-    @Query("SELECT a from Account a WHERE a.favoriteMovie = :Movie AND a.favoriteGenre = :genreId AND a.accountId != :currentAccountId")
+    boolean existsByUsername(String username);
+    @Query("SELECT a from Account a WHERE a.favoriteMovie = :movieId AND a.favoriteGenre = :genreId AND a.accountId != :currentAccountId")
     List<Account> findByFavoriteMovieAndFavoriteGenre(
         @Param("movieId") Integer movieId,
         @Param("genreId") Integer genreId,
