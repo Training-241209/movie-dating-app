@@ -13,12 +13,16 @@ export function GenderCard() {
   const {data: auth} = useAuth()
   const handleSubmit = (e: React.FormEvent) => {
      e.preventDefault();
-     updateGender({ gender, genderPreference })
-    // if(auth?.gender!=="" && auth?.genderPreference!== ""){
-      
-    // }else{
-    //   mutate({ gender, genderPreference });
-    // }
+     if (!gender || !genderPreference) {
+        return;
+    }
+    console.log("AUTH ", auth?.gender)
+    console.log("AUTH  ", auth?.genderPreference)
+    if(auth?.gender ==null && auth?.genderPreference== null){ 
+        mutate({ gender, genderPreference });
+    }else{
+        updateGender({ gender, genderPreference })
+    }
    
   };
 
@@ -32,7 +36,7 @@ export function GenderCard() {
             <form onSubmit={handleSubmit}>
             <div className="mb-4">
                 <label className="block text-sm font-medium mb-3">Gender</label>
-                <Select value={gender} onValueChange={setGender} required>
+                <Select value={gender} onValueChange={setGender} required = {true}>
                 <SelectTrigger >
                     <SelectValue placeholder="Select Gender" />
                 </SelectTrigger>
@@ -47,7 +51,7 @@ export function GenderCard() {
 
             <div className="mb-4">
                 <label className="block text-sm font-medium mb-3">Gender Preference</label>
-                <Select value={genderPreference} onValueChange={setGenderPreference} required>
+                <Select value={genderPreference} onValueChange={setGenderPreference} required = {true}>
                 <SelectTrigger >
                     <SelectValue placeholder="Select Gender Preference" />
                 </SelectTrigger>

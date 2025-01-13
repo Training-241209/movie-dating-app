@@ -11,9 +11,6 @@ export function MovieListings({genreId,genreName}:{genreId: number,genreName:str
     const {mutate: selectGenres} = useSelectGenres()
     const {mutate: updateGenre} = useUpdateGenres()
     function onClick(genreId: number,movieId: number) {
-        console.log("CLICKED", movieId);
-        console.log("Genre", genreId);
-        console.log("auth?.favoriteGenre: ", auth?.favoriteGenre)
         if(auth?.favoriteGenre == null ){   
             selectGenres({genreId,movieId})
         }else{

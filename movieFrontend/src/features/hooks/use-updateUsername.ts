@@ -8,7 +8,7 @@ export function useUpdateUsername(){
         mutationFn: async(username:string) =>{
             const token = "Bearer " + queryClient.getQueryData<{ token: string }>(["auth"])?.token;
             console.log(token)
-            const resp = await axiosInstance.patch("", {username},
+            const resp = await axiosInstance.patch("/account/update-username", {username},
                 {
                     headers: {
                         Authorization: token,

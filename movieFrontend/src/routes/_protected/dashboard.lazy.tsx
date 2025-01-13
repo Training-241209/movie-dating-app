@@ -24,7 +24,7 @@ function RouteComponent() {
 
     if(auth){
 
-        if(auth.gender ===""){
+        if(auth.gender ==="" || auth.gender === null){
             router.navigate({to: '/genderSelection'})
         }
         else if (auth.favoriteGenre === null){

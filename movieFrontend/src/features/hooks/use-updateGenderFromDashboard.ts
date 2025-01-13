@@ -13,12 +13,9 @@ export function useUpdateGenderFromDashboard() {
   const queryClient = useQueryClient();
   return useMutation<unknown, unknown, GenderPreferenceDTO>({
     mutationFn: async (data: GenderPreferenceDTO) => {
-      const token = "Bearer " + queryClient.getQueryData<{ token: string }>(["auth"])?.token;
-      console.log(token);
+      
       const response = await axiosInstance.patch("account/update-gender-and-preference", data, {
-        headers: {
-          Authorization: token,
-        },
+        
       });
       return response.data;
     },
