@@ -18,6 +18,7 @@ import { useUpdateUsername } from "../hooks/use-updateUsername.ts";
 import { useUpdatePassword } from "../hooks/use-updatePassword.ts";
 import { Link } from "@tanstack/react-router";
 export function CredentialsCard(){
+    const {data: auth} = useAuth()
     const formUser = useForm<UsernameSchema>({
         resolver: zodResolver(usernameSchema),
         defaultValues: {
@@ -33,18 +34,16 @@ export function CredentialsCard(){
             confirmNewPassword: "",
         }
     })
-    const {data: auth } = useAuth()
     const {mutate: updateUsername} = useUpdateUsername()
     const {mutate: updatePassword} = useUpdatePassword()
     
     function submitUsername(values:UsernameSchema){
-        // updateUsername(values.username)
+        updateUsername(values.newUsername)
         console.log("Updated Username: ",values.newUsername)
         formUser.reset()
     }
 
     function submitPassword(values:PasswordSchema){
-        
         if(values.newPassword !== values.confirmNewPassword){
             formPassword.setError("confirmNewPassword", {
                 message: "Passwords do not match.",

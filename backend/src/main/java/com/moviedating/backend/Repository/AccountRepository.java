@@ -31,7 +31,8 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
         @Param("movieId") Integer movieId,
         @Param("genreId") Integer genreId,
         @Param("currentAccountId") Integer currentAccountId);
-    
+
+        List<Account> findByFavoriteMovie(Integer favoriteMovie);    
 
     // @Query("FROM account WHERE username = :usernameVar AND password =
     // :passwordVar")

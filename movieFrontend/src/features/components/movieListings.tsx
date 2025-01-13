@@ -6,14 +6,11 @@ import { useAuth } from "../hooks/use-Auth";
 import { useUpdateGenres } from "../hooks/use-updateGenres";
 
 export function MovieListings({genreId,genreName}:{genreId: number,genreName:string}){
-    const {data: auth } = useAuth()
+    const {data: auth } = useAuth();
     const {data = []} = useGetMovies({genreId});
     const {mutate: selectGenres} = useSelectGenres()
     const {mutate: updateGenre} = useUpdateGenres()
     function onClick(genreId: number,movieId: number) {
-        console.log("CLICKED", movieId);
-        console.log("Genre", genreId);
-        console.log("auth?.favoriteGenre: ", auth?.favoriteGenre)
         if(auth?.favoriteGenre == null ){   
             selectGenres({genreId,movieId})
         }else{
@@ -21,6 +18,7 @@ export function MovieListings({genreId,genreName}:{genreId: number,genreName:str
             updateGenre({genreId,movieId})
         }       
     }
+
   return (
     <div>
       <MovieTitle genreName={genreName}/>

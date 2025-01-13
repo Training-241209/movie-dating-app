@@ -1,10 +1,14 @@
+import { useAuth } from "@/features/hooks/use-Auth";
+
 interface MessageProps {
-  user: "me" | "you";
+  user: string;
   message: string;
 }
 
 export function Message({ user, message }: MessageProps) {
-  const isUser = user === "me";
+  const {data: auth} = useAuth();
+
+  const isUser = user === auth?.username;
 
   return (
     <div className={`flex ${isUser ? "justify-end" : "justify-start"} my-2 px-4`}>
