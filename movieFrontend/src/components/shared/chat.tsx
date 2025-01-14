@@ -6,46 +6,28 @@ import { messageSchema, MessageSchema } from "@/features/schemas/messageSchema";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
-import { useAuth } from "@/features/hooks/use-Auth";
 import { useStompClient } from "react-stomp-hooks";
+import { useGetChatRooms } from "@/features/hooks/use-getChatRooms";
 
-export function ChatBoxContents() {
-  const { data: auth } = useAuth();
-  const [isMatched, setIsMatched] = useState(false);
-  const [matchChecked, setMatchChecked] = useState(false);
+export function ChatBoxContents({sender, recipient}: {sender: string, recipient: string}) {
+  const { data: chatRooms=[]} = useGetChatRooms();
   const [messages, setMessages] = useState<{ user: string; content: string }[]>([]);
-  const [otherUserId, setOtherUserId] = useState<string | null>(null);
   const [messagesFetched, setMessagesFetched] = useState(false); // Flag to check if messages are fetched
   const stompClient = useStompClient();
   const chatContainerRef = React.useRef<HTMLDivElement>(null);
+  
 
-  // Check for a match when the component mounts
-  useEffect(() => {
-    const checkMatch = async () => {
-      try {
-        const otherUserMovieId = await getOtherUserMovieId();
-        if (otherUserMovieId === auth?.favoriteMovie) {
-          setIsMatched(true);
-          setOtherUserId(await getOtherUserId());
-          setMatchChecked(true);
-        }
-      } catch (error) {
-        console.error("Error checking match:", error);
-      }
-    };
+  console.log("chats", chatRooms)
 
-    checkMatch();
-  }, [auth?.favoriteMovie]);
 
   useEffect(() => {
-    if (isMatched && matchChecked && !messagesFetched) {
+    if (!messagesFetched) {
       const fetchMessages = async () => {
-        if (auth?.username && otherUserId) {
+        if (sender && recipient) {
           try {
-            const response = await fetch(`http://localhost:8080/messages/${auth?.username}/${otherUserId}`);
+            const response = await fetch(`http://localhost:8080/messages/${sender}/${recipient}`);
             const data = await response.json();
 
-            // Append messages to the state
             setMessages(
               data.map((msg: { senderId: string; content: string }) => ({
                 user: msg.senderId,
@@ -53,7 +35,7 @@ export function ChatBoxContents() {
               }))
             );
 
-            setMessagesFetched(true); // Set flag to true once messages are fetched
+            setMessagesFetched(true); 
           } catch (error) {
             console.error("Error fetching messages:", error);
           }
@@ -61,41 +43,19 @@ export function ChatBoxContents() {
       };
       fetchMessages();
     }
-  }, [isMatched, matchChecked, auth?.username, otherUserId, messagesFetched]);
+  }, [sender, recipient, messagesFetched]);
 
   // Listen for new messages after a match
   useEffect(() => {
-    if (isMatched && stompClient) {
-      stompClient.subscribe(`/user/${auth?.username}/queue/messages`, (message) => {
+    if (stompClient) {
+      stompClient.subscribe(`/user/${sender}/queue/messages`, (message) => {
         const parsedMessage = JSON.parse(message.body);
-        setMessages((prev) => [...prev, { user: otherUserId ?? "", content: parsedMessage.content }]);
+        setMessages((prev) => [...prev, { user: recipient ?? "", content: parsedMessage.content }]);
       });
     }
-  }, [isMatched, auth?.username, stompClient]);
+  }, [sender, stompClient]);
 
-  // Fetch other user's movieId for matching logic
-  async function getOtherUserMovieId() {
-    try {
-      const response = await fetch(`http://localhost:8080/api/match/${auth?.username}`);
-      const data = await response.json();
-      return data[0].favoriteMovie;
-    } catch (error) {
-      console.error("Error fetching other user's movieId:", error);
-      return null;
-    }
-  }
-
-  // Fetch other user's ID for chat history
-  async function getOtherUserId() {
-    try {
-      const response = await fetch(`http://localhost:8080/api/match/${auth?.username}`);
-      const data = await response.json();
-      return data[0].username;
-    } catch (error) {
-      console.error("Error fetching other user's ID:", error);
-      return null;
-    }
-  }
+  
 
   // Form setup using react-hook-form and Zod validation
   const form = useForm<MessageSchema>({
@@ -107,10 +67,10 @@ export function ChatBoxContents() {
 
   // Send a message to the recipient
   function onSubmit(values: MessageSchema) {
-    if (stompClient && isMatched && otherUserId) {
+    if (stompClient && sender && recipient) {
       const chatMessage = {
-        senderId: auth?.username,
-        recipientId: otherUserId,
+        senderId: sender,
+        recipientId: recipient,
         content: values.message,
         timestamp: new Date(),
       };
@@ -122,7 +82,7 @@ export function ChatBoxContents() {
       });
 
       // Update UI with the sent message
-      setMessages((prev) => [...prev, { user: auth?.username ?? "", content: values.message }]);
+      setMessages((prev) => [...prev, { user: sender ?? "", content: values.message }]);
     }
     form.reset();
   }
@@ -135,10 +95,6 @@ export function ChatBoxContents() {
     }
   }, [messages]);
 
-  if (!isMatched) {
-    return <p>You need to be matched with someone to start chatting.</p>;
-  }
-
   return (
     <>
       <div
@@ -149,9 +105,9 @@ export function ChatBoxContents() {
           messages.map((msg, index) => (
             <div
               key={index}
-              className={`p-2 ${msg.user === auth?.username ? "text-right" : "text-left"}`}
+              className={`p-2 ${msg.user === sender ? "text-right" : "text-left"}`}
             >
-              <strong>{msg.user === auth?.username ? "You" : otherUserId}: </strong>
+              <strong>{msg.user === sender ? "You" : recipient}: </strong>
               {msg.content}
             </div>
           ))

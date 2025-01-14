@@ -22,7 +22,7 @@ function RouteComponent() {
       {auth?.username}
       <ChatBoxCentering>
         <ChatBoxCard>
-          <ChatBoxContents>
+          <ChatBoxContents sender={senderId} recipient={recipientId} >
           </ChatBoxContents>
         </ChatBoxCard>
       </ChatBoxCentering>
