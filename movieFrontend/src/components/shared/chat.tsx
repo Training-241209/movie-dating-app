@@ -18,9 +18,11 @@ import { useGetChats } from "@/features/hooks/use-getChats";
 export function ChatBoxContents({
   sender,
   recipient,
+  isSidebarOpen,
 }: {
   sender: string;
   recipient: string;
+  isSidebarOpen: boolean;
 }) {
   const [messages, setMessages] = useState<{ user: string; content: string }[]>(
     []
@@ -174,9 +176,13 @@ export function ChatBoxCard({ children }: { children: React.ReactNode }) {
 }
 
 // ChatBoxCentering component to center chat box on the screen
-export function ChatBoxCentering({ children }: { children: React.ReactNode }) {
+export function ChatBoxCentering({ children, isSidebarOpen }: { children: React.ReactNode, isSidebarOpen: boolean }) {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div
+      className={`flex items-center justify-center min-h-screen bg-gray-100 transition-all ${
+        isSidebarOpen ? "ml-[250px]" : "ml-0"
+      }`}
+    >
       {children}
     </div>
   );
