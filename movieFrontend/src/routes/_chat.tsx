@@ -14,7 +14,7 @@ function RouteComponent() {
   return (
     <div >
       <SidebarProvider>
-        <AppSidebar isOpen={isSidebarOpen} />
+        <AppSidebar/>
         <main>
           <SidebarTrigger />
           <Outlet/>
