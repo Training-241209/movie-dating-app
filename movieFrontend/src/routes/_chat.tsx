@@ -1,22 +1,23 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/shared/appSidebar";
-import { useState } from "react";
+import { useSidebar } from "@/store/use-sidebar";
+
 
 export const Route = createFileRoute("/_chat")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const [isSidebarOpen, setSidebarOpen] = useState(false);
-  const toggleSidebar = () => setSidebarOpen((prev) => !prev);
+
+  const { isOpen, toggle } = useSidebar();
 
   return (
     <div >
       <SidebarProvider>
         <AppSidebar isOpen={isSidebarOpen} />
         <main>
-          <SidebarTrigger />
+          <SidebarTrigger type="submit" onClick={toggle} />
           <Outlet/>
         </main>
       </SidebarProvider>

@@ -15,21 +15,32 @@ import {
 import { useStompClient } from "react-stomp-hooks";
 import { useGetChats } from "@/features/hooks/use-getChats";
 
-export function ChatBoxContents({sender, recipient}: {sender: string, recipient: string}) {
-  const [messages, setMessages] = useState<{ user: string; content: string }[]>([]);
+export function ChatBoxContents({
+  sender,
+  recipient,
+  isSideBarOpen
+}: {
+  sender: string;
+  recipient: string;
+  isSideBarOpen: boolean;
+}) {
+  const [messages, setMessages] = useState<{ user: string; content: string }[]>(
+    []
+  );
   const stompClient = useStompClient();
   const chatContainerRef = React.useRef<HTMLDivElement>(null);
-  const {data: getMessage= [],refetch} = useGetChats({sender,recipient})
-  console.log(getMessage)
+  const { data: getMessage = [], refetch } = useGetChats({ sender, recipient });
+  console.log(getMessage);
   useEffect(() => {
     setMessages(
       getMessage.map((msg: { senderId: string; content: string }) => ({
-      user: msg.senderId,
-      content: msg.content,
-    })))
-  },[getMessage])
+        user: msg.senderId,
+        content: msg.content,
+      }))
+    );
+  }, [getMessage]);
 
-  useEffect(() => {  
+  useEffect(() => {
     refetch();
   }, [sender, recipient, refetch]);
 
@@ -45,7 +56,6 @@ export function ChatBoxContents({sender, recipient}: {sender: string, recipient:
       });
     }
   }, [sender, stompClient]);
-
 
   // Form setup using react-hook-form and Zod validation
   const form = useForm<MessageSchema>({
@@ -72,7 +82,10 @@ export function ChatBoxContents({sender, recipient}: {sender: string, recipient:
       });
 
       // Update UI with the sent message
-      setMessages((prev) => [...prev, { user: sender ?? "", content: values.message }]);
+      setMessages((prev) => [
+        ...prev,
+        { user: sender ?? "", content: values.message },
+      ]);
       refetch();
     }
     form.reset();
@@ -94,14 +107,31 @@ export function ChatBoxContents({sender, recipient}: {sender: string, recipient:
         ref={chatContainerRef}
         className="bg-gray-200 h-[500px] w-[1150px] mx-auto mt-4 border border-black rounded-md flex flex-col overflow-y-auto py-2"
       >
-        {getMessage?.length > 0 ? (
-          getMessage?.map((msg ) => (
+        {messages?.length > 0 ? (
+          messages.map((msg, index) => (
             <div
-              key={msg.id}
-              className={`p-2 ${msg.senderId === sender ? "text-right" : "text-left"}`}
+              key={index}
+              className={`p-2 flex ${msg.user === sender ? "justify-end" : "justify-start"}`}
             >
-              <strong>{msg.senderId === sender ? "You" : recipient}: </strong>
-              {msg.content}
+              <div
+                className={`flex flex-col ${msg.user === sender ? "items-end" : "items-start px-1"}`}
+              >
+                <div
+                  className={`text-sm text-gray-500 mb-1 ${msg.user === sender ? "mr-2" : ""}`}
+                >
+                  {msg.user === sender ? "You" : recipient}
+                </div>
+
+                <div
+                  className={`px-[10px] py-2 rounded-lg max-w-[400px] ${
+                    msg.user === sender
+                      ? "bg-blue-500 text-white rounded-tl-lg rounded-br-lg "
+                      : "bg-gray-300 text-black rounded-tr-lg rounded-bl-lg"
+                  }`}
+                >
+                  {msg.content}
+                </div>
+              </div>
             </div>
           ))
         ) : (
@@ -146,9 +176,13 @@ export function ChatBoxCard({ children }: { children: React.ReactNode }) {
 }
 
 // ChatBoxCentering component to center chat box on the screen
-export function ChatBoxCentering({ children }: { children: React.ReactNode }) {
+export function ChatBoxCentering({ children, isSidebarOpen }: { children: React.ReactNode, isSidebarOpen: boolean }) {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div
+      className={`flex items-center justify-center min-h-screen bg-gray-100 transition-all ${
+        isSidebarOpen ? "ml-[250px]" : "ml-0"
+      }`}
+    >
       {children}
     </div>
   );
@@ -162,26 +196,3 @@ export function ChatBoxInnerContainer({
 }) {
   return <div className="flex flex-col">{children}</div>;
 }
- // if (!messagesFetched) {
-    //   const fetchMessages = async () => {
-    //     if (sender && recipient) {
-    //       try {
-    //         const response = await fetch(`http://localhost:8080/messages/${sender}/${recipient}`);
-    //         const data = await response.json();
-    //         console.log(getMessage)
-    //         setMessages(
-    //           getMessage.map((msg: { senderId: string; content: string }) => ({
-    //             user: msg.senderId,
-    //             content: msg.content,
-    //           }))
-    //         );
-
-    //         setMessagesFetched(true); 
-    //       } catch (error) {
-    //         console.error("Error fetching messages:", error);
-    //       }
-    //     }
-    //   };
-    //   fetchMessages();
-      
-    // }
