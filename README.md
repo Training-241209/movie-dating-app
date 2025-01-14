@@ -11,6 +11,18 @@ Features we want to include in our application is included but not limited to:
 
 - Unmatching with user if not interested
 
+# User Stories
+
+* As a user, I want to be able to create an account.
+* As a user, I want to be able to login securely to my account with the username and password I specified.
+* As a user, I want to be able to logout of my account.
+* As a user, I want to be able to browse a selection of genres and movies and select my gender and choose my gender preference for matching another user.
+* As a user, I want to be able to select a favorite genre and a favorite movie.
+* As a user, I want to be be able to be match with users who selected the same favorite genre and favorite movie.
+* As a user, I want to be able to have a private chat with users I matched with. 
+* As a user, I want to be able to easily update my favorite genre and favorite movie at any time.
+* As a user, I want to be able to easily update my gender and gender preferences at any time.
+
 ## Technologies
 
 Technologies currently being discussed on being used include:

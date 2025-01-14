@@ -54,7 +54,7 @@ export function ChatBoxContents() {
     if (isMatched && stompClient) {
       stompClient.subscribe(`/user/${auth?.username}/queue/messages`, (message) => {
         const parsedMessage = JSON.parse(message.body);
-        setMessages((prev) => [...prev, { user: "you", content: parsedMessage.content }]);
+        setMessages((prev) => [...prev, { user: otherUserId ?? '', content: parsedMessage.content }]);
       });
     }
   }, [isMatched, auth?.username, stompClient]);
@@ -108,7 +108,7 @@ export function ChatBoxContents() {
       });
 
       // Update UI with the sent message
-      setMessages((prev) => [...prev, { user: "me", content: values.message }]);
+      setMessages((prev) => [...prev, { user: auth?.username ?? '', content: values.message }]);
     }
     form.reset();
   }
@@ -127,9 +127,12 @@ export function ChatBoxContents() {
     return <p>You need to be matched with someone to start chatting.</p>;
   }
 
+
+
   return (
     <>
        <div
+<<<<<<< HEAD
           ref={chatContainerRef}
           className="bg-gray-200 h-[500px] w-[1150px] mx-auto mt-4 border border-black rounded-md flex flex-col overflow-y-auto py-2"
         >
@@ -144,6 +147,24 @@ export function ChatBoxContents() {
             <div className="p-2 text-center text-gray-500">No messages yet</div>
           )}
       </div> 
+=======
+  ref={chatContainerRef}
+  className="bg-gray-200 h-[500px] w-[1150px] mx-auto mt-4 border border-black rounded-md flex flex-col overflow-y-auto py-2"
+>
+  {messages?.length > 0 ? (
+    messages.map((msg, index) => {
+      return (
+        <div key={index} className={`p-2 ${msg.user === auth?.username ? "text-right" : "text-left"}`}>
+          <strong>{msg.user}: </strong>
+          {msg.content}
+        </div>
+      );
+    })
+  ) : (
+    <div className="p-2 text-center text-gray-500">No messages yet</div>
+  )}
+</div> 
+>>>>>>> 977f8df4a571ac96183eae870d6e4a1b19396a2c
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
