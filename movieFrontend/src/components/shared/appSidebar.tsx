@@ -14,36 +14,13 @@ import { Link, useRouter } from "@tanstack/react-router";
 import { useAuth } from "@/features/hooks/use-Auth";
 import { useState,useEffect } from "react";
 import { useGetChatRooms } from "@/features/hooks/use-getChatRooms";
+import { useLogout } from "@/features/hooks/use-logout";
 export function AppSidebar() {
-  const data = [
-    {
-      "chatId": "chat_67890",
-      "senderId": "user_001",
-      "recipientId": "user_002"
-    },
-    {
-      "chatId": "chat_98765",
-      "senderId": "user_101",
-      "recipientId": "user_202"
-    },
-    {
-      "chatId": "chat_54321",
-      "senderId": "user_303",
-      "recipientId": "user_404"
-    },
-    {
-      "chatId": "chat_12345",
-      "senderId": "user_505",
-      "recipientId": "user_606"
-    }
-  ]
+  
   const queryClient = useQueryClient();
   const router = useRouter()
-  function onLogout(){
-    localStorage.clear();
-    queryClient.clear();
-    router.navigate({ to: '/auth/login' })
-  }
+  const {mutate: logout} = useLogout();
+
   function onChat(senderId:string|undefined,recipientId:string){
     router.navigate({
       to: `/chat/${senderId}/${recipientId}`,
@@ -104,7 +81,7 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <Button type = 'submit' onClick={onLogout}>Log Out</Button>
+        <Button type = 'submit' onClick={() =>logout()}>Log Out</Button>
       </SidebarFooter>
     </Sidebar>
   )

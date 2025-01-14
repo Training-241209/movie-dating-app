@@ -1,9 +1,11 @@
 import { axiosInstance } from "@/lib/axios-config";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "@tanstack/react-router";
 import { toast } from "sonner";
 
 export function useLogout() {
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   return useMutation({
     mutationFn: async () => {
@@ -18,6 +20,8 @@ export function useLogout() {
     },
     onSuccess: () => {
       toast.success("Logged out successfully");
+      localStorage.clear();
+      router.navigate({ to: "/auth/login" });
       queryClient.invalidateQueries({
         queryKey: ["auth"],
       });

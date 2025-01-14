@@ -5,7 +5,13 @@ import { SendHorizontal } from "lucide-react";
 import { messageSchema, MessageSchema } from "@/features/schemas/messageSchema";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 import { useStompClient } from "react-stomp-hooks";
 import { useGetChats } from "@/features/hooks/use-getChats";
 
@@ -32,7 +38,10 @@ export function ChatBoxContents({sender, recipient}: {sender: string, recipient:
     if (stompClient) {
       stompClient.subscribe(`/user/${sender}/queue/messages`, (message) => {
         const parsedMessage = JSON.parse(message.body);
-        setMessages((prev) => [...prev, { user: recipient ?? "", content: parsedMessage.content }]);
+        setMessages((prev) => [
+          ...prev,
+          { user: recipient ?? "", content: parsedMessage.content },
+        ]);
       });
     }
   }, [sender, stompClient]);
@@ -73,7 +82,8 @@ export function ChatBoxContents({sender, recipient}: {sender: string, recipient:
 
   useEffect(() => {
     if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
     }
     refetch();
   }, [messages]);
@@ -137,11 +147,19 @@ export function ChatBoxCard({ children }: { children: React.ReactNode }) {
 
 // ChatBoxCentering component to center chat box on the screen
 export function ChatBoxCentering({ children }: { children: React.ReactNode }) {
-  return <div className="flex items-center justify-center min-h-screen">{children}</div>;
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      {children}
+    </div>
+  );
 }
 
 // ChatBoxInnerContainer component for organizing the chat structure
-export function ChatBoxInnerContainer({ children }: { children: React.ReactNode }) {
+export function ChatBoxInnerContainer({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return <div className="flex flex-col">{children}</div>;
 }
  // if (!messagesFetched) {
