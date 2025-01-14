@@ -82,6 +82,8 @@ public class AccountService {
     
         return accountRepository.findByFavoriteMovie(Integer.valueOf(favoriteMovie)).stream()
                 .filter(account -> !account.getUsername().equals(username)) 
+                .filter(account -> account.getGenderPreference().equals(temp.getGender()))
+                .filter(account -> temp.getGenderPreference().equals(account.getGender()))
                 .map(account -> {
                     AccountDTO accountDTO = new AccountDTO();
                     accountDTO.setAccountId(account.getAccountId());
