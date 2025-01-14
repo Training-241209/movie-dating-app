@@ -95,7 +95,7 @@ export function ChatBoxContents({sender, recipient}: {sender: string, recipient:
         className="bg-gray-200 h-[500px] w-[1150px] mx-auto mt-4 border border-black rounded-md flex flex-col overflow-y-auto py-2"
       >
         {getMessage?.length > 0 ? (
-          getMessage?.map((msg:any ) => (
+          getMessage?.map((msg ) => (
             <div
               key={msg.id}
               className={`p-2 ${msg.senderId === sender ? "text-right" : "text-left"}`}
@@ -162,3 +162,26 @@ export function ChatBoxInnerContainer({
 }) {
   return <div className="flex flex-col">{children}</div>;
 }
+ // if (!messagesFetched) {
+    //   const fetchMessages = async () => {
+    //     if (sender && recipient) {
+    //       try {
+    //         const response = await fetch(`http://localhost:8080/messages/${sender}/${recipient}`);
+    //         const data = await response.json();
+    //         console.log(getMessage)
+    //         setMessages(
+    //           getMessage.map((msg: { senderId: string; content: string }) => ({
+    //             user: msg.senderId,
+    //             content: msg.content,
+    //           }))
+    //         );
+
+    //         setMessagesFetched(true); 
+    //       } catch (error) {
+    //         console.error("Error fetching messages:", error);
+    //       }
+    //     }
+    //   };
+    //   fetchMessages();
+      
+    // }

@@ -17,6 +17,7 @@ export function MovieListings({genreId,genreName}:{genreId: number,genreName:str
             console.log("UPDATING")
             updateGenre({genreId,movieId})
         }
+        //Set matched users and set up chat using movieId       
     }
 
   return (

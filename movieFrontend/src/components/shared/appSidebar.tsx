@@ -29,18 +29,16 @@ export function AppSidebar() {
   }
   const {data: auth} = useAuth()
   
-  const {data:getChatRooms=[], isPending,refetch} = useGetChatRooms()
+  const {data:getChatRooms=[], isPending} = useGetChatRooms()
 
   useEffect(() => {
     console.log("getChatRooms ",getChatRooms)
-    refetch()
-  }, [refetch]);
+  }, []);
   
   return (
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          {auth?.username}
           <SidebarGroupLabel>Settings</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -59,6 +57,9 @@ export function AppSidebar() {
                 Update Credentials
               </SidebarMenuButton>
               </Link>    
+              <SidebarMenuButton>
+                {auth?.username}
+              </SidebarMenuButton>
             </SidebarMenu>
           </SidebarGroupContent>
           <SidebarGroupLabel>Conversations</SidebarGroupLabel>
