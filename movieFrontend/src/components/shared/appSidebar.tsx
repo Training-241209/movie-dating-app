@@ -29,16 +29,18 @@ export function AppSidebar() {
   }
   const {data: auth} = useAuth()
   
-  const {data:getChatRooms=[], isPending} = useGetChatRooms()
+  const {data:getChatRooms=[], isPending,refetch} = useGetChatRooms()
 
   useEffect(() => {
     console.log("getChatRooms ",getChatRooms)
-  }, []);
+    refetch()
+  }, [refetch]);
   
   return (
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
+          {auth?.username}
           <SidebarGroupLabel>Settings</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -57,18 +59,14 @@ export function AppSidebar() {
                 Update Credentials
               </SidebarMenuButton>
               </Link>    
-              <SidebarMenuButton>
-                {auth?.username}
-              </SidebarMenuButton>
             </SidebarMenu>
           </SidebarGroupContent>
           <SidebarGroupLabel>Conversations</SidebarGroupLabel>
           <SidebarGroupContent>
-          
-          { !isPending ?(
+          {!isPending ?(
             getChatRooms.length > 0 ? (
               getChatRooms.map((item:any) => (
-                <SidebarMenuButton key={item.chatId} onClick={() => onChat(auth?.username, item.username)}>
+                <SidebarMenuButton key={item.username} onClick={() => onChat(auth?.username, item.username)}>
                   <li>
                     {item.username}
                   </li>

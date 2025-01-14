@@ -69,6 +69,7 @@ public class AccountService {
 
         account.setFavoriteGenre(genreId);
         account.setFavoriteMovie(movieId);
+        accountRepository.save(account);
     }
 
     public List<AccountDTO> findMatches(String username) {
