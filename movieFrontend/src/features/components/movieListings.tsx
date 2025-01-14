@@ -6,7 +6,7 @@ import { useAuth } from "../hooks/use-Auth";
 import { useUpdateGenres } from "../hooks/use-updateGenres";
 
 export function MovieListings({genreId,genreName}:{genreId: number,genreName:string}){
-    const {data: auth } = useAuth()
+    const {data: auth } = useAuth();
     const {data = []} = useGetMovies({genreId});
     const {mutate: selectGenres} = useSelectGenres()
     const {mutate: updateGenre} = useUpdateGenres()
@@ -19,6 +19,7 @@ export function MovieListings({genreId,genreName}:{genreId: number,genreName:str
         }
         //Set matched users and set up chat using movieId       
     }
+
   return (
     <div>
       <MovieTitle genreName={genreName}/>

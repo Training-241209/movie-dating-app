@@ -1,4 +1,4 @@
-import { useAuth } from '@/features/hooks/use-Auth';
+import { useAuth } from '@/features/hooks/use-auth';
 import { createLazyFileRoute, useRouter } from '@tanstack/react-router'
 import { useEffect } from 'react'
 

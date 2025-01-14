@@ -6,9 +6,9 @@ import {
 } from '@/components/shared/chat'
 import { Message } from '@/components/shared/message'
 
-export const Route = createLazyFileRoute('/_chat/chat')({
+export const Route = createLazyFileRoute("/_chat/chat")({
   component: RouteComponent,
-})
+});
 
 function RouteComponent() {
   return (

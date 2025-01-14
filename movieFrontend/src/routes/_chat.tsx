@@ -8,12 +8,12 @@ export const Route = createFileRoute("/_chat")({
 
 function RouteComponent() {
   return (
-    <div>
+    <div >
       <SidebarProvider>
         <AppSidebar />
         <main>
           <SidebarTrigger />
-          <Outlet />
+          <Outlet/>
         </main>
       </SidebarProvider>
     </div>

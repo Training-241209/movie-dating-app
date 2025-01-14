@@ -3,6 +3,7 @@ import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { useRouter } from "@tanstack/react-router";
 
 export function useAuth(): UseQueryResult<{
+     accountID: number,
      username: string,
      firstName: string,
      lastName: string,

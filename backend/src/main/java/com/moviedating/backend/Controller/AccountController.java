@@ -68,6 +68,7 @@ public class AccountController {
                 Account retrievedAccount = optionalAccount.get();
                 HashMap<String, String> response = new HashMap<>();
                 response.put("token", token);
+                response.put("id", retrievedAccount.getAccountId().toString());
                 response.put("username", retrievedAccount.getUsername());
                 response.put("firstName", retrievedAccount.getFirstName());
                 response.put("lastName", retrievedAccount.getLastName());
@@ -77,6 +78,7 @@ public class AccountController {
                         retrievedAccount.getGenderPreference() != null
                                 ? retrievedAccount.getGenderPreference().toString()
                                 : "");
+
 
                 return ResponseEntity.status(HttpStatus.OK).body(response);
             } else {
@@ -113,8 +115,7 @@ public class AccountController {
         accountService.updatePassword(token, passwordRequest.getPassword());
 
         return ResponseEntity.ok(Map.of("message", "Password updated"));
-        }
-   
+    }
 
     @PatchMapping("/update-gender-and-preference")
     public ResponseEntity<String> updateGenderAndPreference(@RequestBody Map<String, String> request,
@@ -255,4 +256,5 @@ public class AccountController {
      * }
      */
 
+    
 }

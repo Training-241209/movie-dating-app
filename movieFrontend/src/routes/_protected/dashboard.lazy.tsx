@@ -9,12 +9,10 @@ export const Route = createLazyFileRoute('/_protected/dashboard')({
 })
 
 function RouteComponent() {
-
-
     const router = useRouter();
     const { data: auth, refetch } = useAuth();
     console.log("dashboard", auth);
-
+  
     useEffect(() => {
         if (auth) {
           refetch(); // Trigger a refetch if the auth data is incomplete or changed
@@ -34,4 +32,8 @@ function RouteComponent() {
             router.navigate({ to: "/chat"});
         }
     }
-}
+  
+    // Optionally, render a loading or fallback UI if `auth` is undefined or null
+    return null;
+  }
+  

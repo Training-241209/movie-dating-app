@@ -23,7 +23,6 @@ export function useUpdateGenderAndPreference() {
       return response.data;
     },
     onSuccess: () => {
-      // Invalidate the "auth" query to trigger a refetch and update the auth data
       queryClient.invalidateQueries({ queryKey: ["auth"] });
       toast.success("Gender and preference updated successfully!");
       router.navigate({to: '/genreSelection'})

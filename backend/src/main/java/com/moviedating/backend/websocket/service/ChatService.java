@@ -15,23 +15,23 @@ import lombok.RequiredArgsConstructor;
 public class ChatService {
     private final ChatRepository chatRepo;
     private final ChatRoomService chatRoomService;
-    
-    public Chat saveMessage(Chat message){
+
+    public Chat saveMessage(Chat message) {
         Optional<String> chatId = chatRoomService.getChatRoomId(message.getSenderId(), message.getRecipientId(), true);
-        if(chatId.isEmpty()){
+        if (chatId.isEmpty()) {
             throw new RuntimeException("Chat Room Not Found");
         }
         message.setChatId(chatId.get());
         return chatRepo.save(message);
     }
 
-    public List<Chat> findChats(String senderId, String recipientId){
+    public List<Chat> findChats(String senderId, String recipientId) {
         Optional<String> chatId = chatRoomService.getChatRoomId(senderId, recipientId, false);
-        if(chatId.isEmpty()){
+        if (chatId.isEmpty()) {
             throw new RuntimeException("Chat Room Not Found");
         }
-        return chatRepo.findByChatId(chatId.get());
+        // return chatRepo.findByChatId(chatId.get());
+        return chatRepo.findAllMessagesById(senderId, recipientId);
     }
-
 
 }

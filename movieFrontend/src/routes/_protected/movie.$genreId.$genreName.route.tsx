@@ -1,5 +1,5 @@
 import { MovieListings } from '@/features/components/movieListings'
-import { useAuth } from '@/features/hooks/use-Auth';
+import { useAuth } from '@/features/hooks/use-auth';
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_protected/movie/$genreId/$genreName')({
