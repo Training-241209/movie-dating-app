@@ -11,6 +11,9 @@ import {
 import { Button } from "../ui/button"
 import { useQueryClient } from "@tanstack/react-query";
 import { Link, useRouter } from "@tanstack/react-router";
+import { useAuth } from "@/features/hooks/use-Auth";
+import { useState,useEffect } from "react";
+import { useGetChatRooms } from "@/features/hooks/use-getChatRooms";
 export function AppSidebar() {
   const data = [
     {
@@ -34,7 +37,6 @@ export function AppSidebar() {
       "recipientId": "user_606"
     }
   ]
-  
   const queryClient = useQueryClient();
   const router = useRouter()
   function onLogout(){
@@ -42,12 +44,20 @@ export function AppSidebar() {
     queryClient.clear();
     router.navigate({ to: '/auth/login' })
   }
-  function onChat(senderId:string,recipientId:string){
+  function onChat(senderId:string|undefined,recipientId:string){
     router.navigate({
       to: `/chat/${senderId}/${recipientId}`,
       params: { senderId, recipientId },
     });
   }
+  const {data: auth} = useAuth()
+  
+  const {data:getChatRooms=[], isPending} = useGetChatRooms()
+
+  useEffect(() => {
+    console.log("getChatRooms ",getChatRooms)
+  }, []);
+  
   return (
     <Sidebar>
       <SidebarContent>
@@ -70,17 +80,27 @@ export function AppSidebar() {
                 Update Credentials
               </SidebarMenuButton>
               </Link>    
+              <SidebarMenuButton>
+                {auth?.username}
+              </SidebarMenuButton>
             </SidebarMenu>
           </SidebarGroupContent>
           <SidebarGroupLabel>Conversations</SidebarGroupLabel>
           <SidebarGroupContent>
-            {data.map((item) => (
-              <SidebarMenuButton key={item.chatId} onClick={() =>onChat(item.senderId,item.recipientId)}>
-                <li>
-                  {item.recipientId}
-                </li>
-              </SidebarMenuButton>
-            ))}
+          
+          { !isPending ?(
+            getChatRooms.length > 0 ? (
+              getChatRooms.map((item:any) => (
+                <SidebarMenuButton key={item.chatId} onClick={() => onChat(auth?.username, item.username)}>
+                  <li>
+                    {item.username}
+                  </li>
+                </SidebarMenuButton>
+              ))
+            ) : (
+              "No ChatRoom Available")
+          ) : "Loading"
+          }
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
