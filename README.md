@@ -22,7 +22,6 @@ Features we want to include in our application is included but not limited to:
 * As a user, I want to be able to have a private chat with users I matched with. 
 * As a user, I want to be able to easily update my favorite genre and favorite movie at any time.
 * As a user, I want to be able to easily update my gender and gender preferences at any time.
-* As a user, I want to be able to 
 
 ## Technologies
 
