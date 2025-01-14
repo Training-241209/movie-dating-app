@@ -77,41 +77,7 @@ export function CredentialsCard(){
                 <Button>Back</Button>
             </Link>
                 </CardHeader>
-                    <Form {...formUser}>
-                    <CardTitle>Update Username</CardTitle>
-                    <CardContent>
-                    <form onSubmit={formUser.handleSubmit(submitUsername)}>
-                    <FormField
-                        control={formUser.control}
-                        name="username"
-                        render={({ field }) => (
-                            <FormItem className = "w-full">
-                                <FormControl>
-                                    <Input type="username" placeholder="Username" {...field} />
-                                </FormControl>
-                            <FormMessage />
-                            </FormItem>
-                        )}/>
-                        <FormField
-                        control={formUser.control}
-                        name="newUsername"
-                        render={({ field }) => (
-                            <FormItem className = "w-full">
-                                <FormControl>
-                                    <Input type="newUsername" placeholder="New Username" {...field} />
-                                </FormControl>
-                            <FormMessage />
-                            </FormItem>
-                        )}/>
-                        <div>
-                            <Button type = 'reset' onClick={clearUsername}>Clear</Button>
-                            <Button type = 'submit'>Submit</Button>
-                        </div>
-                        
-                        </form>
-                    </CardContent>
-                </Form>
-                
+            
                 <Form {...formPassword}>
                 <CardTitle>Update Password</CardTitle>
                     <CardContent>

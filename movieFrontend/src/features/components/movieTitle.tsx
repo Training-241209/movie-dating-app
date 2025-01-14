@@ -9,7 +9,7 @@ export function MovieTitle({genreName}:{genreName:string}){
                 <div className="text-4xl flex justify-center mb-10">
                     Please Select An {genreName} Movie
                 </div> 
-                <Link to = '/dashboard'>
+                <Link to = '/genreSelection'>
                     <Button>Back</Button>
                 </Link>
             </div>
@@ -20,7 +20,7 @@ export function MovieTitle({genreName}:{genreName:string}){
                 <div className="text-4xl flex justify-center mb-10">
                     Please Select A {genreName} Movie
                 </div> 
-                <Link to = '/dashboard'>
+                <Link to = '/genreSelection'>
                     <Button>Back</Button>
                 </Link>
             </div>
