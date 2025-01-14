@@ -107,6 +107,7 @@ export function ChatBoxContents({
         ref={chatContainerRef}
         className="bg-gray-200 h-[500px] w-[1150px] mx-auto mt-4 border border-black rounded-md flex flex-col overflow-y-auto py-2"
       >
+<<<<<<< HEAD
         {messages?.length > 0 ? (
           messages.map((msg, index) => (
             <div
@@ -131,6 +132,28 @@ export function ChatBoxContents({
                 >
                   {msg.content}
                 </div>
+=======
+        {getMessage?.length > 0 ? (
+          getMessage?.map((msg:any ) => (
+            <div className={`flex flex-col ${msg.senderId === sender ? "items-end" : "items-start px-1"}`}>
+              <div
+                key={msg.id}
+                className={`p-2 ${msg.senderId === sender ? "text-right" : "text-left"}`}
+              >
+              <div
+                className={`text-sm text-gray-500 mb-1 ${msg.senderId === sender ? "mr-2" : ""}`}>
+                {msg.senderId === sender ? "You" : recipient}
+              </div>
+              <div
+                className={`px-[4px] py-2 rounded-lg max-w-[400px] ${
+                  msg.senderId === sender
+                    ? "bg-blue-500 text-white rounded-tl-lg rounded-br-lg "
+                    : "bg-gray-300 text-black rounded-tr-lg rounded-bl-lg"
+                }`}
+              >
+                {msg.content}
+              </div>
+>>>>>>> 05d4f5863cf557225767c95dd693a92b8fc0f2b0
               </div>
             </div>
           ))
