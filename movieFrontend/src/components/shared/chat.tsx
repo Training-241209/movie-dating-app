@@ -127,11 +127,13 @@ export function ChatBoxContents() {
     return <p>You need to be matched with someone to start chatting.</p>;
   }
 
+
+
   return (
     <>
       <div
         ref={chatContainerRef}
-        className="bg-gray-200 h-[500px] w-[1150px] mx-auto mt-4 border border-black rounded-md flex flex-col overflow-y-auto"
+        className="bg-gray-200 h-[500px] w-[1150px] mx-auto mt-4 border border-black rounded-md flex flex-col overflow-y-auto py-2"
       >
         {messages.map((msg, index) => (
           <div key={index} className={`p-2 ${msg.user === "me" ? "text-right" : "text-left"}`}>
