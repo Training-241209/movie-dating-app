@@ -5,27 +5,41 @@ import { SendHorizontal } from "lucide-react";
 import { messageSchema, MessageSchema } from "@/features/schemas/messageSchema";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 import { useStompClient } from "react-stomp-hooks";
 import { useGetChatRooms } from "@/features/hooks/use-getChatRooms";
+import { Avatar, AvatarFallback } from "@radix-ui/react-avatar";
 
-export function ChatBoxContents({sender, recipient}: {sender: string, recipient: string}) {
-  const { data: chatRooms=[]} = useGetChatRooms();
-  const [messages, setMessages] = useState<{ user: string; content: string }[]>([]);
+export function ChatBoxContents({
+  sender,
+  recipient,
+}: {
+  sender: string;
+  recipient: string;
+}) {
+  const { data: chatRooms = [] } = useGetChatRooms();
+  const [messages, setMessages] = useState<{ user: string; content: string }[]>(
+    []
+  );
   const [messagesFetched, setMessagesFetched] = useState(false); // Flag to check if messages are fetched
   const stompClient = useStompClient();
   const chatContainerRef = React.useRef<HTMLDivElement>(null);
-  
-
-  console.log("chats", chatRooms)
-
 
   useEffect(() => {
     if (!messagesFetched) {
+      console.log("FETCHING MESSAGES", messagesFetched);
       const fetchMessages = async () => {
         if (sender && recipient) {
           try {
-            const response = await fetch(`http://localhost:8080/messages/${sender}/${recipient}`);
+            const response = await fetch(
+              `http://localhost:8080/messages/${sender}/${recipient}`
+            );
             const data = await response.json();
 
             setMessages(
@@ -35,7 +49,7 @@ export function ChatBoxContents({sender, recipient}: {sender: string, recipient:
               }))
             );
 
-            setMessagesFetched(true); 
+            setMessagesFetched(true);
           } catch (error) {
             console.error("Error fetching messages:", error);
           }
@@ -50,12 +64,13 @@ export function ChatBoxContents({sender, recipient}: {sender: string, recipient:
     if (stompClient) {
       stompClient.subscribe(`/user/${sender}/queue/messages`, (message) => {
         const parsedMessage = JSON.parse(message.body);
-        setMessages((prev) => [...prev, { user: recipient ?? "", content: parsedMessage.content }]);
+        setMessages((prev) => [
+          ...prev,
+          { user: recipient ?? "", content: parsedMessage.content },
+        ]);
       });
     }
   }, [sender, stompClient]);
-
-  
 
   // Form setup using react-hook-form and Zod validation
   const form = useForm<MessageSchema>({
@@ -82,7 +97,10 @@ export function ChatBoxContents({sender, recipient}: {sender: string, recipient:
       });
 
       // Update UI with the sent message
-      setMessages((prev) => [...prev, { user: sender ?? "", content: values.message }]);
+      setMessages((prev) => [
+        ...prev,
+        { user: sender ?? "", content: values.message },
+      ]);
     }
     form.reset();
   }
@@ -91,7 +109,8 @@ export function ChatBoxContents({sender, recipient}: {sender: string, recipient:
 
   useEffect(() => {
     if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
     }
   }, [messages]);
 
@@ -103,12 +122,35 @@ export function ChatBoxContents({sender, recipient}: {sender: string, recipient:
       >
         {messages?.length > 0 ? (
           messages.map((msg, index) => (
+            
             <div
               key={index}
-              className={`p-2 ${msg.user === sender ? "text-right" : "text-left"}`}
+              className={`p-2  flex ${msg.user === sender ? "justify-end" : "justify-start"}`}
             >
-              <strong>{msg.user === sender ? "You" : recipient}: </strong>
-              {msg.content}
+              
+              
+              <div className=" flex flex-col ml-2">
+                <div className="text-sm text-gray-500">
+              {msg.user === sender ? 
+                   sender
+                   : recipient}
+                </div>
+              <div
+                className={`max-w-[75%] px-4 py-2 rounded-lg ${
+                  msg.user === sender
+                    ? "bg-blue-500 text-white rounded-tl-lg rounded-br-lg w-"
+                    : "bg-gray-300 text-black rounded-tr-lg rounded-bl-lg"
+                }`}
+              >
+                {msg.content}
+              </div>
+              <div
+                className={`text-sm text-gray-500 ${
+                  msg.user === sender ? "ml-2" : "mr-2"
+                }`}
+                
+              ></div>
+              </div>
             </div>
           ))
         ) : (
@@ -154,10 +196,18 @@ export function ChatBoxCard({ children }: { children: React.ReactNode }) {
 
 // ChatBoxCentering component to center chat box on the screen
 export function ChatBoxCentering({ children }: { children: React.ReactNode }) {
-  return <div className="flex items-center justify-center min-h-screen">{children}</div>;
+  return (
+    <div className="flex items-center justify-center min-h-screen">
+      {children}
+    </div>
+  );
 }
 
 // ChatBoxInnerContainer component for organizing the chat structure
-export function ChatBoxInnerContainer({ children }: { children: React.ReactNode }) {
+export function ChatBoxInnerContainer({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return <div className="flex flex-col">{children}</div>;
 }
