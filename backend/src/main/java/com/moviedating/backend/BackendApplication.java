@@ -12,6 +12,7 @@ public class BackendApplication {
 		Dotenv dotenv = Dotenv.load();
 		dotenv.entries().forEach(entry -> System.setProperty(entry.getKey(),
 				entry.getValue()));
+
 		SpringApplication.run(BackendApplication.class, args);
 	}
 
