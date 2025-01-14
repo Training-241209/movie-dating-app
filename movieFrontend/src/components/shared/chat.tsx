@@ -13,8 +13,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useStompClient } from "react-stomp-hooks";
-import { useGetChatRooms } from "@/features/hooks/use-getChatRooms";
-import { Avatar, AvatarFallback } from "@radix-ui/react-avatar";
 
 export function ChatBoxContents({
   sender,
@@ -23,7 +21,6 @@ export function ChatBoxContents({
   sender: string;
   recipient: string;
 }) {
-  const { data: chatRooms = [] } = useGetChatRooms();
   const [messages, setMessages] = useState<{ user: string; content: string }[]>(
     []
   );
@@ -116,47 +113,44 @@ export function ChatBoxContents({
 
   return (
     <>
+<div
+  ref={chatContainerRef}
+  className="bg-gray-200 h-[500px] w-[1150px] mx-auto mt-4 border border-black rounded-md flex flex-col overflow-y-auto py-2"
+>
+  {messages?.length > 0 ? (
+    messages.map((msg, index) => (
       <div
-        ref={chatContainerRef}
-        className="bg-gray-200 h-[500px] w-[1150px] mx-auto mt-4 border border-black rounded-md flex flex-col overflow-y-auto py-2"
+        key={index}
+        className={`p-2 flex ${msg.user === sender ? "justify-end" : "justify-start"}`}
       >
-        {messages?.length > 0 ? (
-          messages.map((msg, index) => (
-            
-            <div
-              key={index}
-              className={`p-2  flex ${msg.user === sender ? "justify-end" : "justify-start"}`}
-            >
-              
-              
-              <div className=" flex flex-col ml-2">
-                <div className="text-sm text-gray-500">
-              {msg.user === sender ? 
-                   sender
-                   : recipient}
-                </div>
-              <div
-                className={`max-w-[75%] px-4 py-2 rounded-lg ${
-                  msg.user === sender
-                    ? "bg-blue-500 text-white rounded-tl-lg rounded-br-lg w-"
-                    : "bg-gray-300 text-black rounded-tr-lg rounded-bl-lg"
-                }`}
-              >
-                {msg.content}
-              </div>
-              <div
-                className={`text-sm text-gray-500 ${
-                  msg.user === sender ? "ml-2" : "mr-2"
-                }`}
-                
-              ></div>
-              </div>
-            </div>
-          ))
-        ) : (
-          <div className="p-2 text-center text-gray-500">No messages yet</div>
-        )}
+        {/* Container for name and message bubble */}
+        <div className={`flex flex-col ${msg.user === sender ? "items-end" : "items-start px-1"}`}>
+          {/* Name above the chat bubble */}
+          <div
+            className={`text-sm text-gray-500 mb-1 ${msg.user === sender ? "mr-2" : ""}`}
+          >
+            {msg.user === sender ? "You" : recipient}
+          </div>
+
+          {/* Chat bubble */}
+          <div
+            className={`px-[4px] py-2 rounded-lg max-w-[400px] ${
+              msg.user === sender
+                ? "bg-blue-500 text-white rounded-tl-lg rounded-br-lg "
+                : "bg-gray-300 text-black rounded-tr-lg rounded-bl-lg"
+            }`}
+          >
+            {msg.content}
+          </div>
+        </div>
       </div>
+    ))
+  ) : (
+    <div className="p-2 text-center text-gray-500">No messages yet</div>
+  )}
+</div>
+
+
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -197,7 +191,7 @@ export function ChatBoxCard({ children }: { children: React.ReactNode }) {
 // ChatBoxCentering component to center chat box on the screen
 export function ChatBoxCentering({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
       {children}
     </div>
   );
