@@ -12,6 +12,7 @@ import { useStompClient } from "react-stomp-hooks";
 export function ChatBoxContents() {
   const { data: auth } = useAuth();
   const [isMatched, setIsMatched] = useState(false);
+  const [matchChecked, setMatchChecked] = useState(false);
   const [messages, setMessages] = useState<{ user: string; content: string }[]>([]);
   const [otherUserId, setOtherUserId] = useState<string | null>(null);
   const stompClient = useStompClient();
@@ -24,6 +25,7 @@ export function ChatBoxContents() {
         if (otherUserMovieId === auth?.favoriteMovie) {
           setIsMatched(true);
           setOtherUserId(await getOtherUserId());
+          setMatchChecked(true);
         }
       } catch (error) {
         console.error("Error checking match:", error);
@@ -33,22 +35,18 @@ export function ChatBoxContents() {
     checkMatch();
   }, [auth?.favoriteMovie]);
 
-  // Fetch previous chat history when matched
   useEffect(() => {
-    const fetchMessages = async () => {
-      if (auth?.username && otherUserId) {
-        const response = await fetch(`http://localhost:8080/messages/${auth?.username}/${otherUserId}`);
-        const data = await response.json();
-        console.log("messages", data);
-        console.log("messages", data);
-        setMessages(data); // Assuming the API returns an array of messages
-      }
-    };
-
-    if (isMatched) {
+    if (isMatched && matchChecked) {
+      const fetchMessages = async () => {
+        if (auth?.username && otherUserId) {
+          const response = await fetch(`http://localhost:8080/messages/${auth?.username}/${otherUserId}`);
+          const data = await response.json();
+          setMessages(data);
+        }
+      };
       fetchMessages();
     }
-  }, [isMatched, auth?.username, otherUserId]);
+  }, [isMatched, matchChecked, auth?.username, otherUserId]);
 
   // Listen for new messages after a match
   useEffect(() => {
@@ -79,7 +77,7 @@ export function ChatBoxContents() {
       const response = await fetch(`http://localhost:8080/api/match/${auth?.username}`);
       const data = await response.json();
       console.log("userId", data.accountId);
-      return data[0].username; // Assuming the backend returns the user ID
+      return data[0].username; 
     } catch (error) {
       console.error("Error fetching other user's ID:", error);
       return null;
