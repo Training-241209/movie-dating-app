@@ -7,43 +7,25 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { useStompClient } from "react-stomp-hooks";
-import { useGetChatRooms } from "@/features/hooks/use-getChatRooms";
+import { useGetChats } from "@/features/hooks/use-getChats";
 
 export function ChatBoxContents({sender, recipient}: {sender: string, recipient: string}) {
-  const { data: chatRooms=[]} = useGetChatRooms();
   const [messages, setMessages] = useState<{ user: string; content: string }[]>([]);
-  const [messagesFetched, setMessagesFetched] = useState(false); // Flag to check if messages are fetched
   const stompClient = useStompClient();
   const chatContainerRef = React.useRef<HTMLDivElement>(null);
-  
-
-  console.log("chats", chatRooms)
-
-
+  const {data: getMessage= [],refetch} = useGetChats({sender,recipient})
+  console.log(getMessage)
   useEffect(() => {
-    if (!messagesFetched) {
-      const fetchMessages = async () => {
-        if (sender && recipient) {
-          try {
-            const response = await fetch(`http://localhost:8080/messages/${sender}/${recipient}`);
-            const data = await response.json();
+    setMessages(
+      getMessage.map((msg: { senderId: string; content: string }) => ({
+      user: msg.senderId,
+      content: msg.content,
+    })))
+  },[getMessage])
 
-            setMessages(
-              data.map((msg: { senderId: string; content: string }) => ({
-                user: msg.senderId,
-                content: msg.content,
-              }))
-            );
-
-            setMessagesFetched(true); 
-          } catch (error) {
-            console.error("Error fetching messages:", error);
-          }
-        }
-      };
-      fetchMessages();
-    }
-  }, [sender, recipient, messagesFetched]);
+  useEffect(() => {  
+    refetch();
+  }, [sender, recipient, refetch]);
 
   // Listen for new messages after a match
   useEffect(() => {
@@ -55,7 +37,6 @@ export function ChatBoxContents({sender, recipient}: {sender: string, recipient:
     }
   }, [sender, stompClient]);
 
-  
 
   // Form setup using react-hook-form and Zod validation
   const form = useForm<MessageSchema>({
@@ -83,6 +64,7 @@ export function ChatBoxContents({sender, recipient}: {sender: string, recipient:
 
       // Update UI with the sent message
       setMessages((prev) => [...prev, { user: sender ?? "", content: values.message }]);
+      refetch();
     }
     form.reset();
   }
@@ -93,6 +75,7 @@ export function ChatBoxContents({sender, recipient}: {sender: string, recipient:
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
+    refetch();
   }, [messages]);
 
   return (
@@ -101,13 +84,13 @@ export function ChatBoxContents({sender, recipient}: {sender: string, recipient:
         ref={chatContainerRef}
         className="bg-gray-200 h-[500px] w-[1150px] mx-auto mt-4 border border-black rounded-md flex flex-col overflow-y-auto py-2"
       >
-        {messages?.length > 0 ? (
-          messages.map((msg, index) => (
+        {getMessage?.length > 0 ? (
+          getMessage?.map((msg ) => (
             <div
-              key={index}
-              className={`p-2 ${msg.user === sender ? "text-right" : "text-left"}`}
+              key={msg.id}
+              className={`p-2 ${msg.senderId === sender ? "text-right" : "text-left"}`}
             >
-              <strong>{msg.user === sender ? "You" : recipient}: </strong>
+              <strong>{msg.senderId === sender ? "You" : recipient}: </strong>
               {msg.content}
             </div>
           ))
@@ -161,3 +144,26 @@ export function ChatBoxCentering({ children }: { children: React.ReactNode }) {
 export function ChatBoxInnerContainer({ children }: { children: React.ReactNode }) {
   return <div className="flex flex-col">{children}</div>;
 }
+ // if (!messagesFetched) {
+    //   const fetchMessages = async () => {
+    //     if (sender && recipient) {
+    //       try {
+    //         const response = await fetch(`http://localhost:8080/messages/${sender}/${recipient}`);
+    //         const data = await response.json();
+    //         console.log(getMessage)
+    //         setMessages(
+    //           getMessage.map((msg: { senderId: string; content: string }) => ({
+    //             user: msg.senderId,
+    //             content: msg.content,
+    //           }))
+    //         );
+
+    //         setMessagesFetched(true); 
+    //       } catch (error) {
+    //         console.error("Error fetching messages:", error);
+    //       }
+    //     }
+    //   };
+    //   fetchMessages();
+      
+    // }

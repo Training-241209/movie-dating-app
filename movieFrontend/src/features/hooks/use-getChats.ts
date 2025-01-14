@@ -1,13 +1,13 @@
-import { useQuery, UseQueryResult } from "@tanstack/react-query";
-import { ChatSchema } from "../schemas/chatSchema";
+import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "@/lib/axios-config";
 
-export function useGetChats(senderId: string, recipientId: string) : UseQueryResult<ChatSchema[]>  {
+export function useGetChats({sender, recipient}:{sender:string,recipient:string}) {
     return useQuery({
-        queryKey: ['chats', senderId, recipientId],
+        queryKey: ['chats'],
         queryFn: async () => {
-            const resp = await axiosInstance.get(`/messages/${senderId}/${recipientId}`); 
-            return resp.data;
+            const response = await axiosInstance.get(`http://localhost:8080/messages/${sender}/${recipient}`);
+            console.log(response.data)
+            return response.data
         }
     })
 }
