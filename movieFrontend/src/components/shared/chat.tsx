@@ -179,7 +179,7 @@ export function ChatBoxCard({ children }: { children: React.ReactNode }) {
 export function ChatBoxCentering({ children, isSidebarOpen }: { children: React.ReactNode, isSidebarOpen: boolean }) {
   return (
     <div
-      className={`flex items-center justify-center min-h-screen bg-gray-100 transition-all ${
+      className={`flex items-center justify-center min-h-screen transition-all ${
         isSidebarOpen ? "ml-[250px]" : "ml-0"
       }`}
     >
