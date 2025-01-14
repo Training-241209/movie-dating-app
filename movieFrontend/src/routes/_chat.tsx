@@ -10,14 +10,14 @@ export const Route = createFileRoute("/_chat")({
 
 function RouteComponent() {
 
-  const { isOpen } = useSidebar();
+  const { isOpen, toggle } = useSidebar();
 
   return (
     <div >
       <SidebarProvider>
         <AppSidebar/>
         <main>
-          <SidebarTrigger />
+          <SidebarTrigger type="submit" onClick={toggle} />
           <Outlet/>
         </main>
       </SidebarProvider>
