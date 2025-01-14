@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.moviedating.backend.Entity.Account;
 import com.moviedating.backend.Service.AccountService;
+import com.moviedating.backend.dtos.AccountDTO;
 import com.moviedating.backend.websocket.entity.Chat;
 import com.moviedating.backend.websocket.service.ChatService;
 
@@ -22,7 +23,7 @@ public class MatchController {
     private ChatService chatService;
 
     @GetMapping("/{username}")
-    public List<Account> getMatches(@PathVariable String username) {
+    public List<AccountDTO> getMatches(@PathVariable String username) {
         return accountService.findMatches(username);
     }
 

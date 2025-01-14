@@ -15,7 +15,8 @@ function RouteComponent() {
     <div>
       <ChatBoxCentering>
         <ChatBoxCard>
-          <ChatBoxContents/>
+          <ChatBoxContents>
+          </ChatBoxContents>
         </ChatBoxCard>
       </ChatBoxCentering>
     </div>

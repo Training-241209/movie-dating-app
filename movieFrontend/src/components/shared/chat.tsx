@@ -12,9 +12,11 @@ import { useStompClient } from "react-stomp-hooks";
 export function ChatBoxContents() {
   const { data: auth } = useAuth();
   const [isMatched, setIsMatched] = useState(false);
+  const [matchChecked, setMatchChecked] = useState(false);
   const [messages, setMessages] = useState<{ user: string; content: string }[]>([]);
   const [otherUserId, setOtherUserId] = useState<string | null>(null);
   const stompClient = useStompClient();
+  const chatContainerRef = React.useRef<HTMLDivElement>(null); // Reference for the chat container
 
   // Check for a match when the component mounts
   useEffect(() => {
@@ -24,6 +26,7 @@ export function ChatBoxContents() {
         if (otherUserMovieId === auth?.favoriteMovie) {
           setIsMatched(true);
           setOtherUserId(await getOtherUserId());
+          setMatchChecked(true);
         }
       } catch (error) {
         console.error("Error checking match:", error);
@@ -33,22 +36,18 @@ export function ChatBoxContents() {
     checkMatch();
   }, [auth?.favoriteMovie]);
 
-  // Fetch previous chat history when matched
   useEffect(() => {
-    const fetchMessages = async () => {
-      if (auth?.username && otherUserId) {
-        const response = await fetch(`http://localhost:8080/messages/${auth?.username}/${otherUserId}`);
-        const data = await response.json();
-        console.log("messages", data);
-        console.log("messages", data);
-        setMessages(data); // Assuming the API returns an array of messages
-      }
-    };
-
-    if (isMatched) {
+    if (isMatched && matchChecked) {
+      const fetchMessages = async () => {
+        if (auth?.username && otherUserId) {
+          const response = await fetch(`http://localhost:8080/messages/${auth?.username}/${otherUserId}`);
+          const data = await response.json();
+          setMessages(data);
+        }
+      };
       fetchMessages();
     }
-  }, [isMatched, auth?.username, otherUserId]);
+  }, [isMatched, matchChecked, auth?.username, otherUserId]);
 
   // Listen for new messages after a match
   useEffect(() => {
@@ -65,7 +64,6 @@ export function ChatBoxContents() {
     try {
       const response = await fetch(`http://localhost:8080/api/match/${auth?.username}`);
       const data = await response.json();
-      console.log("movie", data);
       return data[0].favoriteMovie;
     } catch (error) {
       console.error("Error fetching other user's movieId:", error);
@@ -78,8 +76,7 @@ export function ChatBoxContents() {
     try {
       const response = await fetch(`http://localhost:8080/api/match/${auth?.username}`);
       const data = await response.json();
-      console.log("userId", data.accountId);
-      return data[0].username; // Assuming the backend returns the user ID
+      return data[0].username;
     } catch (error) {
       console.error("Error fetching other user's ID:", error);
       return null;
@@ -118,6 +115,13 @@ export function ChatBoxContents() {
 
   const isMessageEmpty = !form.watch("message")?.trim();
 
+  // Scroll to the bottom of the chat container when messages change or on mount
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
+
   // If not matched, show a message
   if (!isMatched) {
     return <p>You need to be matched with someone to start chatting.</p>;
@@ -125,7 +129,10 @@ export function ChatBoxContents() {
 
   return (
     <>
-      <div className="bg-gray-200 h-[550px] w-[1150px] mx-auto mt-4 border border-black rounded-md flex flex-col-reverse overflow-y-auto">
+      <div
+        ref={chatContainerRef}
+        className="bg-gray-200 h-[500px] w-[1150px] mx-auto mt-4 border border-black rounded-md flex flex-col overflow-y-auto"
+      >
         {messages.map((msg, index) => (
           <div key={index} className={`p-2 ${msg.user === "me" ? "text-right" : "text-left"}`}>
             <strong>{msg.user}: </strong>

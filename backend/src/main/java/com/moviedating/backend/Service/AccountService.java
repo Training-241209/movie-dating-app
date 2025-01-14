@@ -15,6 +15,7 @@ import com.moviedating.backend.dtos.UpdateUsernameDTO;
 
 import jakarta.transaction.Transactional;
 
+import com.moviedating.backend.dtos.AccountDTO;
 import com.moviedating.backend.dtos.UpdatePasswordDTO;
 
 @Service
@@ -70,18 +71,24 @@ public class AccountService {
         account.setFavoriteMovie(movieId);
     }
 
-    public List<Account> findMatches(String username) {
+    public List<AccountDTO> findMatches(String username) {
         Optional<Account> user = accountRepository.findByUsername(username);
-        if (user.get() == null) {
+        if (user.isEmpty()) {
             throw new IllegalArgumentException("User not found");
         }
         Account temp = user.get();
-        
+    
         String favoriteMovie = temp.getFavoriteMovie().toString();
-
-        // Find users with the same favorite movie, excluding the current user
+    
         return accountRepository.findByFavoriteMovie(Integer.valueOf(favoriteMovie)).stream()
-                .filter(account -> !account.getUsername().equals(username))  // Exclude the current user
+                .filter(account -> !account.getUsername().equals(username)) 
+                .map(account -> {
+                    AccountDTO accountDTO = new AccountDTO();
+                    accountDTO.setAccountId(account.getAccountId());
+                    accountDTO.setUsername(account.getUsername());
+                    accountDTO.setFavoriteMovie(account.getFavoriteMovie());
+                    return accountDTO;
+                })
                 .collect(Collectors.toList());
     }
 
