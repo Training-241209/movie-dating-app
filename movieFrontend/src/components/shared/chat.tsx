@@ -96,12 +96,25 @@ export function ChatBoxContents({sender, recipient}: {sender: string, recipient:
       >
         {getMessage?.length > 0 ? (
           getMessage?.map((msg:any ) => (
-            <div
-              key={msg.id}
-              className={`p-2 ${msg.senderId === sender ? "text-right" : "text-left"}`}
-            >
-              <strong>{msg.senderId === sender ? "You" : recipient}: </strong>
-              {msg.content}
+            <div className={`flex flex-col ${msg.senderId === sender ? "items-end" : "items-start px-1"}`}>
+              <div
+                key={msg.id}
+                className={`p-2 ${msg.senderId === sender ? "text-right" : "text-left"}`}
+              >
+              <div
+                className={`text-sm text-gray-500 mb-1 ${msg.senderId === sender ? "mr-2" : ""}`}>
+                {msg.senderId === sender ? "You" : recipient}
+              </div>
+              <div
+                className={`px-[4px] py-2 rounded-lg max-w-[400px] ${
+                  msg.senderId === sender
+                    ? "bg-blue-500 text-white rounded-tl-lg rounded-br-lg "
+                    : "bg-gray-300 text-black rounded-tr-lg rounded-bl-lg"
+                }`}
+              >
+                {msg.content}
+              </div>
+              </div>
             </div>
           ))
         ) : (
