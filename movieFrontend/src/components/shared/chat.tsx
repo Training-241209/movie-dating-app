@@ -131,15 +131,19 @@ export function ChatBoxContents() {
     <>
       <div
         ref={chatContainerRef}
-        className="bg-gray-200 h-[500px] w-[1150px] mx-auto mt-4 border border-black rounded-md flex flex-col overflow-y-auto"
+        className="bg-gray-200 h-[500px] w-[1150px] mx-auto mt-4 border border-black rounded-md flex flex-col overflow-y-auto py-2"
       >
-        {messages.map((msg, index) => (
-          <div key={index} className={`p-2 ${msg.user === "me" ? "text-right" : "text-left"}`}>
-            <strong>{msg.user}: </strong>
-            {msg.content}
-          </div>
-        ))}
-      </div>
+        {messages?.length > 0 ? (
+          messages.map((msg, index) => (
+            <div key={index} className={`p-2 ${msg.user === "me" ? "text-right" : "text-left"}`}>
+              <strong>{msg.user}: </strong>
+              {msg.content}
+            </div>
+          ))
+        ) : (
+          <div className="p-2 text-center text-gray-500">No messages yet</div>
+        )}
+      </div> 
 
       <Form {...form}>
         <form
