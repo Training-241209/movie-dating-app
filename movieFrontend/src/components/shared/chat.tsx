@@ -16,6 +16,7 @@ export function ChatBoxContents() {
   const [messages, setMessages] = useState<{ user: string; content: string }[]>([]);
   const [otherUserId, setOtherUserId] = useState<string | null>(null);
   const stompClient = useStompClient();
+  const chatContainerRef = React.useRef<HTMLDivElement>(null); // Reference for the chat container
 
   // Check for a match when the component mounts
   useEffect(() => {
@@ -63,7 +64,6 @@ export function ChatBoxContents() {
     try {
       const response = await fetch(`http://localhost:8080/api/match/${auth?.username}`);
       const data = await response.json();
-      console.log("movie", data);
       return data[0].favoriteMovie;
     } catch (error) {
       console.error("Error fetching other user's movieId:", error);
@@ -76,8 +76,7 @@ export function ChatBoxContents() {
     try {
       const response = await fetch(`http://localhost:8080/api/match/${auth?.username}`);
       const data = await response.json();
-      console.log("userId", data.accountId);
-      return data[0].username; 
+      return data[0].username;
     } catch (error) {
       console.error("Error fetching other user's ID:", error);
       return null;
@@ -116,6 +115,13 @@ export function ChatBoxContents() {
 
   const isMessageEmpty = !form.watch("message")?.trim();
 
+  // Scroll to the bottom of the chat container when messages change or on mount
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
+
   // If not matched, show a message
   if (!isMatched) {
     return <p>You need to be matched with someone to start chatting.</p>;
@@ -123,7 +129,10 @@ export function ChatBoxContents() {
 
   return (
     <>
-      <div className="bg-gray-200 h-[550px] w-[1150px] mx-auto mt-4 border border-black rounded-md flex flex-col-reverse overflow-y-auto">
+      <div
+        ref={chatContainerRef}
+        className="bg-gray-200 h-[500px] w-[1150px] mx-auto mt-4 border border-black rounded-md flex flex-col overflow-y-auto"
+      >
         {messages.map((msg, index) => (
           <div key={index} className={`p-2 ${msg.user === "me" ? "text-right" : "text-left"}`}>
             <strong>{msg.user}: </strong>

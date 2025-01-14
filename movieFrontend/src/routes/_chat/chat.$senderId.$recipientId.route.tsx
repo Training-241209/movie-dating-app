@@ -16,9 +16,6 @@ function RouteComponent() {
       <ChatBoxCentering>
         <ChatBoxCard>
           <ChatBoxContents>
-            //Map messages here
-            <Message user="me" message="Hello, how are you?" />
-            <Message user="you" message="I'm good, thank you! How about you?" />
           </ChatBoxContents>
         </ChatBoxCard>
       </ChatBoxCentering>
