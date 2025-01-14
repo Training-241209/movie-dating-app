@@ -15,8 +15,9 @@ export function ChatBoxContents() {
   const [matchChecked, setMatchChecked] = useState(false);
   const [messages, setMessages] = useState<{ user: string; content: string }[]>([]);
   const [otherUserId, setOtherUserId] = useState<string | null>(null);
+  const [messagesFetched, setMessagesFetched] = useState(false); // Flag to check if messages are fetched
   const stompClient = useStompClient();
-  const chatContainerRef = React.useRef<HTMLDivElement>(null); // Reference for the chat container
+  const chatContainerRef = React.useRef<HTMLDivElement>(null);
 
   // Check for a match when the component mounts
   useEffect(() => {
@@ -37,24 +38,37 @@ export function ChatBoxContents() {
   }, [auth?.favoriteMovie]);
 
   useEffect(() => {
-    if (isMatched && matchChecked) {
+    if (isMatched && matchChecked && !messagesFetched) {
       const fetchMessages = async () => {
         if (auth?.username && otherUserId) {
-          const response = await fetch(`http://localhost:8080/messages/${auth?.username}/${otherUserId}`);
-          const data = await response.json();
-          setMessages(data);
+          try {
+            const response = await fetch(`http://localhost:8080/messages/${auth?.username}/${otherUserId}`);
+            const data = await response.json();
+
+            // Append messages to the state
+            setMessages(
+              data.map((msg: { senderId: string; content: string }) => ({
+                user: msg.senderId,
+                content: msg.content,
+              }))
+            );
+
+            setMessagesFetched(true); // Set flag to true once messages are fetched
+          } catch (error) {
+            console.error("Error fetching messages:", error);
+          }
         }
       };
       fetchMessages();
     }
-  }, [isMatched, matchChecked, auth?.username, otherUserId]);
+  }, [isMatched, matchChecked, auth?.username, otherUserId, messagesFetched]);
 
   // Listen for new messages after a match
   useEffect(() => {
     if (isMatched && stompClient) {
       stompClient.subscribe(`/user/${auth?.username}/queue/messages`, (message) => {
         const parsedMessage = JSON.parse(message.body);
-        setMessages((prev) => [...prev, { user: otherUserId ?? '', content: parsedMessage.content }]);
+        setMessages((prev) => [...prev, { user: otherUserId ?? "", content: parsedMessage.content }]);
       });
     }
   }, [isMatched, auth?.username, stompClient]);
@@ -108,46 +122,43 @@ export function ChatBoxContents() {
       });
 
       // Update UI with the sent message
-      setMessages((prev) => [...prev, { user: auth?.username ?? '', content: values.message }]);
+      setMessages((prev) => [...prev, { user: auth?.username ?? "", content: values.message }]);
     }
     form.reset();
   }
 
   const isMessageEmpty = !form.watch("message")?.trim();
 
-  // Scroll to the bottom of the chat container when messages change or on mount
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
   }, [messages]);
 
-  // If not matched, show a message
   if (!isMatched) {
     return <p>You need to be matched with someone to start chatting.</p>;
   }
 
-
-
   return (
     <>
-       <div
-  ref={chatContainerRef}
-  className="bg-gray-200 h-[500px] w-[1150px] mx-auto mt-4 border border-black rounded-md flex flex-col overflow-y-auto py-2"
->
-  {messages?.length > 0 ? (
-    messages.map((msg, index) => {
-      return (
-        <div key={index} className={`p-2 ${msg.user === auth?.username ? "text-right" : "text-left"}`}>
-          <strong>{msg.user}: </strong>
-          {msg.content}
-        </div>
-      );
-    })
-  ) : (
-    <div className="p-2 text-center text-gray-500">No messages yet</div>
-  )}
-</div> 
+      <div
+        ref={chatContainerRef}
+        className="bg-gray-200 h-[500px] w-[1150px] mx-auto mt-4 border border-black rounded-md flex flex-col overflow-y-auto py-2"
+      >
+        {messages?.length > 0 ? (
+          messages.map((msg, index) => (
+            <div
+              key={index}
+              className={`p-2 ${msg.user === auth?.username ? "text-right" : "text-left"}`}
+            >
+              <strong>{msg.user === auth?.username ? "You" : otherUserId}: </strong>
+              {msg.content}
+            </div>
+          ))
+        ) : (
+          <div className="p-2 text-center text-gray-500">No messages yet</div>
+        )}
+      </div>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
