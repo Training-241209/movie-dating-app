@@ -33,8 +33,8 @@ Our entity relationship database currently looks like the diagram below.
 ![ERDS](https://imgur.com/WMfClll.png)
 
 ## Contributors
-Carlos Alvizo
-Justin Lui
-Azeem Mir
-Patrick Ferguson
-Daniel Helbig
+* Carlos Alvizo
+* Justin Lui
+* Azeem Mir
+* Patrick Ferguson
+* Daniel Helbig
