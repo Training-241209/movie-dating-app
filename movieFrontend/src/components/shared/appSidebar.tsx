@@ -31,11 +31,12 @@ export function AppSidebar() {
   }
   const {data: auth} = useAuth()
   
-  const {data:getChatRooms=[], isPending} = useGetChatRooms()
+  const {data:getChatRooms=[], isPending,refetch} = useGetChatRooms()
 
   useEffect(() => {
     console.log("getChatRooms ",getChatRooms)
-  }, []);
+    refetch()
+  }, [refetch]);
   
   return (
     <Sidebar>
