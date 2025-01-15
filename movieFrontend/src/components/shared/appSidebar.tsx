@@ -15,6 +15,8 @@ import { useAuth } from "@/features/hooks/use-Auth";
 import { useState,useEffect } from "react";
 import { useGetChatRooms } from "@/features/hooks/use-getChatRooms";
 import { useLogout } from "@/features/hooks/use-logout";
+import logo from "@/assets/cinematchLogo.png"
+
 export function AppSidebar() {
   
   const queryClient = useQueryClient();
@@ -37,6 +39,7 @@ export function AppSidebar() {
   
   return (
     <Sidebar>
+      <img src={logo} alt="Logo" className="w-[130px] "/>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Settings</SidebarGroupLabel>
