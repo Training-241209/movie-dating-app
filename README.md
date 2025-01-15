@@ -31,3 +31,10 @@ Our entity relationship database currently looks like the diagram below.
 * Entities may be altered depending on application requirements.
 
 ![ERDS](https://imgur.com/WMfClll.png)
+
+## Contributors
+Carlos Alvizo
+Justin Lui
+Azeem Mir
+Patrick Ferguson
+Daniel Helbig
