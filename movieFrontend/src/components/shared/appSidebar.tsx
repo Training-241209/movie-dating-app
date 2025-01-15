@@ -57,9 +57,7 @@ export function AppSidebar() {
                 Update Credentials
               </SidebarMenuButton>
               </Link>    
-              <SidebarMenuButton>
-                {auth?.username}
-              </SidebarMenuButton>
+              
             </SidebarMenu>
           </SidebarGroupContent>
           <SidebarGroupLabel>Conversations</SidebarGroupLabel>

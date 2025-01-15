@@ -15,7 +15,7 @@ function RouteComponent() {
   return (
     <div >
       <SidebarProvider>
-        <AppSidebar isOpen={isSidebarOpen} />
+        <AppSidebar/>
         <main>
           <SidebarTrigger type="submit" onClick={toggle} />
           <Outlet/>
