@@ -9,7 +9,7 @@ export const Route = createRootRoute({
 
     return (
       <StompSessionProvider
-            url="ws://localhost:8080/websocket"
+            url={import.meta.env.WEBSOCKET}
             onConnect={() => {
               console.log('Connected');
             }}
