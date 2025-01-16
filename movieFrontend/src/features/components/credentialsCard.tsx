@@ -67,7 +67,7 @@ export function CredentialsCard(){
         formPassword.reset()
     }
     return(
-        <div className="min-h-screen flex justify-center items-center bg-gray-50">    
+        <div className="min-h-screen flex justify-center items-center">    
             <Card className="w-[80%] sm:w-[50%] md:w-[40%] lg:w-[30%] shadow-lg rounded-lg bg-white">
                 <CardHeader>
                     <div className="flex justify-between items-center">

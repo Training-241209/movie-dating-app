@@ -6,8 +6,8 @@ export const Route = createLazyFileRoute('/_protected/credential')({
 
 function RouteComponent() {
   return (
-  <div>
-    <CredentialsCard/>
+  <div >
+    <CredentialsCard />
     </div>
   )
 }
