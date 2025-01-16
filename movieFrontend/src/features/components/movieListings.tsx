@@ -14,7 +14,6 @@ export function MovieListings({genreId,genreName}:{genreId: number,genreName:str
         if(auth?.favoriteGenre == null ){   
             selectGenres({genreId,movieId})
         }else{
-            console.log("UPDATING")
             updateGenre({genreId,movieId})
         }
         //Set matched users and set up chat using movieId       

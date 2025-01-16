@@ -11,8 +11,6 @@ export const Route = createLazyFileRoute('/_protected/dashboard')({
 function RouteComponent() {
     const router = useRouter();
     const { data: auth, refetch } = useAuth();
-    console.log("dashboard", auth);
-  
     useEffect(() => {
         if (auth) {
           refetch(); // Trigger a refetch if the auth data is incomplete or changed

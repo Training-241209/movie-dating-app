@@ -30,7 +30,6 @@ export function ChatBoxContents({
   const stompClient = useStompClient();
   const chatContainerRef = React.useRef<HTMLDivElement>(null);
   const { data: getMessage = [], refetch } = useGetChats({ sender, recipient });
-  console.log(getMessage);
   useEffect(() => {
     setMessages(
       getMessage.map((msg: { senderId: string; content: string }) => ({

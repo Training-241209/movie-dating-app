@@ -9,7 +9,6 @@ export function useUpdateGenres(){
     return useMutation({
         mutationFn: async ({genreId,movieId}:{genreId:number,movieId:number}) => {
             const token = "Bearer " + queryClient.getQueryData<{ token: string }>(["auth"])?.token;
-            console.log(token)
             const resp = await axiosInstance.patch("account/update-favorites", {genreId,movieId},
                 {
                     headers: {

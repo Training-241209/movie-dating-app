@@ -14,11 +14,9 @@ function Index() {
 
     useEffect(() => {
       if (auth) {
-        console.log("auth", auth);
         router.navigate({ to: "/dashboard"});
       }
       else{
-        console.log("no auth");
         router.navigate({ to: "/auth/login"});
       }
     });

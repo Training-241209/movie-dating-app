@@ -34,7 +34,6 @@ export function AppSidebar()  {
   const {data:getChatRooms=[], isPending,refetch} = useGetChatRooms()
 
   useEffect(() => {
-    console.log("getChatRooms ",getChatRooms)
     refetch()
   }, [refetch]);
   

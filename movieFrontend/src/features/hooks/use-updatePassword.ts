@@ -9,10 +9,7 @@ export function useUpdatePassword(){
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: async(data: passwordDTO) =>{
-            console.log(data)
-            const resp = await axiosInstance.patch("/account/update-password", data,
-               
-            )
+            const resp = await axiosInstance.patch("/account/update-password", data)
             return resp.data;
         },
         onSuccess: () => {

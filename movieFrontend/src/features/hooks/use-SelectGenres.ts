@@ -8,9 +8,6 @@ export function useSelectGenres(){
 
     return useMutation({
         mutationFn: async ({genreId,movieId}:{genreId:number,movieId:number}) => {
-           
-            console.log(genreId,movieId)
-            console.log(import.meta.env.VITE_API_URL+"/account/choose-favorites")
             const resp = await axiosInstance.post("/account/choose-favorites", {genreId,movieId},
             )
             return resp.data;

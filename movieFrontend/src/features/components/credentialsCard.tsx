@@ -39,7 +39,6 @@ export function CredentialsCard(){
     
     function submitUsername(values:UsernameSchema){
         updateUsername(values.newUsername)
-        console.log("Updated Username: ",values.newUsername)
         formUser.reset()
     }
 
@@ -57,7 +56,6 @@ export function CredentialsCard(){
             return;
         }
         const password = values.newPassword
-        console.log("Update Password: ",password)
         updatePassword({password})
         
         formPassword.reset()
