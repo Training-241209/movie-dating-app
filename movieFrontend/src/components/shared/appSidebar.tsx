@@ -17,7 +17,7 @@ import { useGetChatRooms } from "@/features/hooks/use-getChatRooms";
 import { useLogout } from "@/features/hooks/use-logout";
 import logo from "@/assets/cinematchLogo.png"
 
-export function AppSidebar() {
+export function AppSidebar()  {
   
   const queryClient = useQueryClient();
   const router = useRouter()
@@ -39,9 +39,10 @@ export function AppSidebar() {
   }, [refetch]);
   
   return (
-    <Sidebar>
-      <img src={logo} alt="Logo" className="w-[130px] "/>
-      <SidebarContent>
+    <div>
+      <Sidebar >
+      <img src={logo} alt="Logo" className="w-[130px]"/>
+      <SidebarContent className="">
         <SidebarGroup>
           <SidebarGroupLabel>Settings</SidebarGroupLabel>
           <SidebarGroupContent>
@@ -86,5 +87,7 @@ export function AppSidebar() {
         <Button type = 'submit' onClick={() =>logout()}>Log Out</Button>
       </SidebarFooter>
     </Sidebar>
+    </div>
+    
   )
 }

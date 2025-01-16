@@ -69,19 +69,24 @@ export function CredentialsCard(){
         formPassword.reset()
     }
     return(
-        <div className="min-h-screen justify-c  enter items-center bg-slate-800">    
-            <Card className="max-w-lg mx-auto shadow-md">
+        <div className="min-h-screen flex justify-center items-center bg-gray-50">    
+            <Card className="w-[80%] sm:w-[50%] md:w-[40%] lg:w-[30%] shadow-lg rounded-lg bg-white">
                 <CardHeader>
-                    <CardTitle>Update Credentials</CardTitle>
-                    <Link to = '/dashboard'>
-                <Button>Back</Button>
-            </Link>
+                    <div className="flex justify-between items-center">
+                        <CardTitle>Update Credentials</CardTitle>
+                        <Link to = '/dashboard'>
+                            <Button>Back</Button>
+                        </Link>
+                    </div>
                 </CardHeader>
-            
+                <CardContent>
                 <Form {...formPassword}>
-                <CardTitle>Update Password</CardTitle>
-                    <CardContent>
+                    <div className="text-xl font-medium text-gray-700 mb-4">
+                        <CardTitle>Update Password</CardTitle> 
+                    </div>
+                <div>
                         <form onSubmit={formPassword.handleSubmit(submitPassword)}>
+                            <div className="mb-2">
                             <FormField
                             control={formPassword.control}
                             name="password"
@@ -93,6 +98,8 @@ export function CredentialsCard(){
                                 <FormMessage />
                                 </FormItem>
                             )}/>
+                            </div>
+                            <div className="mb-2">
                             <FormField
                             control={formPassword.control}
                             name="newPassword"
@@ -104,6 +111,8 @@ export function CredentialsCard(){
                                 <FormMessage />
                                 </FormItem>
                             )}/>
+                            </div>
+                            <div className="mb-2">
                             <FormField
                             control={formPassword.control}
                             name="confirmNewPassword"
@@ -115,15 +124,17 @@ export function CredentialsCard(){
                                 <FormMessage />
                                 </FormItem>
                             )}/>
-                            <div>
+                            </div>
+                            <div className="flex justify-between">
                                 <Button type = 'reset' onClick ={clearPassword}>Reset</Button>
-                            <Button type = 'submit' >Submit</Button>
+                                <Button type = 'submit' >Submit</Button>
                             </div>
                             
                         </form>
-                        </CardContent>
+                        
+                </div>
                 </Form>            
-                
+                </CardContent>
             </Card>
         </div>
     )

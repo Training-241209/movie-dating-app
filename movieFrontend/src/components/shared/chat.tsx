@@ -180,7 +180,7 @@ export function ChatBoxCentering({ children, isSidebarOpen }: { children: React.
   return (
     <div
       className={`flex items-center justify-center min-h-screen transition-all ${
-        isSidebarOpen ? "ml-[250px]" : "ml-0"
+        isSidebarOpen ? "ml-[25px]" : "ml-0"
       }`}
     >
       {children}
