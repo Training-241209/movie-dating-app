@@ -47,6 +47,12 @@ Our entity relationship database currently looks like the diagram below.
 
 ![ERDS](https://imgur.com/WMfClll.png)
 
+## Additional Features
+
+* Add a feature that allows users to block each other.
+* Extend the movie library available in our web application.
+* Add search functionality to allow users to search for specific movies.
+
 ## Contributors
 * Carlos Alvizo
 * Justin Lui
