@@ -9,7 +9,7 @@ export const Route = createRootRoute({
 
     return (
       <StompSessionProvider
-            url={import.meta.env.WEBSOCKET}
+            url={import.meta.env.VITE_WEBSOCKET}
             onConnect={() => {
               console.log('Connected');
             }}
