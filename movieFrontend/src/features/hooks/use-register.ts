@@ -17,8 +17,12 @@ export function useRegister() {
             router.navigate({ to: "/auth/login" });
         },
         onError: (error: any) => {
-            const errorMessage = error.response?.data?.message || "An error occurred. Please try again.";
-            toast.error(errorMessage);
+            if (error.response?.status === 409) {
+                toast.error("Username already taken");
+            } else {
+                const errorMessage = error.response?.data?.message || "An error occurred. Please try again.";
+                toast.error(errorMessage);
+            }
         },
     });
 }
