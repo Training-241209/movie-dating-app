@@ -19,20 +19,22 @@ export function GenreListings() {
 
     return (
         <div>
-            <div className="text-4xl flex justify-center mb-10">Please Select A Genre</div>
-            <div className="flex flex-wrap justify-center gap-5 mb-5 mx-5">
+            <div className="text-4xl font-semibold text-center text-gray-800 mb-10">
+                Please Select A Genre
+            </div>
+            <div className="flex flex-wrap justify-center gap-8 mb-5 mx-5">
                 {data.map((item: any) => (
                     <div
                         key={item.id}
-                        className="w-[300px] h-[400px] text-center flex flex-col items-center gap-5 overflow-hidden"
+                        className="w-[300px] h-[400px] text-center flex flex-col items-center gap-4 bg-black rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:scale-105"
                     >
                         <a href={`/movie/${item.id}/${item.name}`} onClick={() => onClick(item.id, item.name)}>
                             <img
-                                className="w-full h-[350px] object-center rounded-lg duration-300 hover:opacity-20 aspect-auto"
+                                className="w-full h-[350px] object-cover rounded-lg transition-opacity duration-300 group-hover:opacity-70"
                                 src={`src/assets/GenrePictures/${item.name}.jpg`}
                                 alt={item.name}
                             />
-                            <p className="mb-2">{item.name}</p>
+                            <p className="text-4xl font-semibold text-white mb-2 ">{item.name}</p>
                         </a>
                     </div>
                 ))}

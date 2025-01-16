@@ -11,9 +11,9 @@ function RouteComponent() {
 
 
   return (
-    <div className="h-screen overflow-hidden">
+    <div className="h-screen w-screen">
       <SidebarProvider>
-        <AppSidebar />
+        <AppSidebar/>
         <main>
           <SidebarTrigger  />
           <Outlet/>

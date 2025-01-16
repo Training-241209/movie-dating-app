@@ -12,7 +12,7 @@ export const Route = createLazyFileRoute("/_chat/chat")({
 
 function RouteComponent() {
   return (
-    <div>
+    <div >
       {/* <ChatBoxCentering>
         <ChatBoxCard>
           <ChatBoxContents>

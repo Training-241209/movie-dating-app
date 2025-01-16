@@ -18,7 +18,7 @@ export const Route = createRootRoute({
             }}
             >
           <QueryProvider>
-          <div>
+          <div className='min-h-screen bg-red-300 '>
             <Outlet />
             <Toaster />
           </div>
