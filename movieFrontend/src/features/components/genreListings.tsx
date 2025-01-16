@@ -1,6 +1,7 @@
+import { Button } from "@/components/ui/button";
 import { useAuth } from "../hooks/use-Auth";
 import { useGetGenres } from "../hooks/use-getGenres";
-import { useRouter } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
 
 export function GenreListings() {
     const { data = [] } = useGetGenres();
@@ -16,9 +17,16 @@ export function GenreListings() {
             params: { genreId: genreId.toString(), genreName },
           });
     }
-
+    
     return (
         <div>
+            <div className="absolute top-4 left-4">
+                {auth?.favoriteGenre != null && (
+                <Link to="/chat">
+                    <Button>Back</Button>
+                </Link>
+                )}
+            </div>
             <div className="text-4xl font-semibold text-center text-gray-800 mb-10">
                 Please Select A Genre
             </div>
@@ -26,15 +34,17 @@ export function GenreListings() {
                 {data.map((item: any) => (
                     <div
                         key={item.id}
-                        className="w-[300px] h-[400px] text-center flex flex-col items-center gap-4 bg-black rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:scale-105"
+                        className="w-[300px] h-[350px] text-center flex flex-col items-center gap-4 bg-gray-500 rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:scale-105 border border-black "
                     >
                         <a href={`/movie/${item.id}/${item.name}`} onClick={() => onClick(item.id, item.name)}>
+                        <div className="flex flex-col items-center">
                             <img
-                                className="w-full h-[350px] object-cover rounded-lg transition-opacity duration-300 group-hover:opacity-70"
-                                src={`src/assets/GenrePictures/${item.name}.jpg`}
+                                className="w-44 h-44 object-cover rounded-lg transition-opacity duration-300 group-hover:opacity-70 mt-10"
+                                src={`src/assets/NewGenrePics/${item.name}.png`}
                                 alt={item.name}
                             />
                             <p className="text-4xl font-semibold text-white mb-2 ">{item.name}</p>
+                        </div>    
                         </a>
                     </div>
                 ))}

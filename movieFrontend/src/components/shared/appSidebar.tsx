@@ -44,7 +44,14 @@ export function AppSidebar()  {
       <img src={logo} alt="Logo" className="w-[130px]"/>
       <SidebarContent className="">
         <SidebarGroup>
-          <SidebarGroupLabel>Settings</SidebarGroupLabel>
+        <SidebarGroupContent >
+          <div className="flex items-center justify-center text-xl font-bold w-full">
+            {auth?.firstName + " " +
+            auth?.lastName}
+          </div>
+        
+          </SidebarGroupContent>
+          <SidebarGroupLabel className="flex text-l font-bold">Settings</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               <Link to="/genreSelection">
@@ -65,7 +72,7 @@ export function AppSidebar()  {
               
             </SidebarMenu>
           </SidebarGroupContent>
-          <SidebarGroupLabel>Conversations</SidebarGroupLabel>
+          <SidebarGroupLabel className="flex text-l font-bold">Conversations</SidebarGroupLabel>
           <SidebarGroupContent>
           {!isPending ?(
             getChatRooms.length > 0 ? (

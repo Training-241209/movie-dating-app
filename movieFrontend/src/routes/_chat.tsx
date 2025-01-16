@@ -11,7 +11,7 @@ function RouteComponent() {
 
 
   return (
-    <div className="h-screen w-screen">
+    <div>
       <SidebarProvider>
         <AppSidebar/>
         <main>
