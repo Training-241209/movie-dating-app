@@ -1,0 +1,14 @@
+import { axiosInstance } from "@/lib/axios-config";
+import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "./use-Auth";
+export function useGetChatRooms() {
+    const {data: auth} = useAuth()
+    return useQuery({
+        queryKey: ['chatRooms'],
+        queryFn: async() =>{
+              const response = await axiosInstance.get(`/api/match/${auth?.username}`)
+              return response.data;
+
+        }
+    })
+}
